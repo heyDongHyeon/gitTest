@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.lyrmgr.service.LyrMgrMapper">
+
+
+
+    <select id="getLyrStyle" parameterType="HashMap" resultType="HashMap">
+        SELECT lyr_nm, gbn_cd, line_color, area_color
+
+        FROM xeus.mt_lyr_style
+
+        <where>
+			 lyr_nm = #{lyrNm}
+        </where>
+    </select>
+
+
+    <update id="editLyrStyle" parameterType="HashMap">
+        UPDATE xeus.mt_lyr_style
+
+        SET
+            lyr_nm = #{lyrNm}
+
+            <if test="gbnCd != null and gbnCd != ''">
+                , gbn_cd = #{gbnCd}
+            </if>
+
+            <if test="lineColor != null and lineColor != ''">
+                , line_color = #{lineColor}
+            </if>
+
+            <if test="areaColor != null and areaColor != ''">
+                , area_color = #{areaColor}
+            </if>
+
+        WHERE lyr_nm = #{lyrNm}
+
+    </update>
+
+</mapper>

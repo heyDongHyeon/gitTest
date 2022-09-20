@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:StyledLayerDescriptor 
+    xmlns:sld="http://www.opengis.net/sld" 
+    xmlns:gml="http://www.opengis.net/gml"
+    xmlns="http://www.opengis.net/sld" 
+    xmlns:ogc="http://www.opengis.net/ogc" 
+    version="1.0.0">
+    <sld:NamedLayer>
+        <sld:Name>its_link_ls</sld:Name>
+        <sld:UserStyle>
+            <sld:Name>its_link_ls</sld:Name>
+            <sld:Title>its_link_ls</sld:Title>
+            <sld:IsDefault>1</sld:IsDefault>
+            <sld:FeatureTypeStyle>
+                <sld:Name>its_link_ls</sld:Name>
+                <sld:Rule>
+                    <sld:Name>0</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>spd_grade</ogc:PropertyName>
+                            <ogc:Literal>0</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:LineSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#949595</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.5</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:LineSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>1</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>spd_grade</ogc:PropertyName>
+                            <ogc:Literal>1</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:LineSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#357a33</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">1.0</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:LineSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>2</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>spd_grade</ogc:PropertyName>
+                            <ogc:Literal>2</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:LineSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#b2b223</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">1.0</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:LineSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>3</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>spd_grade</ogc:PropertyName>
+                            <ogc:Literal>3</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:LineSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#9e1213</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">1.0</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:LineSymbolizer>
+                </sld:Rule>
+            </sld:FeatureTypeStyle>
+        </sld:UserStyle>
+    </sld:NamedLayer>
+</sld:StyledLayerDescriptor>

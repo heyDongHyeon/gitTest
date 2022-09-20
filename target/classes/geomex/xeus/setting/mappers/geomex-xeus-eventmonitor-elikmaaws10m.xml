@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliKmaAws10mMapper">
+	<select id="getList" parameterType="HashMap" resultType="EliKmaAws10mVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OBSVT_YMDHM, POINT_X, POINT_Y, LOC, OBSVT_ADDR, AWS_LVL_TP, AWS_LVL, WIND, WS, TA, QTY_DAY
+
+		FROM xeus.ELI_KMA_AWS_10M
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+				AND OBSVT_YMDHM = #{obsvtYmdhm}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="obsvtAddr != null and obsvtAddr != ''">
+				AND OBSVT_ADDR = #{obsvtAddr}
+			</if>
+
+			<if test="awsLvlTp != null and awsLvlTp != ''">
+				AND AWS_LVL_TP = #{awsLvlTp}
+			</if>
+
+			<if test="awsLvl != null and awsLvl != ''">
+				AND AWS_LVL = #{awsLvl}
+			</if>
+
+			<if test="wind != null and wind != ''">
+				AND WIND = #{wind}
+			</if>
+
+			<if test="ws != null and ws != ''">
+				AND WS = #{ws}::numeric
+			</if>
+
+			<if test="ta != null and ta != ''">
+				AND TA = #{ta}::numeric
+			</if>
+
+			<if test="qtyDay != null and qtyDay != ''">
+				AND QTY_DAY = #{qtyDay}::numeric
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+
+		<trim prefix="ORDER BY">
+			<if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+				${sortCol} ${sortTyp}
+			</if>
+			<if test="sortCol == null and sortTyp == null">
+				SEQ_NO DESC
+			</if>
+		</trim>
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+	<select id="getItem" parameterType="HashMap" resultType="EliKmaAws10mVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OBSVT_YMDHM, POINT_X, POINT_Y, LOC, OBSVT_ADDR, AWS_LVL_TP, AWS_LVL, WIND, WS, TA, QTY_DAY
+
+		FROM xeus.ELI_KMA_AWS_10M
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+				AND OBSVT_YMDHM = #{obsvtYmdhm}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="obsvtAddr != null and obsvtAddr != ''">
+				AND OBSVT_ADDR = #{obsvtAddr}
+			</if>
+
+			<if test="awsLvlTp != null and awsLvlTp != ''">
+				AND AWS_LVL_TP = #{awsLvlTp}
+			</if>
+
+			<if test="awsLvl != null and awsLvl != ''">
+				AND AWS_LVL = #{awsLvl}
+			</if>
+
+			<if test="wind != null and wind != ''">
+				AND WIND = #{wind}
+			</if>
+
+			<if test="ws != null and ws != ''">
+				AND WS = #{ws}::numeric
+			</if>
+
+			<if test="ta != null and ta != ''">
+				AND TA = #{ta}::numeric
+			</if>
+
+			<if test="qtyDay != null and qtyDay != ''">
+				AND QTY_DAY = #{qtyDay}::numeric
+			</if>
+
+		</where>
+	</select>
+
+
+	<select id="getCount" parameterType="HashMap" resultType="int">
+		SELECT count(*)
+
+		FROM xeus.ELI_KMA_AWS_10M
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+				AND OBSVT_YMDHM = #{obsvtYmdhm}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="obsvtAddr != null and obsvtAddr != ''">
+				AND OBSVT_ADDR = #{obsvtAddr}
+			</if>
+
+			<if test="awsLvlTp != null and awsLvlTp != ''">
+				AND AWS_LVL_TP = #{awsLvlTp}
+			</if>
+
+			<if test="awsLvl != null and awsLvl != ''">
+				AND AWS_LVL = #{awsLvl}
+			</if>
+
+			<if test="wind != null and wind != ''">
+				AND WIND = #{wind}
+			</if>
+
+			<if test="ws != null and ws != ''">
+				AND WS = #{ws}::numeric
+			</if>
+
+			<if test="ta != null and ta != ''">
+				AND TA = #{ta}::numeric
+			</if>
+
+			<if test="qtyDay != null and qtyDay != ''">
+				AND QTY_DAY = #{qtyDay}::numeric
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+	</select>
+
+
+	<delete id="del" parameterType="HashMap">
+		DELETE FROM xeus.ELI_KMA_AWS_10M WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+	</delete>
+
+
+	<insert id="add" parameterType="EliKmaAws10mVo">
+		INSERT xeus.INTO ELI_KMA_AWS_10M(
+			LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OBSVT_YMDHM, POINT_X, POINT_Y, LOC, OBSVT_ADDR, AWS_LVL_TP, AWS_LVL, WIND, WS, TA, QTY_DAY
+		) VALUES (
+			#{lkInfoId}, #{rcvYmdHms}, #{seqNo}::numeric, #{obsvtYmdhm}, #{pointX}::numeric, #{pointY}::numeric, #{loc}, #{obsvtAddr}, #{awsLvlTp}, #{awsLvl}, #{wind}, #{ws}::numeric, #{ta}::numeric, #{qtyDay}::numeric
+		);
+	</insert>
+
+
+	<update id="edit" parameterType="EliKmaAws10mVo">
+		UPDATE xeus.ELI_KMA_AWS_10M SET
+
+			LK_INFO_ID = #{lkInfoId}
+			, RCV_YMD_HMS = #{rcvYmdHms}
+			, SEQ_NO = #{seqNo}::numeric
+
+			<if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+				, OBSVT_YMDHM = #{obsvtYmdhm}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				, POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				, POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				, LOC = #{loc}
+			</if>
+
+			<if test="obsvtAddr != null and obsvtAddr != ''">
+				, OBSVT_ADDR = #{obsvtAddr}
+			</if>
+
+			<if test="awsLvlTp != null and awsLvlTp != ''">
+				, AWS_LVL_TP = #{awsLvlTp}
+			</if>
+
+			<if test="awsLvl != null and awsLvl != ''">
+				, AWS_LVL = #{awsLvl}
+			</if>
+
+			<if test="wind != null and wind != ''">
+				, WIND = #{wind}
+			</if>
+
+			<if test="ws != null and ws != ''">
+				, WS = #{ws}::numeric
+			</if>
+
+			<if test="ta != null and ta != ''">
+				, TA = #{ta}::numeric
+			</if>
+
+			<if test="qtyDay != null and qtyDay != ''">
+				, QTY_DAY = #{qtyDay}::numeric
+			</if>
+
+		WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+
+	</update>
+
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.ivcp.service.IVCPMapper">
+
+    <select id="getList" parameterType="HashMap" resultType="IVCPVo">
+		SELECT mgr_no, cctv_nm, cctv_area, rmark, _gid, _annox, _annoy, _geometry,
+		       ivcp_uid, cctv_len, cctv_cate
+		  FROM xeus.asset_smart_cctv;
+    </select>
+
+    <select id="getItem" parameterType="HashMap" resultType="IVCPVo">
+    	SELECT mgr_no, cctv_nm, cctv_area, rmark, _gid, _annox, _annoy, _geometry,
+		       ivcp_uid, cctv_len, cctv_cate, loc_lat, loc_lon
+		  FROM xeus.asset_smart_cctv
+
+		  <where>
+ 			<if test="guid != null and guid != ''">
+                 ivcp_guid = #{guid}
+            </if>
+ 			<if test="mgrNo != null and mgrNo != ''">
+                 mgr_no = #{mgrNo}
+            </if>
+		  </where>
+    </select>
+
+
+
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+    	SELECT count(*)
+		  FROM xeus.asset_smart_cctv;
+    </select>
+
+
+    <insert id="add" parameterType="HashMap">
+   		INSERT INTO xeus.asset_smart_cctv(
+   			mgr_no,
+   			cctv_area,
+   			ivcp_uid,
+   			ivcp_guid,
+   			cctv_nm,
+   			loc_lat,
+   			loc_lon,
+   			cctv_cate
+   		)
+   		values(
+			'STV00000' || (select max(_gid) from xeus.asset_smart_cctv)+1,
+			'주추',
+			#{ivcp_uid},
+			#{ivcp_guid},
+			#{cctv_nm},
+			36.51630748,
+			127.24165092,
+			'조치원'
+   		)
+    </insert>
+<!--
+ 	<delete id="del" parameterType="HashMap">
+    </delete>
+
+    <update id="edit" parameterType="IVCPVo">
+
+    </update> -->
+
+</mapper>

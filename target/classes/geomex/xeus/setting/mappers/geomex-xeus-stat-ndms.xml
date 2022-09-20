@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.stat.service.StatNdmsMapper">
+
+	<select id="getNdmsYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  area_nm AS item, #{col} AS col, chart_yy_dt AS cate
+			FROM xeus.ndms_table_year 
+			<where>
+				<if test="type != null and type !=''">
+					AND type=#{type}
+				</if>
+				<if test="ctgory != null and ctgory !=''">
+					AND ctgory=#{ctgory}
+				</if>
+				<if test="emd != null and emd !=''">
+					AND area_nm LIKE '%'||#{emd}||'%'
+				</if>
+			</where>
+		UNION ALL(
+			SELECT '차트' AS item, #{col} AS col, chart_yy_dt AS cate
+			 	FROM xeus.ndms_chart_year
+				<where>
+					<if test="type != null and type !=''">
+						AND type=#{type}
+					</if>
+					<if test="ctgory != null and ctgory !=''">
+						AND ctgory=#{ctgory}
+					</if>
+					<if test="emd != null and emd !=''">
+						AND area_nm LIKE '%'||#{emd}||'%'
+					</if>
+					<if test="allEmd != null and allEmd !=''">
+						AND area_nm LIKE '%'||#{allEmd}||'%'
+					</if>
+				</where>
+		)
+	</select>
+	
+
+	<select id="getNdmsMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  area_nm AS item, #{col} AS col, chart_mm_dt AS cate
+			FROM xeus.ndms_table_month 
+			<where>
+				<if test="type != null and type !=''">
+					AND type=#{type}
+				</if>
+				<if test="ctgory != null and ctgory !=''">
+					AND ctgory=#{ctgory}
+				</if>
+				<if test="emd != null and emd !=''">
+					AND area_nm LIKE '%'||#{emd}||'%'
+				</if>
+				<if test="year != null and year !=''">
+					AND dat_yy = #{year}::SMALLINT
+				</if>
+			</where>
+		UNION ALL(
+			SELECT '차트' AS item, #{col} AS col, chart_mm_dt AS cate
+			 	FROM xeus.ndms_chart_month
+				<where>
+					<if test="type != null and type !=''">
+						AND type=#{type}
+					</if>
+					<if test="ctgory != null and ctgory !=''">
+						AND ctgory=#{ctgory}
+					</if>
+					<if test="emd != null and emd !=''">
+						AND area_nm LIKE '%'||#{emd}||'%'
+					</if>
+					<if test="allEmd != null and allEmd !=''">
+						AND area_nm LIKE '%'||#{allEmd}||'%'
+					</if>
+					<if test="year != null and year !=''">
+						AND dat_yy = #{year}::SMALLINT
+					</if>
+				</where>
+		)
+	</select>
+	<select id="getNdmsDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT  area_nm AS item, #{col} AS col, chart_dd_dt AS cate
+			FROM xeus.ndms_table_day 
+			<where>
+				<if test="type != null and type !=''">
+					AND type=#{type}
+				</if>
+				<if test="ctgory != null and ctgory !=''">
+					AND ctgory=#{ctgory}
+				</if>
+				<if test="emd != null and emd !=''">
+					AND area_nm LIKE '%'||#{emd}||'%'
+				</if>
+				<if test="year != null and year !=''">
+					AND dat_yy = #{year}::SMALLINT
+				</if>
+				<if test="month != null and month !=''">
+					AND dat_mm = #{month}::SMALLINT
+				</if>
+			</where>
+		UNION ALL(
+			SELECT  '차트' AS item, #{col} AS col, chart_dd_dt AS cate
+				FROM xeus.ndms_chart_day 
+				<where>
+					<if test="type != null and type !=''">
+						AND type=#{type}
+					</if>
+					<if test="ctgory != null and ctgory !=''">
+						AND ctgory=#{ctgory}
+					</if>
+					<if test="emd != null and emd !=''">
+						AND area_nm LIKE '%'||#{emd}||'%'
+					</if>
+					<if test="allEmd != null and allEmd !=''">
+						AND area_nm LIKE '%'||#{allEmd}||'%'
+					</if>
+					<if test="year != null and year !=''">
+						AND dat_yy = #{year}::SMALLINT
+					</if>
+					<if test="month != null and month !=''">
+						AND dat_mm = #{month}::SMALLINT
+					</if>
+				</where>
+		)
+	</select>
+	<select id="getPowlvlYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+<!-- 		SELECT -->
+<!--    				full_area_nm AS item, -->
+<!--    				'평균,최대,최소' AS col, -->
+<!-- 				<foreach collection="datList" item="date" separator="" > -->
+<!--    					 ''||ROUND(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END)/count(*),1) -->
+
+<!--    					 ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END),1) -->
+
+<!--    					 ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END),1) -->
+
+<!--    					||';' -->
+<!--    				</foreach> -->
+<!--    				AS cate -->
+<!-- 		FROM xeus.ndms_nem_powlvl -->
+<!-- 			WHERE full_area_nm LIKE '%'||#{emd}||'%' -->
+<!-- 			and   obsr_value > -90 -->
+<!-- 				GROUP BY full_area_nm -->
+
+<!-- 		UNION ALL -->
+<!-- 		( -->
+<!-- 			SELECT -->
+<!-- 				'차트' AS item , -->
+<!-- 				'평균,최대,최소' AS col, -->
+<!-- 				<foreach collection="datList" item="date" separator="" > -->
+<!--    					 ''||ROUND(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END)/count(*),1) -->
+
+<!--    					 ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END),1) -->
+
+<!--    					 ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END),1) -->
+
+<!--    					||';' -->
+<!--    				</foreach> -->
+<!--    				AS cate -->
+<!-- 			FROM xeus.ndms_nem_powlvl -->
+<!-- 				where full_area_nm LIKE '%'||#{emd}||'%' -->
+<!-- 				and   obsr_value > -90 -->
+<!-- 		) -->
+		SELECT  emd as item, '평균,최대,최소' as col, chart_yy_dt as cate
+			FROM xeus.ndms_chart_year 
+				<where>
+					<if test="type != null and type !=''">
+						AND type=#{type}
+					</if>
+					<if test="ctgory != null and ctgory !=''">
+						AND ctgory=#{ctgory}
+					</if>
+					<if test="emd != null and emd !=''">
+						AND emd LIKE '%'||#{emd}||'%'
+						UNION ALL
+						(
+							SELECT
+								'차트' AS item ,
+								'평균,최대,최소' AS col,
+								<foreach collection="datList" item="date" separator="" >
+   									''||ROUND(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END)/count(*),1)
+
+   									||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END),1)
+
+   									||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN obsr_value ELSE 0 END),1)
+
+   									||';'
+   								</foreach>
+   								AS cate
+							FROM xeus.ndms_nem_powlvl
+									where full_area_nm LIKE '%'||#{emd}||'%'
+									and   obsr_value > -90
+						)
+					</if>
+				</where>
+	</select>
+	<select id="getPowlvlMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				full_area_nm AS item,
+   				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm=${date.month} THEN obsr_value ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month} THEN obsr_value ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month} THEN obsr_value ELSE 0 END),1)
+
+   					||';'
+   				</foreach>
+   				AS cate
+		FROM xeus.ndms_nem_powlvl
+			WHERE dat_yy = #{year}::INTEGER AND full_area_nm LIKE '%'||#{emd}||'%'
+			and   obsr_value > -90
+				GROUP BY full_area_nm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' AS item ,
+				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm=${date.month} THEN obsr_value ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month} THEN obsr_value ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month} THEN obsr_value ELSE 0 END),1)
+
+   					||';'
+   				</foreach>
+   				AS cate
+			FROM xeus.ndms_nem_powlvl
+				WHERE dat_yy = #{year}::INTEGER AND full_area_nm LIKE '%'||#{emd}||'%'
+				and   obsr_value > -90
+		)
+	</select>
+	<select id="getPowlvlDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				full_area_nm AS item,
+   				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN obsr_value ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN obsr_value ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN obsr_value ELSE 0 END),1)
+
+   					||';'
+   				</foreach>
+   				AS cate
+		FROM xeus.ndms_nem_powlvl
+			WHERE dat_yy = #{year}::INTEGER AND full_area_nm LIKE '%'||#{emd}||'%'
+			and   obsr_value > -90
+				GROUP BY full_area_nm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' as item ,
+				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN obsr_value ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN obsr_value ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN obsr_value ELSE 0 END),1)
+
+   					 ||';'
+   				</foreach>
+   				AS cate
+			FROM xeus.ndms_nem_powlvl
+				WHERE dat_yy = #{year}::INTEGER AND full_area_nm LIKE '%'||#{emd}||'%'
+				and   obsr_value > -90
+		)
+	</select>
+	<select id="getDmmstYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+<!-- 		SELECT -->
+<!--    				damnm AS item, -->
+<!--    				'평균,최대,최소' AS col, -->
+<!-- 				<foreach collection="datList" item="date" separator="" > -->
+<!--    					 ''||ROUND(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END)/count(*),1) -->
+
+<!--    					 ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END),1) -->
+
+<!--    					 ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END),1) -->
+
+<!--    					 ||';' -->
+<!--    				</foreach> -->
+<!--    				AS cate -->
+<!-- 		FROM xeus.ndms_hrf_dmmst -->
+<!-- 			WHERE damnm LIKE '%'||#{emd}||'%' -->
+<!-- 			and   tototf > -90 -->
+<!-- 				GROUP BY damnm -->
+
+<!-- 		UNION ALL -->
+<!-- 		( -->
+<!-- 			SELECT -->
+<!-- 				'차트' AS item , -->
+<!-- 				'평균,최대,최소' AS col, -->
+<!-- 				<foreach collection="datList" item="date" separator="" > -->
+<!--    					 ''||ROUND(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END)/count(*),1) -->
+
+<!--    					 ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END),1) -->
+
+<!--    					 ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END),1) -->
+
+<!--    					||';' -->
+<!--    				</foreach> -->
+<!--    				AS cate -->
+<!-- 			FROM xeus.ndms_hrf_dmmst -->
+<!-- 				WHERE damnm LIKE '%'||#{emd}||'%' -->
+<!-- 				and   tototf > -90 -->
+<!-- 		) -->
+			SELECT  emd as item, '평균,최대,최소' as col, chart_yy_dt as cate
+			FROM xeus.ndms_chart_year 
+				<where>
+					<if test="type != null and type !=''">
+						AND type=#{type}
+					</if>
+					<if test="ctgory != null and ctgory !=''">
+						AND ctgory=#{ctgory}
+					</if>
+					<if test="emd != null and emd !=''">
+						AND emd LIKE '%'||#{emd}||'%'
+						UNION ALL
+						(
+							SELECT
+								'차트' AS item ,
+								'평균,최대,최소' AS col,
+								<foreach collection="datList" item="date" separator="" >
+   									''||ROUND(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END)/count(*),1)
+
+   									||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END),1)
+
+   									||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN tototf ELSE 0 END),1)
+
+   									||';'
+   								</foreach>
+   								AS cate
+								FROM xeus.ndms_hrf_dmmst
+									where damnm LIKE '%'||#{emd}||'%'
+										and   tototf > -90
+						)
+					</if>
+				</where>
+	</select>
+	<select id="getDmmstMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+<!-- 		SELECT item, col, cate, year FROM xeus.ndms_hrf_dmmst_year -->
+		SELECT
+   				damnm AS item,
+   				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm=${date.month} THEN tototf ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month} THEN tototf ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month} THEN tototf ELSE 0 END),1)
+
+   					||';'
+   				</foreach>
+   				AS cate
+		FROM xeus.ndms_hrf_dmmst
+			WHERE dat_yy = #{year}::INTEGER AND damnm LIKE '%'||#{emd}||'%'
+			and   tototf > -90
+				GROUP BY damnm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' AS item ,
+				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm=${date.month} THEN tototf ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month} THEN tototf ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month} THEN tototf ELSE 0 END),1)
+
+   					||';'
+   				</foreach>
+   				AS cate
+			FROM xeus.ndms_hrf_dmmst
+				WHERE dat_yy = #{year}::INTEGER AND damnm LIKE '%'||#{emd}||'%'
+				and   tototf > -90
+		)
+	</select>
+	<select id="getDmmstDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				damnm AS item,
+   				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN tototf ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN tototf ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN tototf ELSE 0 END),1)
+
+   					||';'
+   				</foreach>
+   				AS cate
+		FROM xeus.ndms_hrf_dmmst
+			WHERE dat_yy = #{year}::INTEGER AND damnm LIKE '%'||#{emd}||'%'
+			and   tototf > -90
+				GROUP BY damnm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' AS item ,
+				'평균,최대,최소' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||ROUND(SUM(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN tototf ELSE 0 END)/count(*),1)
+
+   					 ||','||ROUND(MAX(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN tototf ELSE 0 END),1)
+
+   					 ||','||ROUND(MIN(CASE WHEN dat_mm = #{month}::INTEGER and dat_dd=${date.day} THEN tototf ELSE 0 END),1)
+
+   					 ||';'
+   				</foreach>
+   				AS cate
+			FROM xeus.ndms_hrf_dmmst
+				WHERE dat_yy = #{year}::INTEGER AND damnm LIKE '%'||#{emd}||'%'
+				and   tototf > -90
+		)
+	</select>
+	<select id="getDsrYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				userdefineareanm AS item,
+   				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN dat_yy=${date.year} THEN 1 ELSE 0 END)
+   					 	||';'
+   				</foreach>
+   					 AS cate
+		FROM xeus.ndms_cm_dsr
+			WHERE userdefineareanm LIKE '%'||#{emd}||'%'
+				AND userdefineareanm LIKE '%세종%'
+				GROUP BY userdefineareanm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' AS item ,
+				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN dat_yy=${date.year} THEN 1 ELSE 0 END)
+   					 	||';'
+	   			</foreach>
+   					 AS cate
+			FROM xeus.ndms_cm_dsr
+				WHERE userdefineareanm LIKE '%'||#{emd}||'%'
+					AND userdefineareanm LIKE '%세종%'
+		)
+	</select>
+	<select id="getDsrMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				userdefineareanm AS item,
+   				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN dat_mm=${date.month} THEN 1 ELSE 0 END)
+   					 	||';'
+   				</foreach>
+   					 AS cate
+		FROM xeus.ndms_cm_dsr
+			WHERE dat_yy=#{year}::INTEGER 
+				AND userdefineareanm LIKE '%'||#{emd}||'%'
+				AND userdefineareanm LIKE '%세종%'
+				GROUP BY userdefineareanm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' AS item ,
+				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN dat_mm=${date.month} THEN 1 ELSE 0 END)
+   					 	||';'
+	   			</foreach>
+   					 AS cate
+			FROM xeus.ndms_cm_dsr
+				WHERE dat_yy=#{year}::INTEGER 
+					AND userdefineareanm LIKE '%'||#{emd}||'%'
+					AND userdefineareanm LIKE '%세종%'
+		)
+	</select>
+	<select id="getDsrDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				userdefineareanm AS item,
+   				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					''||SUM(CASE WHEN dat_dd=${date.day} THEN 1 ELSE 0 END)
+   					 	||';'
+   				</foreach>
+   					 AS cate
+		FROM xeus.ndms_cm_dsr
+			WHERE dat_yy=#{year}::INTEGER 
+				AND dat_mm=#{month}::INTEGER
+				AND userdefineareanm LIKE '%'||#{emd}||'%'
+				AND userdefineareanm LIKE '%세종%'
+				GROUP BY userdefineareanm
+
+		UNION ALL
+		(
+			SELECT
+				'차트' AS item ,
+				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN dat_dd=${date.day} THEN 1 ELSE 0 END)
+   					 	||';'
+	   			</foreach>
+   					 AS cate
+			FROM xeus.ndms_cm_dsr
+				WHERE dat_yy=#{year}::INTEGER
+					AND dat_mm=#{month}::INTEGER
+					AND userdefineareanm LIKE '%세종%'
+				 	AND userdefineareanm LIKE '%'||#{emd}||'%'
+		)
+	</select>
+	<select id="getAwsAllYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT	DISTINCT dat_yy AS year
+			FROM xeus.ndms_kma_aws
+	</select>
+	<select id="getPowlvlAllYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT	DISTINCT dat_yy AS year
+			FROM xeus.ndms_nem_powlvl
+	</select>
+	<select id="getDmmstAllYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT	DISTINCT dat_yy AS year
+			FROM xeus.ndms_hrf_dmmst
+	</select>
+	<select id="getDsrAllYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT	DISTINCT dat_yy AS year
+			FROM xeus.ndms_cm_dsr
+	</select>
+	<insert id="addNdmsChartYear" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_chart_year WHERE type=#{type} AND ctgory=#{ctgory};
+		
+		INSERT INTO xeus.ndms_chart_year(type, ctgory, area_nm, chart_yy_dt)
+		<foreach collection="emdList" item="emd" separator="UNION ALL" >
+   			(    SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 #{emd.nm} AS area_nm,
+   					<foreach collection="datList" item="date" separator="" > 
+								
+						''||ROUND((CASE WHEN (SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+     						 ELSE ((SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+
+						  ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_yy_dt 
+   					 FROM ${table} 
+				  		 WHERE ${ctgory} > -90
+				  		 	AND	${emdType} LIKE '%'||#{emd.nm}||'%'        
+				  		 	AND ${emdType} LIKE '%'||#{sajong}||'%'
+			)
+   		</foreach>
+   		UNION ALL(
+   			     SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 '전체' AS area_nm,
+   					<foreach collection="datList" item="date" separator="" > 
+					   	''||ROUND((CASE WHEN (SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+     						 ELSE ((SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+							
+						  ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_yy_dt 
+   					 FROM ${table} 
+				  		 WHERE ${ctgory} > -90  
+				  		 	AND ${emdType} LIKE '%'||#{sajong}||'%'
+		)		  		 
+	</insert>
+	
+	<insert id="addNdmsTableYear" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_table_year WHERE type=#{type} AND ctgory=#{ctgory};
+		
+		INSERT INTO xeus.ndms_table_year(type, ctgory, area_nm, chart_yy_dt)
+   		(    SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 ${emdType} AS area_nm,
+   					<foreach collection="datList" item="date" separator="" > 
+   					
+					 	''||ROUND((CASE WHEN (SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+    						 ELSE ((SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_yy=${date.year}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+							
+						  ||','||ROUND(MAX(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_yy=${date.year}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_yy_dt 
+   					 FROM ${table}
+				  		 WHERE ${ctgory} > -90
+							AND ${emdType} LIKE '%'||#{sajong}||'%'
+				  		 		GROUP BY ${emdType}
+		)	  		 
+	</insert>
+	
+	
+	<insert id="addNdmsChartMonth" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_chart_month WHERE type=#{type} AND ctgory=#{ctgory} AND dat_yy=#{year}::SMALLINT;
+		
+		INSERT INTO xeus.ndms_chart_month(type, ctgory, area_nm, dat_yy, chart_mm_dt)
+		<foreach collection="emdList" item="emd" separator="UNION ALL" >
+   			(   
+   				 SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 #{emd.nm} AS area_nm, #{year}::SMALLINT as dat_yy,
+   					<foreach collection="datList" item="date" separator="" > 
+   					
+				        ''||ROUND((CASE WHEN (SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+    						 ELSE ((SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+							
+						  ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_mm_dt 
+   					 FROM ${table}
+				  		 WHERE ${ctgory} > -90     
+				  		 	AND ${emdType} LIKE '%'||#{emd.nm}||'%'	   
+				  		 	AND ${emdType} LIKE '%'||#{sajong}||'%'
+				  		 	AND dat_yy=#{year}::SMALLINT
+			)
+   		</foreach>
+   		UNION ALL(
+   			     SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 '전체' AS area_nm, #{year}::SMALLINT as dat_yy,
+   					<foreach collection="datList" item="date" separator="" > 
+   					
+				        ''||ROUND((CASE WHEN (SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+   							 ELSE ((SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+							
+						  ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_mm_dt 
+   					 FROM ${table}
+				  		 WHERE ${ctgory} > -90 
+				  		 	 AND ${emdType} LIKE '%'||#{sajong}||'%'
+				  		 	 AND dat_yy=#{year}::SMALLINT
+		)		  		 
+	</insert>
+	<insert id="addNdmsTableMonth" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_table_month WHERE type=#{type} AND ctgory=#{ctgory} AND dat_yy=#{year}::SMALLINT;
+		
+		INSERT INTO xeus.ndms_table_month(type, ctgory, area_nm, dat_yy, chart_mm_dt)
+   		(    SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 ${emdType} AS area_nm, #{year}::SMALLINT AS dat_yy,
+   					<foreach collection="datList" item="date" separator="" > 
+   					
+				       ''||ROUND((CASE WHEN (SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+   							 ELSE ((SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_mm=${date.month}::INTEGER THEN 1 ELSE 0 END)))END)
+						  ,1)
+							
+						  ||','||ROUND(MAX(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_mm=${date.month}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_yy_dt 
+   					 FROM ${table}
+				  		 WHERE ${ctgory} > -90
+							AND ${emdType} LIKE '%'||#{sajong}||'%'
+							AND dat_yy=#{year}::SMALLINT
+				  		 		GROUP BY ${emdType}
+		)	  		
+	</insert>
+	<insert id="addNdmsChartDay" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_chart_day WHERE type=#{type} AND ctgory=#{ctgory} AND dat_yy=#{year}::SMALLINT AND dat_mm=#{month}::SMALLINT;
+		
+		INSERT INTO xeus.ndms_chart_day(type, ctgory, area_nm,  dat_yy, dat_mm, chart_dd_dt)
+		<foreach collection="emdList" item="emd" separator="UNION ALL" >
+   			(    
+   				SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 #{emd.nm} AS area_nm, #{year}::SMALLINT AS dat_yy, #{month}::SMALLINT AS dat_mm,
+   					<foreach collection="datList" item="date" separator="" > 
+   					
+   					    ''||ROUND((CASE WHEN (SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+     						 ELSE ((SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+							
+						  ||','||ROUND(MAX(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_mm_dt 
+   					 FROM ${table} 
+				  		 WHERE  ${ctgory} > -90 
+				  		     AND ${emdType} LIKE '%'||#{emd.nm}||'%'	 
+				  		     AND ${emdType} LIKE '%'||#{sajong}||'%'
+				  		 	 AND dat_yy=#{year}::SMALLINT 
+				  		 	 AND dat_mm=#{month}::SMALLINT
+			)
+   		</foreach>
+   		UNION ALL(
+   			     SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 '전체' AS area_nm, #{year}::SMALLINT AS dat_yy, #{month}::SMALLINT AS dat_mm,
+   					<foreach collection="datList" item="date" separator="" > 
+   					
+						''||ROUND((CASE WHEN (SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+     						 ELSE ((SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)
+
+						  ||','||ROUND(MAX(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_dd_dt 
+   					 FROM ${table}
+				  		 WHERE ${ctgory} > -90  
+				  		 	AND ${emdType} LIKE '%'||#{sajong}||'%' 
+				  		 	AND dat_yy=#{year}::SMALLINT 
+				  		 	AND dat_mm=#{month}::SMALLINT
+		)		  		 
+	</insert>
+	<insert id="addNdmsTableDay" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_table_day WHERE type=#{type} AND ctgory=#{ctgory} AND dat_yy=#{year}::SMALLINT AND dat_mm=#{month}::SMALLINT;
+		
+		INSERT INTO xeus.ndms_table_day(type, ctgory, area_nm, dat_yy, dat_mm, chart_dd_dt)
+   		(    
+   			SELECT		#{type} AS type,	 #{ctgory} AS ctgory,	 ${emdType} AS area_nm, #{year}::SMALLINT AS dat_yy, #{month}::SMALLINT AS dat_mm,
+   					<foreach collection="datList" item="date" separator="" > 
+					    	
+						''||ROUND((CASE WHEN (SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN 1 ELSE 0 END))=0 THEN 9999   
+     						 ELSE ((SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE 0 END)) /
+								(SUM(CASE WHEN dat_dd=${date.day}::INTEGER THEN 1 ELSE 0 END)))END)
+							,1)     
+
+						  ||','||ROUND(MAX(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE -9999 END),1)
+
+						  ||','||ROUND(MIN(CASE WHEN dat_dd=${date.day}::INTEGER THEN ${ctgory} ELSE 9999 END),1)
+
+						  ||';'
+   					</foreach> AS chart_dd_dt 
+   					 FROM ${table}
+				  		 WHERE ${ctgory} > -90
+							AND ${emdType} LIKE '%'||#{sajong}||'%'
+							AND dat_yy=#{year}::SMALLINT
+							AND dat_mm=#{month}::SMALLINT
+				  		 		GROUP BY ${emdType}
+		)	  		
+	</insert>
+	<insert id="addDsrChartYear" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_chart_year WHERE type='dsr' AND ctgory='dsr_num';
+		
+		INSERT INTO xeus.ndms_chart_year(type, ctgory, area_nm, chart_yy_dt)
+		<foreach collection="emdList" item="emd" separator="UNION ALL" >
+   		(    
+   			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 #{emd.nm} AS area_nm,
+   			<foreach collection="datList" item="date" separator="" > 
+				''||SUM(CASE WHEN dat_yy=${date.year} THEN 1 ELSE 0 END)
+   				||';'		
+   			</foreach> AS chart_yy_dt 
+   				FROM xeus.ndms_cm_dsr 
+					WHERE
+						userdefineareanm LIKE '%'||#{emd.nm}||'%'        
+						AND userdefineareanm LIKE '%세종%'
+		)
+   		</foreach>
+   		UNION ALL(
+   			     SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 '전체' AS area_nm,
+   				<foreach collection="datList" item="date" separator="" > 
+					''||SUM(CASE WHEN dat_yy=${date.year} THEN 1 ELSE 0 END)
+   					||';'
+   				</foreach> AS chart_yy_dt 
+   					 FROM xeus.ndms_cm_dsr  
+				  		 WHERE
+				  		 	 userdefineareanm LIKE '%세종%'
+		)		  	
+	</insert>
+	
+	<insert id="addDsrTableYear" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_table_year WHERE type='dsr' AND ctgory='dsr_num';
+		
+		INSERT INTO xeus.ndms_table_year(type, ctgory, area_nm, chart_yy_dt)
+   		(    
+   			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 userdefineareanm AS area_nm,
+ 			<foreach collection="datList" item="date" separator="" > 
+   				''||SUM(CASE WHEN dat_yy=${date.year} THEN 1 ELSE 0 END)
+   				||';'	
+   			</foreach> AS chart_yy_dt 
+   				FROM xeus.ndms_cm_dsr
+					WHERE 
+						userdefineareanm LIKE '%세종%'
+				  			GROUP BY userdefineareanm
+		)	  		 
+	</insert>
+	<insert id="addDsrChartMonth" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_chart_month WHERE type='dsr' AND ctgory='dsr_num' AND dat_yy=#{year}::SMALLINT;
+	
+		INSERT INTO xeus.ndms_chart_month(type, ctgory, area_nm, dat_yy, chart_mm_dt)
+		<foreach collection="emdList" item="emd" separator="UNION ALL" >
+	  	(    
+  			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 #{emd.nm} AS area_nm, #{year}::SMALLINT AS dat_yy,
+  			<foreach collection="datList" item="date" separator="" > 
+				''||SUM(CASE WHEN dat_mm=${date.month} THEN 1 ELSE 0 END)
+	  			||';'		
+  			</foreach> AS chart_yy_dt 
+ 				FROM xeus.ndms_cm_dsr 
+					WHERE
+						userdefineareanm LIKE '%'||#{emd.nm}||'%'        
+						AND userdefineareanm LIKE '%세종%'
+						AND dat_yy=#{year}::SMALLINT
+		)
+  		</foreach>
+  		UNION ALL(
+  			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 '전체' AS area_nm, #{year}::SMALLINT AS dat_yy,
+  			<foreach collection="datList" item="date" separator="" > 
+				''||SUM(CASE WHEN dat_mm=${date.month} THEN 1 ELSE 0 END)
+  				||';'
+  			</foreach> AS chart_yy_dt 
+  				FROM xeus.ndms_cm_dsr  
+			  		WHERE
+			  			userdefineareanm LIKE '%세종%'
+			  			AND dat_yy=#{year}::SMALLINT
+		)		  	
+	</insert>
+	
+	<insert id="addDsrTableMonth" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_table_month WHERE type='dsr' AND ctgory='dsr_num' AND dat_yy=#{year}::SMALLINT;
+		
+		INSERT INTO xeus.ndms_table_month(type, ctgory, area_nm, dat_yy, chart_mm_dt)
+   		(    
+   			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 userdefineareanm AS area_nm,  #{year}::SMALLINT AS dat_yy,
+   			<foreach collection="datList" item="date" separator="" > 
+   				''||SUM(CASE WHEN dat_mm=${date.month} THEN 1 ELSE 0 END)
+   				||';'	
+   			</foreach> AS chart_yy_dt 
+   				FROM xeus.ndms_cm_dsr
+					WHERE 
+						userdefineareanm LIKE '%세종%'
+						AND dat_yy=#{year}::SMALLINT
+						GROUP BY userdefineareanm
+		)	  		 
+	</insert>
+	<insert id="addDsrChartDay" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_chart_day WHERE type='dsr' AND ctgory='dsr_num' AND dat_yy=#{year}::SMALLINT AND dat_mm=#{month}::SMALLINT;
+	
+		INSERT INTO xeus.ndms_chart_day(type, ctgory, area_nm, dat_yy, dat_mm, chart_dd_dt)
+		<foreach collection="emdList" item="emd" separator="UNION ALL" >
+	  	(    
+  			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 #{emd.nm} AS area_nm, #{year}::SMALLINT AS dat_yy, #{month}::SMALLINT AS dat_mm,
+  			<foreach collection="datList" item="date" separator="" > 
+			''||SUM(CASE WHEN dat_dd=${date.day} THEN 1 ELSE 0 END)
+  				||';'		
+  			</foreach> AS chart_yy_dt 
+  				FROM xeus.ndms_cm_dsr 
+					WHERE
+						userdefineareanm LIKE '%'||#{emd.nm}||'%'        
+						AND userdefineareanm LIKE '%세종%'
+						AND dat_yy=#{year}::SMALLINT
+						AND dat_mm=#{month}::SMALLINT
+		)
+	  	</foreach>
+	  	UNION ALL(
+			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 '전체' AS area_nm,  #{year}::SMALLINT AS dat_yy, #{month}::SMALLINT AS dat_mm,
+			<foreach collection="datList" item="date" separator="" > 
+				''||SUM(CASE WHEN dat_dd=${date.day} THEN 1 ELSE 0 END)
+				||';'
+			</foreach> AS chart_yy_dt 
+				FROM xeus.ndms_cm_dsr  
+	  				WHERE
+	  		 			userdefineareanm LIKE '%세종%'
+	  		 			 AND dat_yy=#{year}::SMALLINT
+	  		 			 AND dat_mm=#{month}::SMALLINT
+		)		  	
+	</insert>
+	
+	<insert id="addDsrTableDay" parameterType="java.util.HashMap">
+		DELETE FROM xeus.ndms_table_day WHERE type='dsr' AND ctgory='dsr_num' AND dat_yy=#{year}::SMALLINT AND dat_mm=#{month}::SMALLINT;
+		
+		INSERT INTO xeus.ndms_table_day(type, ctgory, area_nm, dat_yy, dat_mm, chart_dd_dt)
+   		(    
+   			SELECT		'dsr' AS type,	 'dsr_num' AS ctgory,	 userdefineareanm AS area_nm, #{year}::SMALLINT AS dat_yy, #{month}::SMALLINT AS dat_mm,
+   			<foreach collection="datList" item="date" separator="" > 
+   				''||SUM(CASE WHEN dat_dd=${date.day} THEN 1 ELSE 0 END)
+   				||';'	
+   			</foreach> AS chart_yy_dt 
+   				FROM xeus.ndms_cm_dsr
+					WHERE 
+						userdefineareanm LIKE '%세종%'
+						AND dat_yy=#{year}::SMALLINT
+						AND dat_mm=#{month}::SMALLINT
+						GROUP BY userdefineareanm
+		)	  		 
+	</insert>
+</mapper>

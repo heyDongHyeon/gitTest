@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+   <bean id="scheduleJob" class="geomex.xeus.scheduler.SchedulerWorker" />
+	
+    <task:scheduled-tasks>
+<!--             <task:scheduled ref="scheduleJob" method="asyncNdmsEventTest" cron="0/10 * * * * ?"/>	 -->
+<!--         <task:scheduled ref="scheduleJob" method="asyncNdmsEvent" cron="15 * * * * ?"/> -->
+<!--         <task:scheduled ref="scheduleJob" method="eventAddTest" cron="30 * * * * ?"/> -->
+         
+<!--         <task:scheduled ref="scheduleJob" method="asyncNdpsEvent" cron="0/10 * * * * ?"/> -->
+<!--         <task:scheduled ref="scheduleJob" method="asyncNdmsSync" cron="0/5 * * * * ?"/> -->
+<!--         <task:scheduled ref="scheduleJob" method="asyncSmartCctv" cron="0/5 * * * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsAwsEvent" cron="0 50 08 * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsPowlvlEvent" cron="10 50 08 * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsDmmstEvent" cron="20 50 08 * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsDsrEvent" cron="30 50 08 * * ?"/> -->
+
+
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsAwsEvent" cron="0/10 * * * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsAllAwsEvent" cron="0/10 * * * * ?"/> -->
+		
+		
+		<task:scheduled ref="scheduleJob" method="chartNdmsPowlvlEvent" cron="* * 3 * * ?"/>
+<!-- 		<
+ask:scheduled ref="scheduleJob" method="chartNdmsAllPowlvlEvent" cron="0/10 * * * * ?"/> -->
+		
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsDmmstEvent" cron="0/10 * * * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsAllDmmstEvent" cron="0/10 * * * * ?"/> -->
+		
+		
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsDsrEvent" cron="0/10 * * * * ?"/> -->
+<!-- 		<task:scheduled ref="scheduleJob" method="chartNdmsAllDsrEvent" cron="0/10 * * * * ?"/> -->
+		
+    </task:scheduled-tasks>
+</beans>

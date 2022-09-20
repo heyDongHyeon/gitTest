@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:StyledLayerDescriptor 
+    xmlns:sld="http://www.opengis.net/sld" 
+    xmlns:gml="http://www.opengis.net/gml"
+    xmlns="http://www.opengis.net/sld" 
+    xmlns:ogc="http://www.opengis.net/ogc" 
+    version="1.0.0">
+    <sld:NamedLayer>
+        <sld:Name>kais_railway_ls</sld:Name>
+        <sld:UserStyle>
+            <sld:Name>kais_railway_ls</sld:Name>
+            <sld:Title>kais_railway_ls</sld:Title>
+            <sld:IsDefault>1</sld:IsDefault>
+            <sld:FeatureTypeStyle>
+                <sld:Name>kais_railway_ls</sld:Name>
+                <sld:Rule>
+                    <sld:Name>basicLineStyle</sld:Name>
+                    <sld:MinScaleDenominator>1.0</sld:MinScaleDenominator>
+                    <sld:MaxScaleDenominator>90000.0</sld:MaxScaleDenominator>
+                    <sld:LineSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#474747</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.588</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">2</sld:CssParameter>
+                            <sld:CssParameter name="stroke-dasharray">5 1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:LineSymbolizer>
+                </sld:Rule>
+            </sld:FeatureTypeStyle>
+        </sld:UserStyle>
+    </sld:NamedLayer>
+</sld:StyledLayerDescriptor>

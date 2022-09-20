@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.ndms.service.NdmsApiMapper">
+
+	<insert id="addCmDsr" parameterType="hashMap">
+		<foreach item="item" index="index" collection="list" open="" separator="" close="">
+			DELETE FROM xeus.ndms_cm_dsr
+
+			WHERE dsr_seq = #{item.dstrno}::varchar;
+
+			INSERT INTO xeus.ndms_cm_dsr(dsr_seq,  userdefineareanm, dsr_etc_addr, dat_yy, dat_mm, dat_dd
+			)
+		    VALUES (
+
+		    	#{item.dstrno}::varchar,
+		    	#{item.dstrareanm}::varchar,
+		    	#{item.reptdesc}::varchar,
+		    	#{item.datyy}::int,
+		        #{item.datmm}::int,
+		        #{item.datdd}::int
+	        );
+		</foreach>
+	</insert>
+
+	<insert id="addKmaInform" parameterType="hashMap">
+		<foreach item="item" index="index" collection="list" open="" separator="" close="">
+			DELETE FROM xeus.ndms_kma_inform
+
+			WHERE userdefineareanm = #{item.userdefineareanm}::varchar and dt_tm_fc = #{item.dttmfc}::varchar;
+
+			INSERT INTO xeus.ndms_kma_inform(
+			            userdefineareanm, dt_tm_fc, sect_area_txt, etc_ttl, stat_ctnt,
+			            dt_tm_ef_txt, etc_ref, no_tm_seq, stat_pw_vl, stat_tm_ef, dat_yy, dat_mm, dat_dd)
+			    VALUES (
+			    #{item.userdefineareanm}::varchar,
+			    #{item.dttmfc}::varchar,
+			    #{item.sectareatxt}::varchar,
+			    #{item.etcttl}::varchar,
+			    #{item.statctnt}::varchar,
+            	#{item.dttmeftxt}::varchar,
+            	#{item.etcref}::varchar,
+            	#{item.notmseq}::numeric,
+            	#{item.statpwvl}::varchar,
+            	#{item.stattmef}::varchar,
+		        #{item.datyy}::int,
+		        #{item.datmm}::int,
+		        #{item.datdd}::int);
+
+		</foreach>
+	</insert>
+
+	<insert id="addKmaPreInform" parameterType="hashMap">
+		<foreach item="item" index="i" collection="list" open="" separator="" close="">
+			DELETE FROM xeus.ndms_kma_pre_inform
+
+			WHERE no_tm_seq = #{item.notmseq}::int and dt_regt = #{item.dtregt}::date;
+
+				INSERT INTO xeus.ndms_kma_pre_inform(
+		           stat_tm1, stat_tm2, dt_regt, nm_man_fc, no_tm_seq, dat_yy, dat_mm, dat_dd)
+		    VALUES (
+		    #{item.stattm1}::varchar,
+		    #{item.stattm2}::varchar,
+		    #{item.dtregt}::date,
+		    #{item.nmmanfc}::varchar,
+		    #{item.notmseq}::int,
+			        #{item.datyy}::int,
+			        #{item.datmm}::int,
+			        #{item.datdd}::int);
+
+		</foreach>
+	</insert>
+
+<!-- 	<insert id="addKmaEarthInfm" parameterType="hashMap"> -->
+<!-- 		<foreach item="item" index="i" collection="list" open="" separator="" close=""> -->
+<!-- 			DELETE FROM xeus.ndms_kma_earth_infm -->
+
+<!-- 			WHERE cd_stn = #{item.cdstn}::int and no_ord = #{item.noord}::int -->
+<!--  					and no_ref = #{item.noref}::int  and dt_tm_fc = #{item.dttmfc}::varchar; -->
+ 					
+<!-- 			INSERT INTO xeus.ndms_kma_earth_infm( -->
+<!-- 			            dt_tm_fc, loc_loc, sect_scle, stat_other, depth, cord_lat, cord_lon, intensity_desc, intensity_pageuri, intensity_locationuri, cd_stn, no_ord, no_ref, dat_yy, dat_mm, dat_dd) -->
+<!-- 			    VALUES ( -->
+<!-- 			    #{item.dttmfc}::varchar, -->
+<!-- 			    #{item.locloc}::varchar, -->
+<!-- 			    #{item.sectscle}::varchar, -->
+<!-- 			    #{item.statother}::varchar, -->
+<!-- 			    #{item.depth}::varchar, -->
+<!-- 			    #{item.cordlat}::varchar, -->
+<!-- 			    #{item.cordlon}::varchar, -->
+<!-- 			    #{item.intensitydesc}::varchar, -->
+<!-- 			    #{item.intensitypageuri}::varchar, -->
+<!-- 			    #{item.intensitylocationuri}::varchar, -->
+<!-- 			    #{item.cdstn}::int, -->
+<!-- 			    #{item.noord}::int, -->
+<!-- 			    #{item.noref}::int, -->
+<!-- 			    #{item.datyy}::int, -->
+<!-- 			    #{item.datmm}::int, -->
+<!-- 			    #{item.datdd}::int -->
+<!-- 			  	); -->
+<!-- 		</foreach> -->
+<!-- 	</insert> -->
+
+	<insert id="addNemPornqt" parameterType="hashMap">
+
+		<foreach item="item" index="index" collection="list" open="" separator="" close="">
+
+			DELETE FROM xeus.ndms_nem_pornqt
+
+			WHERE full_area_nm = #{item.fullareanm}::varchar and obsr_dttm = #{item.obsrdttm}::varchar;
+
+			INSERT INTO xeus.ndms_nem_pornqt(
+
+            obsr_dttm, full_area_nm, obst_nm, obsr_value,
+            data_tp, cd_gis, dt_regt, area_cd, seq_no, dat_yy, dat_mm, dat_dd)
+		    VALUES (
+		    #{item.obsrdttm}::varchar,
+		    #{item.fullareanm}::varchar,
+		    #{item.obstnm}::varchar,
+		    #{item.obsrvalue}::varchar,
+
+		    #{item.datatp}::varchar,
+		 	#{item.cdgis}::int,
+		 	#{item.dtregt}::date,
+		 	#{item.areacd}::varchar,
+
+		 	#{item.seqno}::int,
+			#{item.datyy}::int,
+			#{item.datmm}::int,
+			#{item.datdd}::int
+
+			);
+
+		</foreach>
+	</insert>
+
+	<insert id="addHrfDmmst" parameterType="hashMap">
+		<foreach item="item" index="index" collection="list" open="" separator="" close="">
+		DELETE FROM xeus.ndms_hrf_dmmst
+
+		WHERE damnm = #{item.damnm}::varchar and ymdhm = #{item.ymdhm}::varchar;
+
+		INSERT INTO xeus.ndms_hrf_dmmst(
+            ymdhm, dmobscd, damnm, lftbnk, rgtbnk, swl, owl, sfw, ecpc, inf,
+            tototf, gtotf, egotf, spwotf, og, oh, tmswl, damtyp, dt_regt, dat_yy, dat_mm, dat_dd)
+    	VALUES (
+			#{item.ymdhm}::varchar,
+			#{item.dmobscd}::varchar,
+			#{item.damnm}::varchar,
+			#{item.lftbnk}::varchar,
+			#{item.rgtbnk}::varchar,
+
+			#{item.swl}::numeric,
+			#{item.owl}::numeric,
+			#{item.sfw}::numeric,
+			#{item.ecpc}::numeric,
+			#{item.inf}::numeric,
+			#{item.tototf}::numeric,
+            #{item.gtotf}::numeric,
+            #{item.egotf}::numeric,
+            #{item.spwotf}::numeric,
+
+            #{item.og}::varchar,
+            #{item.oh}::varchar,
+            #{item.tmswl}::varchar,
+            #{item.damtyp}::varchar,
+            #{item.dtregt}::date,
+			        #{item.datyy}::int,
+			        #{item.datmm}::int,
+			        #{item.datdd}::int);
+
+
+		</foreach>
+	</insert>
+
+	<insert id="addKmaAws" parameterType="hashMap">
+		<foreach item="item" index="i" collection="list" open="" separator="" close="">
+		DELETE FROM xeus.ndms_kma_aws
+
+		WHERE userdefineareanm = #{item.userdefineareanm} and dt_obz = #{item.dtobz};
+
+		INSERT INTO xeus.ndms_kma_aws(
+            userdefineareanm, cd_stn, dt_obz, wind_wd, wv_ws, at_avg_ta,
+            wthr_hm, ap_pa, ap_ps, wthr_yn, wthr_1hr, wthr_day, cord_lat,
+            cord_lon, cord_ht, dt_regt, dat_yy, dat_mm, dat_dd)
+    	VALUES (
+				#{item.userdefineareanm}::varchar,
+				#{item.cdstn}::varchar,
+				#{item.dtobz}::varchar,
+				#{item.windwd}::numeric,
+				#{item.wvws}::numeric,
+				#{item.atavgta}::numeric,
+				#{item.wthrhm}::numeric,
+				#{item.appa}::numeric,
+				#{item.apps}::numeric,
+				#{item.wthryn}::numeric,
+				#{item.wthrhm}::numeric,
+				#{item.wthrday}::numeric,
+				#{item.cordlat}::varchar,
+				#{item.cordlon}::varchar,
+				#{item.cordht}::varchar,
+				#{item.dtregt}::date,
+				#{item.datyy}::int,
+			    #{item.datmm}::int,
+			    #{item.datdd}::int
+			);
+		</foreach>
+	</insert>
+
+	<insert id="addNemPowlvl" parameterType="hashMap">
+		<foreach item="item" index="index" collection="list" open="" separator="" close="">
+			DELETE FROM xeus.ndms_nem_powlvl
+
+			WHERE full_area_nm = #{item.fullareanm}::varchar and obsr_dttm = #{item.obsrdttm}::varchar;
+
+			INSERT INTO xeus.ndms_nem_powlvl(
+		            obsr_dttm, full_area_nm, obst_nm, obsr_value, dngr_stat_cancel,
+		            data_tp, wlvl_expt_dttm, area_cd, seq_no, dt_regt, dat_yy, dat_mm, dat_dd)
+		    VALUES (
+		    #{item.obsrdttm}::varchar,
+		    #{item.fullareanm}::varchar,
+		    #{item.obstnm}::varchar,
+		    #{item.obsrvalue}::numeric,
+		    #{item.dngrstatcancel}::varchar,
+		    #{item.datatp}::varchar,
+		    #{item.wlvlexptdttm}::varchar,
+		    #{item.areacd}::varchar,
+		    #{item.seqno}::varchar,
+		    #{item.dtregt}::date,
+			        #{item.datyy}::int,
+			        #{item.datmm}::int,
+			        #{item.datdd}::int);
+
+		</foreach>
+	</insert>
+	
+	<insert id="addTest" parameterType="hashMap">
+			INSERT INTO ${table}(
+				${emdType}, ${ctgory}, dat_yy, dat_mm, dat_dd, data_tp
+			)
+		    VALUES (
+		    	#{emdValue},
+		    	#{realValue},
+		    	#{datYy}::SMALLINT,
+		    	#{datMm}::SMALLINT,
+		    	#{datDd}::SMALLINT,
+		    	#{dataTp}
+		    )
+	</insert>
+	
+	<insert id="addEventTest" parameterType="hashMap">
+			INSERT INTO xeus.mon_evet_hist(
+				evt_nm, evt_actn_dtm, evt_svc_nm, usvc_outb_id, evt_typ
+			)
+		    VALUES (
+		   		#{evtNm},
+		   		#{evtActnDtm},
+		   		#{evtSvcNm},
+		   		'test',
+		   		#{evtTyp}
+		    )
+	</insert>
+
+
+	<insert id="addKmaDfsShrtPop" parameterType="hashMap">
+
+		<foreach item="item" index="index" collection="list" open="" separator="" close="">
+
+			DELETE FROM xeus.ndms_kma_dfs_shrt_pop
+
+			WHERE userdefineareanm = #{item.userdefineareanm}::varchar and dt_tmfc = #{item.dttmfc}::varchar;
+
+			INSERT INTO xeus.ndms_kma_dfs_shrt_pop(userdefineareanm, dt_tmfc,
+            coord_x, coord_y, qty_rs_rat1, qty_rs_rat2, qty_rs_rat3, qty_rs_rat4,
+            qty_rs_rat5, qty_rs_rat6, qty_rs_rat7, qty_rs_rat8, qty_rs_rat9,
+            qty_rs_rat10, qty_rs_rat11, qty_rs_rat12, qty_rs_rat13, qty_rs_rat14,
+            qty_rs_rat15, qty_rs_rat16, qty_rs_rat17, qty_rs_rat18, qty_rs_rat19,
+            qty_rs_rat20, qty_rs_rat21, qty_rs_rat22, dt_regt, area_cd, dat_yy, dat_mm, dat_dd)
+			    VALUES (
+			    #{item.userdefineareanm}::varchar,
+			     #{item.dttmfc}::varchar,
+			    #{item.coordx}::numeric,
+			    #{item.coordy}::numeric,
+			    #{item.qtyrsrat1}::numeric,
+			    #{item.qtyrsrat2}::numeric,
+			    #{item.qtyrsrat3}::numeric,
+			    #{item.qtyrsrat4}::numeric,
+	            #{item.qtyrsrat5}::numeric,
+	            #{item.qtyrsrat6}::numeric,
+	            #{item.qtyrsrat7}::numeric,
+	            #{item.qtyrsrat8}::numeric,
+	            #{item.qtyrsrat9}::numeric,
+	            #{item.qtyrsrat10}::numeric,
+	            #{item.qtyrsrat11}::numeric,
+	            #{item.qtyrsrat12}::numeric,
+	            #{item.qtyrsrat13}::numeric,
+	            #{item.qtyrsrat14}::numeric,
+	            #{item.qtyrsrat15}::numeric,
+	            #{item.qtyrsrat16}::numeric,
+	            #{item.qtyrsrat17}::numeric,
+	            #{item.qtyrsrat18}::numeric,
+	            #{item.qtyrsrat19}::numeric,
+	            #{item.qtyrsrat20}::numeric,
+	            #{item.qtyrsrat21}::numeric,
+	            #{item.qtyrsrat22}::numeric,
+	            #{item.dtregt}::date,
+	            #{item.areacd},
+			        #{item.datyy}::int,
+			        #{item.datmm}::int,
+			        #{item.datdd}::int);
+		</foreach>
+	</insert>
+	<insert id="addKmaAlertInfo" parameterType="hashMap">
+		INSERT INTO xeus.ndms_kma_alert_info(
+			status, doc_code, doc_nm, report_time, event_time, latitude, longitude, magnitude, location,
+			 event_id, instruction, depth, intensity_type, intensity_desc, distance, auto_flag, local_flag, sea_flag, nk_flag)
+	    VALUES (
+			#{status},
+			#{DocCode},
+			#{DocNm},
+			#{ReportTime},
+			#{EventTime},
+			#{Latitude},
+			#{Longitude},
+			#{Magnitude},
+			#{Location},
+			#{EventID},
+			#{instruction},
+			#{Depth},
+			#{IntensityType},
+			#{IntensityDesc},
+			#{distance},
+			#{Autoflag},
+			#{Localflag},
+			#{Seaflag},
+			#{Nkflag}
+		)
+	</insert>
+	<update id="modKmaAlertInfo" parameterType="hashMap">
+		UPDATE xeus.ndms_kma_alert_info
+			SET status = #{status},
+				doc_code = #{DocCode},
+				doc_nm = #{DocNm},
+				report_time = #{ReportTime},
+				event_time = #{EventTime},
+				latitude = #{Latitude},
+				longitude = #{Longitude},
+				magnitude = #{Magnitude},
+				location = #{Location},
+				instruction = #{instruction},
+				depth = #{Depth},
+				intensity_type = #{IntensityType},
+				intensity_desc = #{IntensityDesc},
+				distance = #{distance},
+				auto_flag = #{Autoflag},
+				local_flag = #{Localflag},
+				sea_flag = #{Seaflag},
+				nk_flag = #{Nkflag}
+				
+		WHERE event_id=#{EventID}
+	</update>
+	<insert id="preAddKmaAlertInfo" parameterType="hashMap">
+		INSERT INTO xeus.ndms_kma_alert_info(
+			status, doc_code, doc_nm, report_time, event_time, latitude, longitude, magnitude, location,
+			 event_id, instruction, depth, intensity_type, intensity_desc, distance, auto_flag, local_flag, sea_flag, nk_flag)
+	    VALUES (
+			#{status},
+			#{code},
+			#{DocNm},
+			#{rtptime},
+			#{orgtime},
+			#{lat},
+			#{lon},
+			#{mag},
+			#{area},
+			#{eqno},
+			#{note},
+			#{depth},
+			#{Itype},
+			#{Idesc},
+			#{distance},
+			#{auto},
+			#{local},
+			#{sea},
+			#{nk}
+		)
+	</insert>
+	<update id="preModKmaAlertInfo" parameterType="hashMap">
+		UPDATE xeus.ndms_kma_alert_info
+			SET status=#{status},
+				doc_code=#{code},
+				doc_nm=#{DocNm},
+				report_time=#{rtptime},
+				event_time=#{orgtime},
+				latitude=#{lat},
+				longitude=#{lon},
+				magnitude=#{mag},
+				location=#{area},
+				instruction=#{note},
+				depth=#{depth},
+				intensity_type=#{Itype},
+				intensity_desc=#{Idesc},
+				distance=#{distance},
+				auto_flag=#{auto},
+				local_flag=#{local},
+				sea_flag=#{sea},
+				nk_flag=#{nk}
+				
+		WHERE event_id=#{eqno}
+	</update>
+	<select id="getKmaAlertInfo" parameterType="hashMap" resultType="hashMap">
+		SELECT * FROM xeus.ndms_kma_alert_info
+			<where>
+				<if test="emdCd != null and emdCd != ''">
+					AND location like '%' || #{emdCd} || '%'				
+				</if>
+				<if test="dat != null and dat != ''">
+					AND event_time like '%' || #{dat} || '%'				
+				</if>
+			</where>
+	</select>
+	<select id="getKmaAlertEventIdCount" parameterType="hashMap" resultType="hashMap">
+		SELECT COUNT(*) AS count FROM xeus.ndms_kma_alert_info 
+		<where>
+			<if test= "eqno != null and eqno != '' ">
+				AND event_id=#{eqno}
+			</if>
+			<if test= "EventID != null and EventID != '' ">
+				AND event_id=#{EventID}
+			</if>
+		</where>
+	</select>
+	<select id="getRealTest" parameterType="hashMap" resultType="hashMap">
+		SELECT
+			userdefineareanm AS userdefineareanm,
+			dt_obz AS dtobz,
+			wind_wd AS windwd,
+			wv_ws AS wvws,
+			at_avg_ta AS atavgta,
+			wthr_hm AS wthrhm,
+			ap_pa AS appa,
+			ap_ps AS apps,
+			wthr_yn AS wthryn,
+			wthr_1hr AS wthr1hr,
+			wthr_day AS wthrday,
+			cord_lat AS cordlat,
+			cord_lon AS cordlon,
+			cord_ht AS cordht,
+			dt_regt AS dtregt,
+			cd_stn AS cdstn,
+			dat_yy AS datyy,
+			dat_mm AS datmm,
+			dat_dd AS datdd
+	
+		FROM
+			xeus.ndms_kma_aws 
+		WHERE
+			dt_regt = '2020-05-08'
+	</select>
+	
+</mapper>

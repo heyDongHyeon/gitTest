@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.ndpssend.service.NdpsSendMapper">
+
+
+	<select id="getSMSGroupInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT ADBK_GROUP_NM as grp
+		FROM sejong.adbk_view
+
+		GROUP BY ADBK_GROUP_NM
+	</select>
+	<select id="getSMSTreeGroupInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT DISTINCT id,pId,name, phoneNumber FROM (
+			SELECT
+				T1.ADBK_INNB AS id,
+				T1.ADBK_GROUP_INNB AS pId,
+				T1.ADBK_NM AS name,
+				T1.ADBK_MOBLPHONNO AS phoneNumber
+			FROM
+				sejong.adbk_view T1
+				LEFT JOIN sejong.adbkgrp_view T2 ON T1.ADBK_GROUP_INNB = T2.ADBK_GROUP_INNB
+			WHERE
+				T2.ADBK_GROUP_INNB IS NOT NULL
+			UNION ALL
+			(	 SELECT ADBK_GROUP_INNB AS id, UPPER_ADBK_GROUP_INNB AS pId, ADBK_GROUP_NM AS name, null AS phoneNumber FROM sejong.adbkgrp_view WHERE ADBK_GROUP_INNB IN ( SELECT DISTINCT ADBK_GROUP_INNB FROM sejong.adbk_view ) )
+			UNION ALL
+			(
+				SELECT
+					ADBK_GROUP_INNB AS id,
+					UPPER_ADBK_GROUP_INNB AS pId,
+					ADBK_GROUP_NM AS name,
+					null AS phoneNumber
+				FROM
+					sejong.adbkgrp_view
+				WHERE
+					ADBK_GROUP_INNB IN ( SELECT DISTINCT UPPER_ADBK_GROUP_INNB FROM sejong.adbkgrp_view WHERE ADBK_GROUP_INNB IN ( SELECT DISTINCT ADBK_GROUP_INNB FROM sejong.adbk_view ) )
+			)
+			UNION ALL
+			(
+				SELECT
+					T1.ADBK_INNB AS id,
+					9999 AS pId,
+					T1.ADBK_NM AS name,
+					T1.ADBK_MOBLPHONNO AS phoneNumber
+
+				FROM
+					sejong.adbk_view T1
+					LEFT JOIN sejong.adbkgrp_view T2 ON T1.ADBK_GROUP_INNB = T2.ADBK_GROUP_INNB
+				WHERE
+					T2.ADBK_GROUP_INNB IS NULL
+			)
+			UNION ALL
+			(
+				SELECT	9999 AS id,	0 AS pId,	'그룹없음' AS name, null AS phoneNumber
+			)
+		) AS TEMP
+		WHERE name != ''
+		ORDER BY name ASC
+	</select>
+
+	<select id="getSMSInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT ADBK_INNB as innb, ADBK_NM as nm, ADBK_TELNO as telno, ADBK_MOBLPHONNO as moblphonno, ADBK_FAXNO as faxno
+			, ADBK_GROUP_NM as grp
+			FROM sejong.adbk_view
+			<where>
+					<if test="grp != null and grp != ''">
+						AND ADBK_GROUP_NM = #{grp}
+					</if>
+					<if test="objName != null and objName != ''">
+						AND ADBK_NM LIKE concat('%', #{objName}, '%')
+					</if>
+					<if test="objNum != null and objNum != ''">
+						AND ADBK_MOBLPHONNO LIKE concat('%', #{objNum}, '%')
+					</if>
+			</where>
+
+			GROUP BY ADBK_GROUP_NM,ADBK_NM
+		ORDER BY ADBK_NM ASC
+	</select>
+
+	<select id="getVoiceInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+		SELECT
+			BRDCST_TRMNL_SE as se,
+			BRDCST_TRMNL_INNB as innb,
+			BRDCST_TRMNL_NM as nm,
+			BRDCST_TRMNL_TELNO as telno
+		FROM sejong.brdcst_trmnls_view
+<!-- 				WHERE -->
+<!-- 				  BRDCST_TRMNL_NM LIKE concat('%', #{objName}, '%') -->
+<!-- 				AND -->
+<!-- 				  BRDCST_TRMNL_LC LIKE concat('%', #{emdCd}, '%') -->
+		<where>
+				AND BRDCST_TRMNL_SE = 'B03001'
+			<!--장비명 -->
+			<if test="objName != null and objName != ''">
+				AND BRDCST_TRMNL_NM LIKE concat_ws(#{objName},'%','%')
+			</if>
+			<!--읍면동 -->
+			<if test="emdCd != null and emdCd != ''">
+				AND BRDCST_TRMNL_LC LIKE concat_ws(#{emdCd},'%','%')
+			</if>
+		</where>
+
+	</select>
+    <insert id="sendAllSMS" parameterType="HashMap">
+
+			INSERT INTO
+			relation.mssage_cntc_sndng(
+		    	  MSSAGE_CNTC_ID
+		    	, MSSAGE_CNTC_NM
+		    	, MSSAGE_TRNSMITER_NO
+		    	, MSSAGE_RCVER_NM
+		    	, MSSAGE_RECPTN_NO
+		    	, MSSAGE_CN
+		    	, MSSAGE_TY
+		    	, MSSAGE_RESVE_AT
+				, TRNSMITER_DT
+				, TRNSMITER_REQUST_DT)
+
+				VALUES
+				<foreach collection="list" item="item" open="" separator="," close="">
+				(
+					  'relation01'
+					, '연계발송1'
+					, #{item.transNo}
+					, #{item.rcverNm}
+					, #{item.recptnNo}
+					, #{item.cntcCn}
+					, '4'
+					, #{item.resveAt}
+					<choose>
+               			<when test="item.tranDate !=null">
+                  	 		,STR_TO_DATE(#{item.tranDate}, '%Y%m%d%H%i%s')
+               		 	</when>
+       		         	<otherwise>
+                	 		,now()
+            	   		</otherwise>
+        	    	</choose>
+					<choose>
+               			<when test="item.tranDate !=null">
+                  	 		,STR_TO_DATE(#{item.tranDate}, '%Y%m%d%H%i%s')
+               		 	</when>
+       		         	<otherwise>
+                	 		,now()
+            	   		</otherwise>
+        	    	</choose>
+			    )
+				</foreach>
+	</insert>
+
+    <insert id="sendAllVoice" parameterType="HashMap">
+	    INSERT INTO
+	    relation.mssage_cntc_sndng (
+		      MSSAGE_CNTC_ID
+		    , MSSAGE_CNTC_NM
+		    , MSSAGE_RCVER_NM
+		    , MSSAGE_RECPTN_NO
+		    , MSSAGE_CN
+		    , BRDCST_TRMNL_NO
+		    , BRDCST_VOICE_SEXDSTN
+		    , BRDCST_VOICE_VOLUM
+		    , BRDCST_VOICE_VE
+		    , BRDCST_BEGIN_NTCN
+		    , BRDCST_END_NTCN
+		    , MSSAGE_TY
+		    , MSSAGE_RESVE_AT
+		    , TRNSMITER_DT
+		    , TRNSMITER_REQUST_DT)
+
+		    VALUES
+		    <foreach collection="list" item="item" open="" separator="," close="">
+		    (
+				  'relation01'
+				, '연계발송1'
+				, #{item.rcverNm}
+				, #{item.recptnNo}
+				, #{item.cntcCn}
+		   		, #{item.tranlNo}
+		   		, #{item.voiceSexdstn}
+		   		, #{item.voiceVolum}
+		   		, #{item.voiceVe}
+		   		, #{item.beginNtcn}
+		   		, #{item.endNtcn}
+		   		, #{item.mssageTy}
+		   		, #{item.resveAt}
+		  	    <choose>
+               		 <when test="item.tranDate !=null">
+                  	 	,STR_TO_DATE(#{item.tranDate}, '%Y%m%d%H%i%s')
+               		 </when>
+       		         <otherwise>
+                	 	,now()
+            	   	 </otherwise>
+        	    </choose>
+		 	    <choose>
+               		 <when test="item.tranDate !=null">
+                  	 	,STR_TO_DATE(#{item.tranDate}, '%Y%m%d%H%i%s')
+               		 </when>
+       		         <otherwise>
+                	 	,now()
+            	   	 </otherwise>
+        	    </choose>
+	   		)
+			</foreach>
+	</insert>
+</mapper>

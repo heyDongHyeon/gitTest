@@ -1,0 +1,240 @@
+html, body { background: #EDEDED; margin: 0; padding: 0; }
+img { padding: 0; margin: 0; }
+.hidden { display: none; }
+input, select { outline: none; }
+table { border-spacing:  0px !important; }
+
+#header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+    height: 50px;
+    background: #3A79E2;
+    border-bottom: 2px solid #255DBA;
+}
+
+#header #ci {
+    margin-left: 18.5%;
+}
+
+#header #back {
+    position: absolute;
+    top: 0px;
+    right: 18.5%;
+    background: gray;
+    color: white;
+    padding: 15px;
+    cursor: pointer;
+}
+
+#header #back:hover {
+    text-decoration: underline;
+}
+
+#wrap {
+    /* width: 1500px;
+    height: 600px;
+    margin: 0 auto;
+    padding-top: 75px; */
+    margin-left: 70px;
+    padding: 20px;
+    background: rgb(59, 59, 59);
+    height: 100%;
+}
+
+#wrap #title {
+    /* background: #898989;
+    font-weight: bold;
+    color: white;
+    padding: 7px; */
+    font-size: 13px;
+    color:#f6f6f6;
+    padding-left: 10px;
+}
+
+#wrap #search {
+    position: relative;
+    margin-top: 14px;
+    background: #30303A;
+    padding: 10px;
+    color:#f6f6f6;
+}
+
+#wrap #search span {
+}
+
+#wrap #search #searchInput {
+    width: 200px;
+    height: 35px;
+    vertical-align: top;
+    border: none;
+    padding-left: 10px;
+    background: #555;
+    color:#f6f6f6;
+}
+
+#wrap #search select {
+    width: 200px;
+    height: 35px;
+    vertical-align: top;
+    padding-left: 10px;
+    border:none;
+
+    background: #555;
+    color:#f6f6f6;
+}
+
+#wrap #search .paleBtn {
+    height: 30px;
+    padding: 0px 15px;
+    background: white;
+    cursor: pointer;
+    color: gray;
+    border: 1px solid #DADADA;
+}
+
+#wrap #search #searchBtn:hover {
+}
+
+#wrap #search #count {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+/*     color: #666666; */
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#wrap #content {
+    /* width: 100%; */
+    max-height: 600px;
+    margin-top: 12px;
+    overflow: auto;
+/*     background: #e4e4e4; */
+/*     padding: 10px; */
+}
+/*
+#wrap #content #userList {
+    width: 100%;
+}
+
+#wrap #content #userList th{
+    font-size: 13px;
+    padding: 15px;
+    text-align: center;
+	background:#30303A;
+	border:none;
+	color:#f6f6f6;
+}
+
+#wrap #content #userList td{
+	background: rgb(59, 59, 59);
+    border: 1px solid #555;
+    border-right:none;
+    font-size: 13px;
+    padding: 10px;
+    text-align: center;
+    color: #f6f6f6;
+}
+
+#wrap #content #userList td:FIRST-CHILD {
+	  border-left:none;
+}
+#wrap #content #userList tbody tr td .mngBtn, .myBtn {
+	width: 24px;
+	height: 24px;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	background: none;
+    background-image: url("../img/icon_info_normal.png");
+}
+
+#wrap #content #userList tbody tr td .mngBtn:hover, .myBtn:hover {
+    background-image: url("../img/icon_info_over.png");
+}
+
+#wrap #content #userList tbody tr td.downBtn:hover {
+    cursor: pointer;
+    text-decoration: underline;
+} */
+
+.bpopup {
+    display: none;
+    border: 5px solid #222c38;
+    background: #222c38;
+    width: 400px;
+}
+.bpopup button {
+    background: #4C535C;
+    border: 0px;
+    font-size: 13px;
+    padding: 7px 25px;
+    color: white;
+    cursor: pointer;
+}
+
+#bpop_wrap {
+    padding: 0 10px;
+}
+#bpop_wrap h2 {
+    text-align: center;
+    font-size: 14px;
+    margin: 20px 0px;
+    color: white;
+}
+#bpop_wrap table {
+    /* border-spacing: 0; */
+    border-spacing: 1px;
+    width: 381px;
+}
+#bpop_wrap table tr .top {
+    text-align: right;
+    font-size: 13px;
+    /* padding: 20px 15px 20px 15px; */
+    padding: 15px;
+    background-color: #35404C;
+    color: white;
+    width: 85px;
+}
+#bpop_wrap table tr th {
+    width: 35%;
+}
+#bpop_wrap table tr td {
+    border-bottom: 1px solid #D5D5D5;
+    border-right: 1px solid #D5D5D5;
+    /* background: #D5D5D5; */
+    background: white;
+    padding-left: 10px;
+}
+#bpop_wrap table tr td.lastTd {
+    background: #222c38;
+}
+#bpop_wrap table tr .bottom {
+    text-align: right;
+    font-size: 13px;
+    padding: 150px 15px 150px 73px;
+    background-color: #35404C;
+    color: white;
+}
+#bpop_wrap input {
+    height: 25px;
+    width: 95%;
+    /* background: #D5D5D5; */
+    background: white;
+    padding-left: 5px;
+}
+#bpop_wrap input, textarea {
+    border: 0;
+}
+#bpop_wrap select {
+    height: 25px;
+    width: 95%;
+    border: 0;
+    /* background: #D5D5D5; */
+    background: white;
+}
+#bpop_wrap table tr td button {
+    margin: 10px 0px;
+}

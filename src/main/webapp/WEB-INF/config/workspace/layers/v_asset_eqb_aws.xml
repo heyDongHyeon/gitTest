@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    레이어 정보 xml
+    layerGroup은 지원 안함 client단에서 그룹 정책을 세워서 사용하는 것으로 결정
+    datastore는 schema에 엄격하므로 layer설정지 datastore도 지정해야 함
+    virtualTable은 지원 안하며 dbms의 view를 이용하여 구혀하도록 함.
+    스타일명은 <sld:UserStyle>의 <sld:Name>bldg_line</sld:Name> 으로 함
+-->
+<layer queryable="1">
+    <name>v_asset_eqb_aws</name>
+    <nativeName>v_asset_eqb_aws</nativeName>
+    <datastore>xeus_web_db</datastore>
+    <fid>_gid</fid>
+    <title>기상관측기기</title>
+    <abstract>기상관측기기</abstract>
+    <wms>true</wms>
+    <wfs enable="true">
+      <operation>Insert</operation>
+      <operation>Update</operation>
+      <operation>Delete</operation>
+    </wfs>
+    <keywordList>
+        <keyword>features</keyword>
+        <keyword>v_asset_eqb_aws</keyword>
+    </keywordList>
+    <!-- 원본 src and boundBox -->
+    <srs>EPSG:5186</srs>
+    <boundingBox>
+        <min_ye>214137.161660945</min_ye>
+        <max_ye>429549.671707086</max_ye>
+        <min_xn>233223.287848912</min_xn>
+        <max_xn>458207.477140529</max_xn>
+    </boundingBox>
+    <defaultStyle>v_asset_eqb_aws</defaultStyle>
+    <styles>
+        <style>v_asset_eqb_aws</style>
+    </styles>
+</layer>

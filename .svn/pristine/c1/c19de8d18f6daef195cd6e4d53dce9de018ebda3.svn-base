@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- wms의 getcapabilities와 매핑되므로 xmlns정보가 있어야 unmarshaller 됨 -->
+<Service 
+    xmlns="http://www.opengis.net/wms" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <Name>WMS</Name>
+    <Title>GEOMEX Web Map Service</Title>
+    <Abstract>A compliant implementation of WMS plus most of the SLD extension (dynamic styling). </Abstract>
+    <KeywordList>
+        <Keyword>WMS</Keyword>
+        <Keyword>GEOMEX</Keyword>
+    </KeywordList>
+    <!-- xlink:type 규칙 지켜야 함 -->
+    <OnlineResource xlink:type="geomex" xlink:href="http://www.geomexsoft.co.kr" />
+    <ContactInformation>
+        <ContactPersonPrimary>
+            <ContactPerson>geomex</ContactPerson>
+            <ContactOrganization>geomexsoft</ContactOrganization>
+        </ContactPersonPrimary>
+        <ContactPosition>company</ContactPosition>
+        <ContactAddress>
+            <AddressType>Work</AddressType>
+            <Address />
+            <City/>
+            <StateOrProvince />
+            <PostCode />
+            <Country>Korea</Country>
+        </ContactAddress>
+        <ContactVoiceTelephone />
+        <ContactFacsimileTelephone />
+        <ContactElectronicMailAddress/>
+    </ContactInformation>
+    <Fees>NONE</Fees>
+    <AccessConstraints>NONE</AccessConstraints>
+    <MaxWidth>4000</MaxWidth>
+    <MaxHeight>4000</MaxHeight>
+</Service>

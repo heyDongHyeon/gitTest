@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.map.service.GeometryMapper">
+
+	<select id="getGeometry" parameterType="HashMap" resultType="GeometryVo">
+        SELECT
+
+            _gid AS gid,
+            st_x(st_centroid(_geometry)) AS anno_x,
+            st_y(st_centroid(_geometry)) AS anno_y,
+            st_astext(_geometry) AS geometry
+
+        FROM xeus.${tbl}
+
+        WHERE ${col} = #{val}
+	</select>
+
+	<select id="getWfs" parameterType="HashMap" resultType="HashMap">
+        SELECT *, st_asgeojson(_geometry) as geojson
+
+        FROM xeus.${tbl}
+
+        <where>
+	        <if test="col != null and col != '' and val != null and val != ''">
+	            AND ${col} in (${val})
+	        </if>
+
+	        <!-- <if test="col == 'dmtia_nm'">
+	            AND loc_dat > (SELECT replace((current_date - 3)::varchar, '-', '') || '000000')
+	        </if> -->
+
+	        <if test="box != null and box != ''">
+	            AND ST_Intersects(ST_MakeEnvelope(${box}, 5186), _geometry)
+	        </if>
+
+			<!-- 특정 조건 추가 -->
+            <if test="reqGbn != null and reqGbn != ''">
+                AND req_gbn in (${reqGbn})
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND reqst_dat <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND reqst_dat <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+            <if test="facilityClscd != null and facilityClscd != ''">
+                AND facility_clscd like '%'||#{facilityClscd}||'%'
+            </if>
+
+	        <if test="col == 'fcl_gbn_cd' ">
+	            AND facility_clscd not like 'WIFI%' and facility_clscd not like 'LORA%' and facility_clscd not like 'CCTV%'
+	        </if>
+        </where>
+
+
+	</select>
+
+	<select id="getPresetCCTV" parameterType="HashMap" resultType="HashMap">
+		SELECT * FROM xeus.asset_cctv_preset
+
+
+		WHERE cctv_mgr_no = #{cctvMgrNo}
+
+		ORDER BY ST_SetSRID(ST_MakePoint(#{tmx}::numeric, #{tmy}::numeric), 5186)
+		<![CDATA[ <-> ]]>
+				 ST_SetSRID(ST_MakePoint(dir_x, dir_y), 5186)
+
+		LIMIT 1
+	</select>
+
+
+</mapper>

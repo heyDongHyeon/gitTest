@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.log.service.IfDscLogMapper">
+    <select id="getList" parameterType="HashMap" resultType="IfDscLogVo">
+        SELECT msg_typ_cd, sta_typ_cd, msg_sta_dtm, snd_sys_cd, rcv_sys_cd, snd_dtm, data_len, send_num, svc_typ, evt_lon, evt_lat, evt_addr, evt_bjd, ref_id, dsc_nm, dsc_phone, dsc_birth, dsc_sex, dsc_addr, guard_nm, guard_phone, evt_dtm, info, note, sender_id, rcv_dtm_rqst, rcv_orgn, nrml_yn, err_msg, snd_dtm_rsp, snd_orgn, images
+
+        FROM xeus.if_dsc_log
+
+        <where>
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                AND msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="staTypCd != null and staTypCd != ''">
+                AND sta_typ_cd = #{staTypCd}
+            </if>
+
+            <if test="msgStaDtm != null and msgStaDtm != ''">
+                AND msg_sta_dtm = #{msgStaDtm}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                AND snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                AND rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                AND snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                AND data_len = #{dataLen}
+            </if>
+
+            <if test="sendNum != null and sendNum != ''">
+                AND send_num = #{sendNum}
+            </if>
+
+            <if test="svcTyp != null and svcTyp != ''">
+                AND svc_typ LIKE '%'||#{svcTyp}||'%'
+            </if>
+
+            <if test="evtLon != null and evtLon != ''">
+                AND evt_lon = #{evtLon}
+            </if>
+
+            <if test="evtLat != null and evtLat != ''">
+                AND evt_lat = #{evtLat}
+            </if>
+
+            <if test="evtAddr != null and evtAddr != ''">
+                AND evt_addr LIKE '%'||#{evtAddr}||'%'
+            </if>
+
+            <if test="evtBjd != null and evtBjd != ''">
+                AND evt_bjd = #{evtBjd}
+            </if>
+
+            <if test="refId != null and refId != ''">
+                AND ref_id = #{refId}
+            </if>
+
+            <if test="dscNm != null and dscNm != ''">
+				AND dsc_nm = #{dscNm}
+			</if>
+
+			<if test="dscPhone != null and dscPhone != ''">
+				AND dsc_phone = #{dscPhone}
+			</if>
+
+			<if test="dscBirth != null and dscBirth != ''">
+				AND dsc_birth = #{dscBirth}
+			</if>
+
+			<if test="dscSex != null and dscSex != ''">
+				AND dsc_sex = #{dscSex}
+			</if>
+
+			<if test="dscAddr != null and dscAddr != ''">
+				AND dsc_addr = #{dscAddr}
+			</if>
+
+            <if test="guardNm != null and guardNm != ''">
+                AND guard_nm = #{guardNm}
+            </if>
+
+            <if test="guardPhone != null and guardPhone != ''">
+                AND guard_phone = #{guardPhone}
+            </if>
+
+            <if test="evtDtm != null and evtDtm != ''">
+                AND evt_dtm = #{evtDtm}
+            </if>
+
+            <if test="info != null and info != ''">
+                AND info = #{info}
+            </if>
+
+            <if test="note != null and note != ''">
+                AND note = #{note}
+            </if>
+
+            <if test="senderId != null and senderId != ''">
+                AND sender_id LIKE '%'||#{senderId}||'%'
+            </if>
+
+            <if test="rcvDtmRqst != null and rcvDtmRqst != ''">
+                AND rcv_dtm_rqst = #{rcvDtmRqst}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                AND rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="nrmlYn != null and nrmlYn != ''">
+                AND nrml_yn = #{nrmlYn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                AND err_msg = #{errMsg}
+            </if>
+
+            <if test="sndDtmRsp != null and sndDtmRsp != ''">
+                AND snd_dtm_rsp = #{sndDtmRsp}
+            </if>
+
+            <if test="sndOrgn != null and sndOrgn != ''">
+                AND snd_orgn = #{sndOrgn}
+            </if>
+
+            <if test="images != null and images != ''">
+                AND images = #{images}
+            </if>
+
+            <if test="dscOrGuardNm != null and dscOrGuardNm != ''">
+                (dsc_nm LIKE '%'||#{dscOrGuardNm}||'%' OR guard_nm LIKE '%'||#{dscOrGuardNm}||'%')
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND evt_dtm <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND evt_dtm <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+        </where>
+
+        <trim prefix="ORDER BY">
+            <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+                ${sortCol} ${sortTyp}
+            </if>
+            <if test="sortCol == null and sortTyp == null">
+                send_num DESC
+            </if>
+        </trim>
+
+        <if test="limit != null and limit != '' and offset != null and offset != ''">
+            LIMIT ${limit} OFFSET ${offset}
+        </if>
+
+    </select>
+
+
+    <select id="getItem" parameterType="HashMap" resultType="IfDscLogVo">
+        SELECT msg_typ_cd, sta_typ_cd, msg_sta_dtm, snd_sys_cd, rcv_sys_cd, snd_dtm, data_len, send_num, svc_typ, evt_lon, evt_lat, evt_addr, evt_bjd, ref_id, dsc_nm, dsc_phone, dsc_birth, dsc_sex, dsc_addr, guard_nm, guard_phone, evt_dtm, info, note, sender_id, rcv_dtm_rqst, rcv_orgn, nrml_yn, err_msg, snd_dtm_rsp, snd_orgn, images
+
+        FROM xeus.if_dsc_log
+
+        <where>
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                AND msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="staTypCd != null and staTypCd != ''">
+                AND sta_typ_cd = #{staTypCd}
+            </if>
+
+            <if test="msgStaDtm != null and msgStaDtm != ''">
+                AND msg_sta_dtm = #{msgStaDtm}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                AND snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                AND rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                AND snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                AND data_len = #{dataLen}
+            </if>
+
+            <if test="sendNum != null and sendNum != ''">
+                AND send_num = #{sendNum}
+            </if>
+
+            <if test="svcTyp != null and svcTyp != ''">
+                AND svc_typ = #{svcTyp}
+            </if>
+
+            <if test="evtLon != null and evtLon != ''">
+                AND evt_lon = #{evtLon}
+            </if>
+
+            <if test="evtLat != null and evtLat != ''">
+                AND evt_lat = #{evtLat}
+            </if>
+
+            <if test="evtAddr != null and evtAddr != ''">
+                AND evt_addr = #{evtAddr}
+            </if>
+
+            <if test="evtBjd != null and evtBjd != ''">
+                AND evt_bjd = #{evtBjd}
+            </if>
+
+            <if test="refId != null and refId != ''">
+                AND ref_id = #{refId}
+            </if>
+
+            <if test="dscNm != null and dscNm != ''">
+				AND dsc_nm = #{dscNm}
+			</if>
+
+			<if test="dscPhone != null and dscPhone != ''">
+				AND dsc_phone = #{dscPhone}
+			</if>
+
+			<if test="dscBirth != null and dscBirth != ''">
+				AND dsc_birth = #{dscBirth}
+			</if>
+
+			<if test="dscSex != null and dscSex != ''">
+				AND dsc_sex = #{dscSex}
+			</if>
+
+			<if test="dscAddr != null and dscAddr != ''">
+				AND dsc_addr = #{dscAddr}
+			</if>
+
+            <if test="guardNm != null and guardNm != ''">
+                AND guard_nm = #{guardNm}
+            </if>
+
+            <if test="guardPhone != null and guardPhone != ''">
+                AND guard_phone = #{guardPhone}
+            </if>
+
+            <if test="evtDtm != null and evtDtm != ''">
+                AND evt_dtm = #{evtDtm}
+            </if>
+
+            <if test="info != null and info != ''">
+                AND info = #{info}
+            </if>
+
+            <if test="note != null and note != ''">
+                AND note = #{note}
+            </if>
+
+            <if test="senderId != null and senderId != ''">
+                AND sender_id = #{senderId}
+            </if>
+
+            <if test="rcvDtmRqst != null and rcvDtmRqst != ''">
+                AND rcv_dtm_rqst = #{rcvDtmRqst}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                AND rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="nrmlYn != null and nrmlYn != ''">
+                AND nrml_yn = #{nrmlYn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                AND err_msg = #{errMsg}
+            </if>
+
+            <if test="sndDtmRsp != null and sndDtmRsp != ''">
+                AND snd_dtm_rsp = #{sndDtmRsp}
+            </if>
+
+            <if test="sndOrgn != null and sndOrgn != ''">
+                AND snd_orgn = #{sndOrgn}
+            </if>
+
+            <if test="images != null and images != ''">
+                AND images = #{images}
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+        SELECT count(*)
+
+        FROM xeus.if_dsc_log
+
+        <where>
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                AND msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="staTypCd != null and staTypCd != ''">
+                AND sta_typ_cd = #{staTypCd}
+            </if>
+
+            <if test="msgStaDtm != null and msgStaDtm != ''">
+                AND msg_sta_dtm = #{msgStaDtm}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                AND snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                AND rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                AND snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                AND data_len = #{dataLen}
+            </if>
+
+            <if test="sendNum != null and sendNum != ''">
+                AND send_num = #{sendNum}
+            </if>
+
+            <if test="svcTyp != null and svcTyp != ''">
+                AND svc_typ LIKE '%'||#{svcTyp}||'%'
+            </if>
+
+            <if test="evtLon != null and evtLon != ''">
+                AND evt_lon = #{evtLon}
+            </if>
+
+            <if test="evtLat != null and evtLat != ''">
+                AND evt_lat = #{evtLat}
+            </if>
+
+            <if test="evtAddr != null and evtAddr != ''">
+                AND evt_addr LIKE '%'||#{evtAddr}||'%'
+            </if>
+
+            <if test="evtBjd != null and evtBjd != ''">
+                AND evt_bjd = #{evtBjd}
+            </if>
+
+            <if test="refId != null and refId != ''">
+                AND ref_id = #{refId}
+            </if>
+
+            <if test="dscNm != null and dscNm != ''">
+				AND dsc_nm = #{dscNm}
+			</if>
+
+			<if test="dscPhone != null and dscPhone != ''">
+				AND dsc_phone = #{dscPhone}
+			</if>
+
+			<if test="dscBirth != null and dscBirth != ''">
+				AND dsc_birth = #{dscBirth}
+			</if>
+
+			<if test="dscSex != null and dscSex != ''">
+				AND dsc_sex = #{dscSex}
+			</if>
+
+			<if test="dscAddr != null and dscAddr != ''">
+				AND dsc_addr = #{dscAddr}
+			</if>
+
+            <if test="guardNm != null and guardNm != ''">
+                AND guard_nm = #{guardNm}
+            </if>
+
+            <if test="guardPhone != null and guardPhone != ''">
+                AND guard_phone = #{guardPhone}
+            </if>
+
+            <if test="evtDtm != null and evtDtm != ''">
+                AND evt_dtm = #{evtDtm}
+            </if>
+
+            <if test="info != null and info != ''">
+                AND info = #{info}
+            </if>
+
+            <if test="note != null and note != ''">
+                AND note = #{note}
+            </if>
+
+            <if test="senderId != null and senderId != ''">
+                AND sender_id LIKE '%'||#{senderId}||'%'
+            </if>
+
+            <if test="rcvDtmRqst != null and rcvDtmRqst != ''">
+                AND rcv_dtm_rqst = #{rcvDtmRqst}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                AND rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="nrmlYn != null and nrmlYn != ''">
+                AND nrml_yn = #{nrmlYn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                AND err_msg = #{errMsg}
+            </if>
+
+            <if test="sndDtmRsp != null and sndDtmRsp != ''">
+                AND snd_dtm_rsp = #{sndDtmRsp}
+            </if>
+
+            <if test="sndOrgn != null and sndOrgn != ''">
+                AND snd_orgn = #{sndOrgn}
+            </if>
+
+            <if test="images != null and images != ''">
+                AND images = #{images}
+            </if>
+
+            <if test="dscOrGuardNm != null and dscOrGuardNm != ''">
+                (dsc_nm LIKE '%'||#{dscOrGuardNm}||'%' OR guard_nm LIKE '%'||#{dscOrGuardNm}||'%')
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND evt_dtm <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND evt_dtm <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+        </where>
+    </select>
+
+
+    <delete id="del" parameterType="HashMap">
+        DELETE FROM xeus.if_dsc_log WHERE send_num = #{sendNum}
+    </delete>
+
+
+    <insert id="add" parameterType="IfDscLogVo">
+        INSERT INTO xeus.if_dsc_log(
+            msg_typ_cd, sta_typ_cd, msg_sta_dtm, snd_sys_cd, rcv_sys_cd, snd_dtm, data_len, send_num, svc_typ, evt_lon, evt_lat, evt_addr, evt_bjd, ref_id, dsc_nm, dsc_phone, dsc_birth, dsc_sex, dsc_addr, guard_nm, guard_phone, evt_dtm, images, info, note, sender_id, rcv_dtm_rqst, rcv_orgn, nrml_yn, err_msg, snd_dtm_rsp, snd_orgn
+        ) VALUES (
+            #{msgTypCd}, #{staTypCd}, #{msgStaDtm}, #{sndSysCd}, #{rcvSysCd}, #{sndDtm}, #{dataLen}, #{sendNum}, #{svcTyp}, #{evtLon}, #{evtLat}, #{evtAddr}, #{evtBjd}, #{refId}, #{dscNm}, #{dscPhone}, #{dscBirth}, #{dscSex}, #{dscAddr}, #{guardNm}, #{guardPhone}, #{evtDtm}, #{images}, #{info}, #{note}, #{senderId}, #{rcvDtmRqst}, #{rcvOrgn}, #{nrmlYn}, #{errMsg}, #{sndDtmRsp}, #{sndOrgn}
+        );
+    </insert>
+
+
+    <update id="edit" parameterType="IfDscLogVo">
+        UPDATE xeus.if_dsc_log SET
+            send_num = #{sendNum}
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                , msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="staTypCd != null and staTypCd != ''">
+                , sta_typ_cd = #{staTypCd}
+            </if>
+
+            <if test="msgStaDtm != null and msgStaDtm != ''">
+                , msg_sta_dtm = #{msgStaDtm}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                , snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                , rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                , snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                , data_len = #{dataLen}
+            </if>
+
+            <if test="svcTyp != null and svcTyp != ''">
+                , svc_typ = #{svcTyp}
+            </if>
+
+            <if test="evtLon != null and evtLon != ''">
+                , evt_lon = #{evtLon}
+            </if>
+
+            <if test="evtLat != null and evtLat != ''">
+                , evt_lat = #{evtLat}
+            </if>
+
+            <if test="evtAddr != null and evtAddr != ''">
+                , evt_addr = #{evtAddr}
+            </if>
+
+            <if test="evtBjd != null and evtBjd != ''">
+                , evt_bjd = #{evtBjd}
+            </if>
+
+            <if test="refId != null and refId != ''">
+                , ref_id = #{refId}
+            </if>
+
+            <if test="dscNm != null and dscNm != ''">
+				, dsc_nm = #{dscNm}
+			</if>
+
+			<if test="dscPhone != null and dscPhone != ''">
+				, dsc_phone = #{dscPhone}
+			</if>
+
+			<if test="dscBirth != null and dscBirth != ''">
+				, dsc_birth = #{dscBirth}
+			</if>
+
+			<if test="dscSex != null and dscSex != ''">
+				, dsc_sex = #{dscSex}
+			</if>
+
+			<if test="dscAddr != null and dscAddr != ''">
+				, dsc_addr = #{dscAddr}
+			</if>
+
+            <if test="guardNm != null and guardNm != ''">
+                , guard_nm = #{guardNm}
+            </if>
+
+            <if test="guardPhone != null and guardPhone != ''">
+                , guard_phone = #{guardPhone}
+            </if>
+
+            <if test="evtDtm != null and evtDtm != ''">
+                , evt_dtm = #{evtDtm}
+            </if>
+
+            <if test="info != null and info != ''">
+                , info = #{info}
+            </if>
+
+            <if test="note != null and note != ''">
+                , note = #{note}
+            </if>
+
+            <if test="senderId != null and senderId != ''">
+                , sender_id = #{senderId}
+            </if>
+
+            <if test="rcvDtmRqst != null and rcvDtmRqst != ''">
+                , rcv_dtm_rqst = #{rcvDtmRqst}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                , rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="nrmlYn != null and nrmlYn != ''">
+                , nrml_yn = #{nrmlYn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                , err_msg = #{errMsg}
+            </if>
+
+            <if test="sndDtmRsp != null and sndDtmRsp != ''">
+                , snd_dtm_rsp = #{sndDtmRsp}
+            </if>
+
+            <if test="sndOrgn != null and sndOrgn != ''">
+                , snd_orgn = #{sndOrgn}
+            </if>
+
+            <if test="images != null and images != ''">
+                , images = #{images}
+            </if>
+
+        WHERE send_num = #{sendNum}
+
+    </update>
+</mapper>

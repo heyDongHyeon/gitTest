@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WFS-Service 
+    xmlns:ows="http://www.opengis.net/ows"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <ows:ServiceIdentification>
+        <ows:Title>GEOMEX Web Map Service</ows:Title>
+        <ows:Abstract>This is the reference implementation of WFS 1.1.0 </ows:Abstract>
+        <ows:Keywords>
+            <ows:Keyword>WFS</ows:Keyword>
+            <ows:Keyword>GEOMEX</ows:Keyword>
+        </ows:Keywords>
+        <ows:ServiceType>WFS</ows:ServiceType>
+        <ows:ServiceTypeVersion>1.1.0</ows:ServiceTypeVersion>
+        <ows:Fees>NONE</ows:Fees>
+        <ows:AccessConstraints>NONE</ows:AccessConstraints>
+    </ows:ServiceIdentification>
+    
+    <ows:ServiceProvider>
+        <ows:ProviderName>geomexsoft</ows:ProviderName>
+        <ows:ServiceContact>
+            <ows:IndividualName>geomex</ows:IndividualName>
+            <ows:PositionName>company</ows:PositionName>
+            <ows:ContactInfo>
+                <ows:Phone>
+                    <ows:Voice />
+                    <ows:Facsimile />
+                </ows:Phone>
+                <ows:Address>
+                    <ows:DeliveryPoint />
+                    <ows:City/>
+                    <ows:AdministrativeArea />
+                    <ows:PostalCode />
+                    <ows:Country>korea</ows:Country>
+                    <ows:ElectronicMailAddress />
+                </ows:Address>
+            </ows:ContactInfo>
+        </ows:ServiceContact>
+    </ows:ServiceProvider>
+</WFS-Service >
+    

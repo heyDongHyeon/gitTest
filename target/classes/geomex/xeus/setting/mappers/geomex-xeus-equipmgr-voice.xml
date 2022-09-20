@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.equipmgr.service.VoiceMapper">
+
+	<select id="getList" parameterType="java.util.HashMap" resultType="VoiceVo">
+		SELECT  voice.mgr_no, voice.fcl_gbn_nm, voice.loc_nm, voice.loc_addr, voice.loc_addr_detail, voice.rs_info, voice.std_date, voice.end_date, voice.biz_exp, voice.warn_dsc, voice.comm_mtd, voice.biz_nm,
+	 		voice.doc_mgr_no, voice.tm_lat, voice.tm_lon, array_to_string(array_agg(mgr.mgr_spot||'/'||mgr.mgr_belong||'/'||mgr.mgr_level||'/'||mgr.mgr_nm||'/'||mgr.mgr_tel||'/'||mgr.mgr_phone||'/'||mgr.mgr_sub_no), ',') as strMgr
+		, sig.sig_kor_nm || ' ' || emd.emd_kor_nm || ' ' || li.li_kor_nm || ' ' || cbnd.jibun AS addr
+
+			FROM xeus.asset_eqb_voice AS voice
+				LEFT JOIN xeus.asset_eqb_aws_mgr AS mgr
+					ON voice.mgr_no = mgr.mgr_no
+
+
+						        LEFT JOIN xeus.kras_cbnd_as AS cbnd ON st_intersects(cbnd._geometry, voice._geometry)
+        LEFT JOIN xeus.kais_sig_as sig on sig.sig_cd = substr(cbnd.pnu, 0, 6)
+        LEFT JOIN xeus.kais_emd_as emd on emd.emd_cd = substr(cbnd.pnu, 0, 9)
+        LEFT JOIN xeus.kais_li_as li on li.li_cd = substr(cbnd.pnu, 0, 11)
+				<where>
+					<if test="objName != null and objName != ''">
+		                AND (voice.doc_mgr_no like '%'||#{objName}||'%' OR loc_addr like '%'||#{objName}||'%')
+		            </if>
+					<if test="emdCd != null and emdCd != ''">
+		                st_intersects(emd._geometry, voice._geometry)
+
+		                AND emd.emd_cd = #{emdCd}
+		            </if>
+					<if test="mgrNo != null and mgrNo != ''">
+						AND voice.mgr_no = #{mgrNo}
+					</if>
+				</where>
+				GROUP BY voice.mgr_no, addr
+				ORDER BY voice.mgr_no
+	</select>
+	<select id="getItem" parameterType="java.util.HashMap" resultType="VoiceVo">
+		SELECT  voice.mgr_no, voice.fcl_gbn_nm, voice.loc_nm, voice.loc_addr, voice.loc_addr_detail, voice.rs_info, voice.std_date, voice.end_date, voice.biz_exp, voice.warn_dsc, voice.comm_mtd, voice.biz_nm,
+	 		voice.doc_mgr_no, voice.tm_lat, voice.tm_lon, array_to_string(array_agg(mgr.mgr_spot||'/'||mgr.mgr_belong||'/'||mgr.mgr_level||'/'||mgr.mgr_nm||'/'||mgr.mgr_tel||'/'||mgr.mgr_phone||'/'||mgr.mgr_sub_no ), ',') as strMgr
+			FROM xeus.asset_eqb_voice AS voice
+				LEFT JOIN xeus.asset_eqb_aws_mgr AS mgr
+					ON voice.mgr_no = mgr.mgr_no
+						where voice.mgr_no = #{mgrNo}
+							GROUP BY voice.mgr_no
+	</select>
+	<insert id="add" parameterType="VoiceVo">
+<!-- 		aws 테이블 insert -->
+		WITH myconstants AS(
+			INSERT INTO xeus.asset_eqb_voice(
+	              	mgr_no, fcl_gbn_nm, loc_nm, loc_addr, loc_addr_detail, rs_info, std_date, end_date, biz_exp, warn_dsc, comm_mtd, biz_nm, doc_mgr_no, tm_lat, tm_lon, _geometry
+	              	, _annox, _annoy
+	              	)
+		    VALUES (
+		    		(SELECT
+			             		 'VOI' ||
+			             		 (case length((num + 1)::text)::integer
+			               		 when 1 then '000000'
+			               		 when 2 then '00000'
+			               		 when 3 then '0000'
+			                	 when 4 then '000'
+			                	 when 5 then '00'
+			                	 when 6 then '0'
+			               	     when 7 then ''
+			            		  end) || num + 1 AS val
+			           				 FROM generate_series(
+			               				 (SELECT coalesce(substring(max(mgr_no), 4)::numeric, 0) FROM xeus.asset_eqb_voice),
+			                			 (SELECT coalesce(substring(max(mgr_no), 4)::numeric, 0) FROM xeus.asset_eqb_voice)
+			           					 ) AS num),
+		    		#{fclGbnNm}, #{locNm}, #{locAddr}, #{locAddrDetail}, #{rsInfo}, #{stdDate}, #{endDate}, #{bizExp}, #{warnDsc},
+		    		#{commMtd}, #{bizNm}, #{docMgrNo}, #{tmLat}::numeric, #{tmLon}::numeric,
+		    		(SELECT st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)),
+		    		(SELECT st_x(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186))),
+		    		(SELECT st_y(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)))
+		    	 )
+		    RETURNING mgr_no
+    	 )
+
+<!-- 	    mgr테이블 insert -->
+
+	    INSERT INTO xeus.asset_eqb_aws_mgr(
+              	mgr_no, mgr_spot, mgr_belong, mgr_level, mgr_nm, mgr_tel, mgr_phone, mgr_sub_no
+            	)
+	    VALUES
+	   		<foreach collection="mgr" item="item" open="" separator="," close="">
+            	(
+            		(select mgr_no from myconstants),
+            		#{item.mgrSpot}, #{item.mgrBelong}, #{item.mgrLevel}, #{item.mgrNm}, #{item.mgrTel}, #{item.mgrPhone}, #{item.mgrSubNo}::Integer
+            	)
+        	</foreach>
+	</insert>
+	<update id="edit" parameterType="VoiceVo">
+		UPDATE xeus.asset_eqb_voice
+			SET fcl_gbn_nm=#{fclGbnNm},
+				loc_nm=#{locNm},
+				loc_addr=#{locAddr},
+				loc_addr_detail=#{locAddrDetail},
+				rs_info=#{rsInfo},
+				std_date=#{stdDate},
+				end_date=#{endDate},
+				biz_exp=#{bizExp},
+				warn_dsc=#{warnDsc},
+				comm_mtd=#{commMtd},
+				biz_nm=#{bizNm},
+				doc_mgr_no=#{docMgrNo},
+				tm_lat=#{tmLat}::numeric,
+				tm_lon=#{tmLon}::numeric,
+				_geometry=(SELECT st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)),
+				_annox=(SELECT st_x(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186))),
+	    		_annoy=(SELECT st_y(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)))
+					WHERE mgr_no=#{mgrNo};
+		<if test="mgr != null">
+			<foreach collection="mgr" item="item" open="" separator=";" close="">
+				UPDATE xeus.asset_eqb_aws_mgr
+					SET
+		           		 mgr_spot=#{item.mgrSpot}
+		           		,mgr_belong=#{item.mgrBelong}
+		           		,mgr_level=#{item.mgrLevel}
+		           		,mgr_nm=#{item.mgrNm}
+		           		,mgr_tel=#{item.mgrTel}
+		           		,mgr_phone=#{item.mgrPhone}
+		        	WHERE mgr_no=#{mgrNo} and mgr_sub_no=#{item.mgrSubNo}::Integer
+		     </foreach>
+        </if>
+	</update>
+	<delete id="del" parameterType="java.util.HashMap">
+		DELETE FROM xeus.asset_eqb_voice
+			WHERE mgr_no=#{mgrNo};
+
+		DELETE FROM xeus.asset_eqb_aws_mgr
+			WHERE mgr_no=#{mgrNo};
+	</delete>
+</mapper>

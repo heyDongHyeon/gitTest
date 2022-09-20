@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.BellMapper">
+
+	<select id="getList" parameterType="HashMap" resultType="BellVo">
+		<!-- SELECT evt_mgr_no, cctv_mgr_no, evt_lat, evt_lon, mgr_seq
+
+		FROM xeus.bell_cctv_evt -->
+
+        SELECT bell.mgr_seq
+            , bell.evt_mgr_no
+            , bell.cctv_mgr_no
+            , CASE WHEN bell.cctv_mgr_no is null THEN
+                bell.evt_lat
+                ELSE cctv._annox
+              END AS evt_lat
+            , CASE WHEN bell.cctv_mgr_no is null THEN
+                bell.evt_lon
+                ELSE cctv._annoy
+              END AS evt_lon
+            , master.event_typ
+            , master.recv_dat
+            , master.state_cd
+            , master.close_cd
+            , cctv.cctv_nm
+        FROM xeus.bell_cctv_evt AS bell
+        LEFT JOIN xeus.master_cctv_evt AS master ON bell.evt_mgr_no = master.mgr_no
+        LEFT JOIN xeus.asset_cctv AS cctv ON cctv.mgr_no = bell.cctv_mgr_no
+
+		<where>
+
+			<if test="evtMgrNo != null and evtMgrNo != ''">
+				AND bell.evt_mgr_no = #{evtMgrNo}::numeric
+			</if>
+
+			<if test="cctvMgrNo != null and cctvMgrNo != ''">
+				AND bell.cctv_mgr_no = #{cctvMgrNo}
+			</if>
+
+			<if test="evtLat != null and evtLat != ''">
+				AND bell.evt_lat = #{evtLat}::numeric
+			</if>
+
+			<if test="evtLon != null and evtLon != ''">
+				AND bell.evt_lon = #{evtLon}::numeric
+			</if>
+
+			<if test="mgrSeq != null and mgrSeq != ''">
+				AND bell.mgr_seq = #{mgrSeq}::integer
+			</if>
+
+            <if test="eventTyp != null and eventTyp != ''">
+                AND master.event_typ = #{eventTyp}
+            </if>
+
+		</where>
+
+		<trim prefix="ORDER BY">
+			<if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+				${sortCol} ${sortTyp}
+			</if>
+			<if test="sortCol == null and sortTyp == null">
+				mgr_seq asc
+			</if>
+		</trim>
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+	<select id="getItem" parameterType="HashMap" resultType="BellVo">
+		<!-- SELECT evt_mgr_no, cctv_mgr_no, evt_lat, evt_lon, mgr_seq
+
+		FROM xeus.bell_cctv_evt -->
+
+        SELECT bell.mgr_seq
+            , bell.evt_mgr_no
+            , bell.cctv_mgr_no
+            , CASE WHEN bell.cctv_mgr_no is null THEN
+        	bell.evt_lat
+        	ELSE cctv._annox
+              END AS evt_lat
+            , CASE WHEN bell.cctv_mgr_no is null THEN
+        	bell.evt_lon
+        	ELSE cctv._annoy
+              END AS evt_lon
+            , master.event_typ
+            , master.recv_dat
+            , master.action_note
+            , master.close_cd
+            , cctv.cctv_nm
+            , sig.sig_kor_nm||' '||emd.emd_kor_nm||' '||li.li_kor_nm||' '||cbnd.jibun  AS bell_addr
+        FROM xeus.bell_cctv_evt AS bell
+        LEFT JOIN xeus.master_cctv_evt AS master ON bell.evt_mgr_no = master.mgr_no
+        LEFT JOIN xeus.asset_cctv AS cctv ON cctv.mgr_no = bell.cctv_mgr_no
+        LEFT JOIN xeus.kais_sig_as AS sig ON
+        	ST_INTERSECTS(sig._geometry,
+        		CASE WHEN bell.cctv_mgr_no is null THEN
+        			ST_TRANSFORM( ST_SETSRID( ST_MAKEPOINT( bell.evt_lon, bell.evt_lat ), 4326), 5186)
+        		ELSE
+        			cctv._geometry
+        		END
+        	)
+        LEFT JOIN xeus.kais_emd_as AS emd ON
+        	ST_INTERSECTS(emd._geometry,
+        		CASE WHEN bell.cctv_mgr_no is null THEN
+        			ST_TRANSFORM( ST_SETSRID( ST_MAKEPOINT( bell.evt_lon, bell.evt_lat ), 4326), 5186)
+        		ELSE
+        			cctv._geometry
+        		END
+        	)
+        LEFT JOIN xeus.kais_li_as AS li ON
+        	ST_INTERSECTS(li._geometry,
+        		CASE WHEN bell.cctv_mgr_no is null THEN
+        			ST_TRANSFORM( ST_SETSRID( ST_MAKEPOINT( bell.evt_lon, bell.evt_lat ), 4326), 5186)
+        		ELSE
+        			cctv._geometry
+        		END
+        	)
+        LEFT JOIN xeus.kras_cbnd_as AS cbnd ON
+        	ST_INTERSECTS(cbnd._geometry,
+        		CASE WHEN bell.cctv_mgr_no is null THEN
+        			ST_TRANSFORM( ST_SETSRID( ST_MAKEPOINT( bell.evt_lon, bell.evt_lat ), 4326), 5186)
+        		ELSE
+        			cctv._geometry
+        		END
+        	)
+
+		<where>
+
+			<if test="evtMgrNo != null and evtMgrNo != ''">
+				AND bell.evt_mgr_no = #{evtMgrNo}::numeric
+			</if>
+
+			<if test="cctvMgrNo != null and cctvMgrNo != ''">
+				AND bell.cctv_mgr_no = #{cctvMgrNo}
+			</if>
+
+			<if test="evtLat != null and evtLat != ''">
+				AND bell.evt_lat = #{evtLat}::numeric
+			</if>
+
+			<if test="evtLon != null and evtLon != ''">
+				AND bell.evt_lon = #{evtLon}::numeric
+			</if>
+
+			<if test="mgrSeq != null and mgrSeq != ''">
+				AND bell.mgr_seq = #{mgrSeq}::integer
+			</if>
+
+            <if test="eventTyp != null and eventTyp != ''">
+                AND master.event_typ = #{eventTyp}
+            </if>
+
+		</where>
+	</select>
+
+
+	<select id="getCount" parameterType="HashMap" resultType="int">
+		SELECT count(*)
+
+		FROM xeus.bell_cctv_evt AS bell
+        LEFT JOIN xeus.master_cctv_evt AS master ON bell.evt_mgr_no = master.mgr_no
+        LEFT JOIN xeus.asset_cctv AS cctv ON cctv.mgr_no = bell.cctv_mgr_no
+
+		<where>
+
+			<if test="evtMgrNo != null and evtMgrNo != ''">
+				AND bell.evt_mgr_no = #{evtMgrNo}::numeric
+			</if>
+
+			<if test="cctvMgrNo != null and cctvMgrNo != ''">
+				AND bell.cctv_mgr_no = #{cctvMgrNo}
+			</if>
+
+			<if test="evtLat != null and evtLat != ''">
+				AND bell.evt_lat = #{evtLat}::numeric
+			</if>
+
+			<if test="evtLon != null and evtLon != ''">
+				AND bell.evt_lon = #{evtLon}::numeric
+			</if>
+
+			<if test="mgrSeq != null and mgrSeq != ''">
+				AND bell.mgr_seq = #{mgrSeq}::integer
+			</if>
+
+            <if test="eventTyp != null and eventTyp != ''">
+                AND master.event_typ = #{eventTyp}
+            </if>
+
+		</where>
+	</select>
+
+
+	<delete id="del" parameterType="HashMap">
+		DELETE FROM xeus.bell_cctv_evt WHERE mgr_seq = #{mgrSeq}::integer
+	</delete>
+
+
+	<insert id="add" parameterType="BellVo">
+		INSERT INTO xeus.bell_cctv_evt(
+			evt_mgr_no, cctv_mgr_no, evt_lat, evt_lon, mgr_seq
+		) VALUES (
+			#{evtMgrNo}::numeric, #{cctvMgrNo}, #{evtLat}, #{evtLon}, #{mgrSeq}::integer
+		);
+	</insert>
+
+
+	<update id="edit" parameterType="BellVo">
+		UPDATE xeus.bell_cctv_evt SET
+			mgr_seq = #{mgrSeq}::integer
+
+			<if test="evtMgrNo != null and evtMgrNo != ''">
+				, evt_mgr_no = #{evtMgrNo}::numeric
+			</if>
+
+			<if test="cctvMgrNo != null and cctvMgrNo != ''">
+				, cctv_mgr_no = #{cctvMgrNo}
+			</if>
+
+			<if test="evtLat != null and evtLat != ''">
+				, evt_lat = #{evtLat}
+			</if>
+
+			<if test="evtLon != null and evtLon != ''">
+				, evt_lon = #{evtLon}
+			</if>
+
+		WHERE mgr_seq = #{mgrSeq}::integer
+
+	</update>
+
+</mapper>

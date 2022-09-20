@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    레이어 정보 xml
+    layerGroup은 지원 안함 client단에서 그룹 정책을 세워서 사용하는 것으로 결정
+    datastore는 schema에 엄격하므로 layer설정지 datastore도 지정해야 함
+    virtualTable은 지원 안하며 dbms의 view를 이용하여 구혀하도록 함.
+    스타일명은 <sld:UserStyle>의 <sld:Name>bldg_line</sld:Name> 으로 함
+-->
+<layer queryable="1">
+    <name>asset_disbord</name>
+    <nativeName>asset_disbord</nativeName>
+    <datastore>xeus_web_db</datastore>
+    <fid>_gid</fid>
+    <title>재난전광판</title>
+    <abstract>재난전광판</abstract>
+    <wms>true</wms>
+    <wfs enable="true">
+      <operation>Insert</operation>
+      <operation>Update</operation>
+      <operation>Delete</operation>
+    </wfs>
+    <keywordList>
+        <keyword>features</keyword>
+        <keyword>asset_disbord</keyword>
+    </keywordList>
+    <!-- 원본 src and boundBox -->
+    <srs>EPSG:5186</srs>
+    <boundingBox>
+        <min_ye>219887.460018588</min_ye>
+        <max_ye>430298.440875115</max_ye>
+        <min_xn>233203.697854282</min_xn>
+        <max_xn>445017.669367275</max_xn>
+    </boundingBox>
+    <defaultStyle>asset_disbord</defaultStyle>
+    <styles>
+        <style>asset_disbord</style>
+    </styles>
+</layer>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.stat.service.StatEventMapper">
+	<select id="getEventYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+			SELECT
+   				${daso} AS item,
+   				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN SUBSTRING(evt_actn_dtm,1,4)=${date.year}::TEXT THEN 1 else 0 END)||';'
+   				</foreach>
+   				AS cate
+			FROM xeus.mon_evet_hist
+				WHERE ${evt} like  '%'||#{bec}||'%'
+				    AND  evt_nm <![CDATA[<>]]> ''
+				    AND evt_typ_cd <![CDATA[<>]]>  'CCTVLOCK'
+					<if test="sec !=null and sec !=''">
+						AND evt_nm=#{sec}
+					</if>
+					GROUP BY ${daso}
+	</select>
+	<select id="getEventMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				${daso} AS item,
+   				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					 ''||SUM(CASE WHEN SUBSTRING(evt_actn_dtm,5,2)=#{date.month}::TEXT THEN 1 else 0 END)||';'
+   				</foreach>
+   				 AS cate
+		FROM xeus.mon_evet_hist
+			WHERE ${evt} like  '%'||#{bec}||'%'
+			    AND  evt_nm <![CDATA[<>]]> ''
+			    AND evt_typ_cd <![CDATA[<>]]>  'CCTVLOCK'
+				<if test="sec !=null and sec !=''">
+					AND evt_nm=#{sec}
+				</if>
+				<if  test="year != null and year != ''">
+					AND SUBSTRING(evt_actn_dtm,1,4)=#{year}::TEXT
+				</if>
+				GROUP BY ${daso}
+	</select>
+	<select id="getEventDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				${daso} AS item,
+   				'건수' AS col,
+				<foreach collection="datList" item="date" separator="" >
+   					''||SUM(CASE WHEN SUBSTRING(evt_actn_dtm,7,2)=#{date.day}::TEXT THEN 1 else 0 END)||';'
+   				</foreach>
+   				AS cate
+		FROM xeus.mon_evet_hist
+			WHERE ${evt} like  '%'||#{bec}||'%'
+			    AND  evt_nm <![CDATA[<>]]> ''
+			    AND evt_typ_cd <![CDATA[<>]]>  'CCTVLOCK'
+				<if test="sec !=null and sec !=''">
+					AND evt_nm=#{sec}
+				</if>
+				<if  test="year != null and year != ''">
+					AND SUBSTRING(evt_actn_dtm,1,4)=#{year}::TEXT
+				</if>
+				<if  test="month != null and month != ''">
+					AND SUBSTRING(evt_actn_dtm,5,2)=#{month}::TEXT
+				</if>
+				GROUP BY ${daso}
+	</select>
+	<select id="getEventAllYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT	DISTINCT SUBSTRING(usvc_outb_id,2,4) AS year
+			FROM xeus.mon_evet_list
+	</select>
+</mapper>

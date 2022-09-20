@@ -1,0 +1,435 @@
+/**
+ * 장비관리(NMS) 메뉴의 점검 등록 관련 이벤트 입니다.
+ */
+
+var NDPS_OBJ_LIST = {}; //NDPS 데이터 전역 변수 - 목록 표출 및 차트에서 사용됨.
+
+(function(){
+
+	var hintTag = '<p class="send_hint_msg">* 지도 화면 왼쪽 검색 화면에서 검색하여 체크박스를 선택해주세요.</p>';
+
+	//전송 폼을 생성한다.
+	//- 켜짐과 동시에.
+	_common.callLoadingAjax('/ndpsSend/getVoiceSendView.do', {}, function(view) {
+		$("#" + parentView).find("#center-overlay-east").html(view);
+
+		xeusLayout.EAST = 400;
+
+		xeusLayout.showOverlayEastPane(delay, function() {
+			$("#" + parentView).find("#center-overlay-east").html(view);
+
+			$("#" + parentView).find(".btnDiv").removeClass("hidden");
+
+			$("#" + parentView).find('#vectorInfo').bPopup().close();
+			$("#" + parentView).find('.bPopup').remove();
+
+			$("#send_toggle_date .date_util").datepicker({
+	            format: "yyyy-mm-dd",
+	            language: "kr"
+			});
+
+			$('input[name=send_at]').on('click', function(){
+				var typ = $(this).val();
+
+				if ( typ === '0' ) {
+					$('#send_toggle_date').hide();
+				} else {
+					$('#send_toggle_date').show();
+					$('.date_util').val(new Date().getYMD(true));
+					$('#send_at_hh').val(new Date().getHour());
+					$('#send_at_mm').val(new Date().getMin());
+				}
+			});
+
+
+			var volums = ['최저음', '매우 작게', '조금 작게', '약간 작게', '보통', '약간 크게', '조금 크게', '매우 크게', '최고음'];
+			//방송 음량 슬라이더
+			$( "#send_slider_voice_volum" ).slider({
+			      range: "min",
+			      min: 1,
+			      max: 9,
+			      value: 5,
+			      slide: function( event, ui ) {
+			        $( "#volum_text" ).val( volums[Number(ui.value)-1] );
+			        $( "#send_volum" ).val( ui.value );
+			      },
+			});
+
+			$( "#volum" ).val( '5' );
+			$( "#volum_text" ).val( '보통' );
+
+			var ves = ['보통 빠르기', '느리게', '매우 느리게'];
+			//방송 음량 슬라이더
+			$( "#send_slider_voice_ve" ).slider({
+				range: "min",
+				min: 1,
+				max: 3,
+				value: 1,
+				slide: function( event, ui ) {
+					$( "#ve_text" ).val( ves[ui.value-1] );
+					$( "#send_ve" ).val( ui.value );
+				},
+			});
+
+			$( "#ve" ).val( '1' );
+			$( "#ve_text" ).val( '보통 빠르기' );
+
+			$('input[name=at]').on('click', function(){
+				var typ = $(this).val();
+
+				if ( typ === '0' ) {
+					$('#send_toggle_date').hide();
+				} else {
+					$('#send_toggle_date').show();
+				}
+			});
+
+
+			//벨소리 이벤트 입니다.
+			//$("#alram").trigger("play");
+			$('.send_bell_sound').on('click', function(){
+				var key = $(this).val();
+				$('.send_audio_obj').trigger('stop');
+				$('#send_bell_'+key).trigger("play");
+			});
+
+			$('#sendBtn').on('click', function(){
+				var recInfo = '';//이름,번호;
+				$('#send_select_list .send_select_item').each(function(){
+					var key = $(this).attr('id').replace('send_select_', '');
+					var nm = $(this).attr('nm');
+					var telno =  $(this).attr('telno');
+					if(telno==null || telno==undefined || telno == ''){
+						telno='undefined';
+					}
+
+					recInfo += key+','+nm+','+telno+';';
+				});
+
+				var cntcCn = $('#send_cntc_cn').val();//메세지내용
+				var voiceVolum = $('#send_volum').val();//방솜음량
+				var sexDstn = $('input[name=send_sexdstn]:checked').val();//음성 성별
+				var voiceVe = $('#send_ve').val();//음성 속도
+				var resveAt =  $('input[name=send_at]:checked').val();//예약발성 인지
+				var tranDate;
+				if(resveAt==0){
+					transDate=null;
+				}else{
+					tranDate= $('#send_at_ymd').val().replace(/-/gi, '')
+					+$('#send_at_hh').val()+$('#send_at_mm').val();//예약 날짜
+					if((tranDate-getTimeStamp())<0){
+						alert('이미 지나간 시간입니다. 현재시간 이후로 설정해주세요.');
+						return;
+					}
+				}
+				var beginNtcn = $('input[name=send_beginntcn]:checked').val();//시작 알림음
+				var endNtcn = $('input[name=send_endntcn]:checked').val();//종료 알림음
+
+				var param = {
+						recInfo : recInfo,
+						cntcCn : cntcCn,
+						voiceVolum : voiceVolum,
+						sexDstn : sexDstn,
+						voiceVe : voiceVe,
+						resveAt : resveAt,
+						tranDate : tranDate,
+						beginNtcn : beginNtcn,
+						endNtcn : endNtcn
+				};
+				confirm("음성방송을 하시겠습니까?", function(){
+					_common.callAjax('/ndpsSend/sendAllVoice.json', param, function(json) {
+						if(json.result){
+							alert('방송했습니다.');
+						}else{
+							alert('방송 실패했습니다.');
+						}
+					},false);
+				});
+			});
+
+			$('#initBtn').on('click', function(){
+				$('#send_list_all_remove').trigger('click');
+				$('#send_cntc_cn').val('');
+				$('.send_group #at1').prop('checked',true);
+				$('#send_toggle_date').hide();
+
+				$('#send_beginntcn1').prop('checked',true);
+				$('#send_endntcn1').prop('checked',true);
+				$('#send_sexdstn1').prop('checked',true);
+
+				$( "#volum_text" ).val('보통');
+			    $( "#send_volum" ).val(5);
+			    $('#send_slider_voice_volum').slider("value",5);
+
+			    $( "#ve_text" ).val('보통 빠르기');
+				$( "#send_ve" ).val(1);
+				$('#send_slider_voice_ve').slider("value",1);
+			});
+
+		});
+	});
+
+	/* 범례 탭 이벤트 입니다. */
+	$("#" + parentView).find(".searchWrapper").find("button.tab").eq(0).click(function(){
+		$("#" + parentView).find("#btn-infra-view").click();
+	});
+
+	/* 명칭 엔터키 이벤트 입니다. */
+	$("#" + parentView).find(".searchWrapper").find("#objName").keyup(function(e){
+        if(e.which == 13){
+            $("#" + parentView).find(".searchWrapper").find("#searchBtn").click();
+        }
+    });
+
+	/* 검색 버튼 이벤트 입니다. */
+	$("#" + parentView).find(".searchWrapper").find("#searchBtn").click(function(){
+
+		var _param = _common.utils.collectSendData("#" + parentView + " .searchWrapper #searchTable");
+		_param["se"] = "B03001";
+		_common.callLoadingAjax("/brdcstTrmnls/getList.json", _param, function(json) {
+			$("#" + parentView).find(".searchWrapper").find("#resultList").find("table").html("");
+			for(var key in json){
+				var list = json[key];
+				if(list.length > 0){
+					for(var i=0; i<list.length; i++){
+						if(list[i] == null){
+							continue;
+						}
+						var no = list[i].innb; //단말기 고유 번호
+						var se = list[i].se; //단말기 구분
+						var nm = list[i].nm; //단말기명
+						var telno = list[i].telno; // 단말기 전화번호
+						var checked = '';//
+
+						if ( telno === undefined ) telno ='';
+
+						$('#send_select_list .send_select_item').each(function(){
+
+							var key = $(this).attr('id').replace('send_select_', '');
+
+							if ( key == no ) {
+								checked = 'checked';
+							}
+
+						});
+
+						var $tr = $("<tr class='tCenter' k='" + no + "'></tr>");
+						//목록에 있을 시 체크 상태로 표출한다.
+						$tr.append("<td width='20px'><input class='send_chk_box' type='checkbox' id='send_id_"+no+"' nm='"+nm+"' telno='"+telno+"' "+checked+"></td>");
+						$tr.append("<td width='100px'>" + nm + "</td>");
+						$tr.append("<td width='100px'>" + telno + "</td>");
+						$("#" + parentView).find(".searchWrapper").find("#resultList").find("#send_table").append($tr);
+
+					}
+
+				}
+			}
+
+			//리스트 전체 삭제
+			$('#send_list_all_remove').on('click', function(){
+				$('#send_select_list').find('.send_list_remove').each(function(){
+					$(this).click();
+
+				});
+			});
+
+			//체크 박스 선택 시
+			$('.send_chk_box').on('click', function(){
+				var chk = $(this).prop('checked');
+				var key = $(this).attr('id').replace('send_id_', '');
+				var nm = $(this).attr('nm');
+				var telno = $(this).attr('telno');
+				if ( !chk ) {
+					$('#send_select_list').find('#send_select_'+key).remove();
+
+					if ( $('#send_select_list .send_select_item').length === 0 ) {
+
+						$('#send_select_list').html(hintTag);
+					};
+
+				} else {
+					$('#send_select_list p').remove();
+					var str = '<span id="send_select_'+key+'" nm="'+nm+'" telno="'+telno+'"  class="send_select_item"><span>'+nm+'</span><span class="send_list_remove" key="'+key+'">x</span></span>';
+					if ( $('#send_select_list').find('#send_select_'+key).length === 0 ) {
+						$('#send_select_list').append(str);
+					}
+
+					$('#send_select_'+key).find('.send_list_remove').on('click', function(){
+						var kay =$(this).attr('key');
+						$('#send_id_'+key).prop('checked', false);
+						$('#send_select_'+key).remove();
+
+
+						if ( $('#send_select_list .send_select_item').length === 0 ) {
+
+							$('#send_select_list').html(hintTag);
+						};
+					});
+				}
+			});
+
+			//체크 박스 전체선택 시
+			$('#send_all_chk').on('click', function(){
+				var chk = $(this).prop('checked');
+				$('#send_select_list p').remove();
+				$('.send_chk_box').each(function(){
+					var key = $(this).attr('id').replace('send_id_', '');
+					var nm = $(this).attr('nm');
+					var telno = $(this).attr('telno');
+
+					if ( !chk ) {
+
+						$('.send_chk_box').prop('checked', false);
+						$('#send_select_list').find('#send_select_'+key).remove();
+
+					} else {
+
+						$('.send_chk_box').prop('checked', true);
+						var str = '<span id="send_select_'+key+'" nm="'+nm+'" telno="'+telno+'"  class="send_select_item"><span>'+nm+'</span><span class="send_list_remove" key="'+key+'">x</span></span>';
+						if ( $('#send_select_list').find('#send_select_'+key).length === 0  ) {
+							$('#send_select_list').append(str);
+						}
+
+
+					}
+				});
+
+				if ( $('#send_select_list .send_select_item').length === 0 ) {
+
+					$('#send_select_list').html(hintTag);
+				};
+
+				$('.send_list_remove').on('click', function(){
+					var key =$(this).attr('key');
+					$('#send_id_'+key).prop('checked', false);
+					$('#send_select_'+key).remove();
+
+					if ( $('#send_select_list .send_select_item').length === 0 ) {
+
+						$('#send_select_list').html(hintTag);
+					};
+				});
+			});
+
+/*			 위치 버튼 이벤트 입니다.
+			$("#" + parentView).find(".searchWrapper").find("#resultList").find(".locBtn").click(function(){
+				var juso = $(this).parent().parent().attr("k");	//tr의 k
+//				console.log("juso = "+juso);
+				var data = $(this).parent().parent().attr("p");	//tr의 k
+//				console.log("data = "+data);
+				var xyArr=[];
+				xyArr.dsc=data;
+				var xy = Spatial.convertAddrToXY(juso);
+				xyArr.lon=xy[0];
+				xyArr.lat=xy[1];
+				var epsg = xeusLayout.mapService.getMap().getView().getProjection().getCode();	//왜갑자기4326(위도를) 5186으로 바꿩ㅈ
+				var mainCenter = ol.proj.transform([xy[0], xy[1]], 'EPSG:4326', epsg);	//바꾼다..
+
+				xeusLayout.mapService.moveToAnimation(0, [mainCenter[0], mainCenter[1]]);	//지도 위치로 가지는 것.
+				xeusLayout.mapService.createNdmsPoint(xyArr);	//지도 위치로 가지는 것.
+			});*/
+		});
+	});
+
+	/* DatePicker 생성 이벤트입니다. */
+	$("#" + parentView).find(".searchWrapper").find(".datePicker").datepicker("destroy").datepicker({
+		changeMonth: true,
+        changeYear: true,
+        dateFormat: "yymmdd",
+        showButtonPanel: true,
+        beforeShowDay: $.datepicker.noBefore
+	});
+
+	/**
+	 * 영역검색 버튼 이벤트 입니다.
+	 */
+	$("#" + parentView).find(".searchWrapper").find("#spatialBtn").click(function(){
+		if($(".drawType:checked").val() == null){
+			alert("검색방법을 선택해 주세요.");
+			return false;
+		}
+		Public.NDPS.Search.Start();
+	});
+
+	/**
+	 * 영역검색 방식 변경 이벤트 입니다.
+	 */
+	$("#" + parentView).find(".searchWrapper").find(".drawType").click(function(){
+
+		xeusLayout.mapService.setLayerVisible('음성통보시스템',true)
+		$("#" + parentView).find("#sendView-음성통보시스템").prop('checked',true);
+
+		if(Public.NDPS.StopEvent != null) Public.NDPS.StopEvent();
+		Public.NDPS.Search.Start();
+	});
+
+	/**
+	 * 영역검색 취소버튼 이벤트 입니다.
+	 */
+	$("#" + parentView).find(".searchWrapper").find("#drawCncl").click(function(){
+		Public.NDPS.StopEvent();
+		$(".drawType").prop("checked", false);
+	});
+
+	/* 지도에서 위치설정 이벤트 입니다.
+	$("#" + parentView).find(".searchWrapper").find("#mapClickBtn").click(function(){
+	    $("body").css("cursor", "crosshair");
+	    $("#" + parentView).find(".selectCancel").show(500);
+	    xeusLayout.mapService.getMap().on('click', Public.NMS.Infra.Start);
+	    Public.StopEvent = function(){
+	        $("body").css("cursor", "default").off("click");
+	        $("#" + parentView).find(".selectCancel").hide(500);
+	        xeusLayout.mapService.getMap().un('click', Public.NMS.Infra.Start);
+	    }
+	});
+	$("#" + parentView).find(".searchWrapper").find(".selectCancel").click(function(){
+	    Public.StopEvent();
+	});
+*/
+
+
+	/* 시설물 신규추가 버튼입니다..
+	$("#" + parentView).find(".searchWrapper").find("#fclAddBtn").click(function(e){
+
+		$("#" + parentView).append(_html);
+
+		$("#" + parentView).find('#vectorInfo').bPopup({
+			appendTo: $('#'+parentView),
+			onOpen: function() {
+				$("#" + parentView).find('#vectorInfo').find('#closeBtn').click(function(){
+					$("#" + parentView).find('#vectorInfo').bPopup().close();
+					$("#" + parentView).find('.bPopup').remove();
+				});
+
+				$("#" + parentView).find('#vectorInfo').find('#saveBtn').click(function(){
+					var type = $("#" + parentView).find('#vectorInfo').find("select").val();
+
+					var url = "";s
+					if(type == "CTV") url = "/cctv/getUnregCctvView.do";
+					if(type == "AWS") url = "/aws/getUnregAwsView.do";
+					if(type == "VOI") url = "/voice/getUnregVoiceView.do";
+					if(type == "DIS") url = "/disbord/getUnregDisbordView.do";
+
+					_common.callAjax(url, {}, function(view) {
+						xeusLayout.showOverlayEastPane(delay, function() {
+							$("#" + parentView).find("#center-overlay-east").html(view);
+
+							$("#" + parentView).find(".btnDiv").removeClass("hidden");
+							$("#" + parentView).find("#regTable").find(".date").datepicker({
+					            format: "yyyy/mm/dd",
+					            language: "kr"
+							});
+
+							$("#" + parentView).find('#vectorInfo').bPopup().close();
+							$("#" + parentView).find('.bPopup').remove();
+						});
+					});
+				});
+			},
+			onClose: function() {
+				$("#" + parentView).find('.bPopup').remove();
+			}
+
+		});
+	});*/
+})();

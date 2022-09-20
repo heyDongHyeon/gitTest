@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ogc:Filter_Capabilities 
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:ows="http://www.opengis.net/ows" 
+    xmlns:gml="http://www.opengis.net/gml"
+    xmlns:ogc="http://www.opengis.net/ogc">
+    <ogc:Spatial_Capabilities>
+        <ogc:GeometryOperands>
+            <ogc:GeometryOperand>gml:Envelope</ogc:GeometryOperand>
+            <ogc:GeometryOperand>gml:Point</ogc:GeometryOperand>
+            <ogc:GeometryOperand>gml:LineString</ogc:GeometryOperand>
+            <ogc:GeometryOperand>gml:Polygon</ogc:GeometryOperand>
+        </ogc:GeometryOperands>
+        <ogc:SpatialOperators>
+            <ogc:SpatialOperator name="Disjoint" />
+            <ogc:SpatialOperator name="Equals" />
+            <ogc:SpatialOperator name="DWithin" />            
+            <ogc:SpatialOperator name="Intersects" />
+            <ogc:SpatialOperator name="Touches" />
+            <ogc:SpatialOperator name="Crosses" />
+            <ogc:SpatialOperator name="Within" />
+            <ogc:SpatialOperator name="Contains" />
+            <ogc:SpatialOperator name="Overlaps" />
+            <ogc:SpatialOperator name="BBOX" />
+        </ogc:SpatialOperators>
+    </ogc:Spatial_Capabilities>
+    <ogc:Scalar_Capabilities>
+        <ogc:LogicalOperators />
+        <ogc:ComparisonOperators>
+            <ogc:ComparisonOperator>LessThan</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>GreaterThan</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>LessThanEqualTo</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>GreaterThanEqualTo</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>EqualTo</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>NotEqualTo</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>Like</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>Between</ogc:ComparisonOperator>
+            <ogc:ComparisonOperator>NullCheck</ogc:ComparisonOperator>
+        </ogc:ComparisonOperators>
+        <ogc:ArithmeticOperators>
+            <ogc:SimpleArithmetic />
+            <ogc:Functions>
+                <ogc:FunctionNames>
+                    <ogc:FunctionName nArgs="3">between</ogc:FunctionName>
+                    <ogc:FunctionName nArgs="1">boundary</ogc:FunctionName>
+                    <ogc:FunctionName nArgs="2">crosses</ogc:FunctionName>
+                    <ogc:FunctionName nArgs="2">disjoint</ogc:FunctionName>
+                    <ogc:FunctionName nArgs="1">geomFromWKT</ogc:FunctionName>
+                    <ogc:FunctionName nArgs="2">within</ogc:FunctionName>
+                </ogc:FunctionNames>
+            </ogc:Functions>
+        </ogc:ArithmeticOperators>
+    </ogc:Scalar_Capabilities>
+    <ogc:Id_Capabilities>
+        <ogc:FID />
+        <ogc:EID />
+    </ogc:Id_Capabilities>
+</ogc:Filter_Capabilities>

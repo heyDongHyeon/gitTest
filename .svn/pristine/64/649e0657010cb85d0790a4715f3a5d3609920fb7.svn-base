@@ -1,0 +1,90 @@
+.common_layout {
+	color:#f6f6f6;
+	padding: 10px;
+}
+
+.common_layout .common_group {
+	margin-bottom:20px;
+}
+
+.common_layout p {
+	font-size:13px;
+}
+
+.common_layout input[type=radio]{
+	vertical-align: middle;
+}
+
+.common_layout textarea {
+    height: 200px;
+    background: #30303A;
+    padding: 10px;
+    color:#f6f6f6;
+    width:100%;
+    resize: none;
+}
+
+.common_layout hint_msg {
+
+    line-height: 120px;
+    text-align: center;
+    color:#999;
+}
+
+.common_layout textarea::-webkit-input-placeholder {
+	color: #a6a6a6;
+}
+
+.common_layout textarea:-moz-placeholder { /* Firefox 18- */
+	color: #a6a6a6;
+}
+
+.common_layout textarea::-moz-placeholder {  /* Firefox 19+ */
+	color: #a6a6a6;
+}
+
+.common_layout textarea:-ms-input-placeholder {
+	color: #a6a6a6;
+}
+/*
+.common_layout textarea::FOCUS::-webkit-input-placeholder {
+	color: #4582ac;
+}
+
+.common_layout textarea:FOCUS:-moz-placeholder { Firefox 18-
+	color: #4582ac;
+}
+
+.common_layout textarea::FOCUS::-moz-placeholder {  Firefox 19+
+	color: #4582ac;
+}
+
+.common_layout textarea:FOCUS:-ms-input-placeholder {
+	color: #4582ac;
+}
+
+.common_layout textarea:FOCUS {
+  background: #4582ac;
+  outline: none;
+
+} */
+
+.common_layout textarea:FOCUS {
+  outline: none;
+
+}
+
+.common_layout .active_btn {
+    background:#4582ac;
+}
+
+.common_layout .active_btn:hover {
+}
+
+.common_layout .unactive_btn {
+    background: #d9d9d9;
+    color:#000
+}
+
+.common_layout .unactive_btn:hover {
+}

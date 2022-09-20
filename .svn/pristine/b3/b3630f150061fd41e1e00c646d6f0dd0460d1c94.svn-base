@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace name="geomex" schemaLocation="http://schemas.opengis.net" cite="false" forceXY="true">
+<!-- postgis를 이용한 실제 서비스시 cite=false forceXY = true 로 함 -->
+    <namespace>
+        <prefix>gmx</prefix>
+        <uri>http://www.geomex.co.kr/gmx</uri>
+    </namespace>
+
+    <!-- externalServiceUrl layer,기능 권한 체크 구현예정 -->
+    <external-service enabled="false">
+        <entry key="getUserAuth">http://127.0.0.1/wms/getUserAuth.jsp</entry>
+    </external-service>
+
+    <!-- 대소문자 주의, cache 의미가 없음 -->
+    <wmsParameters>
+        <entry key="RenderingBuffer">300</entry>
+        <entry key="ThreadPool-CorePoolSize">30</entry>
+        <entry key="ThreadPool-MaximumPoolSize">50</entry>
+    </wmsParameters>
+
+    <datastore name="xeus_web_db" enabled="true">
+        <entry key="dbtype">postgis</entry>
+        <!-- <entry key="host">10.1.73.13</entry>
+        <entry key="port">5432</entry> -->
+        <!-- <entry key="host">127.0.0.1</entry>
+        <entry key="port">5436</entry> -->
+        <entry key="host">10.1.73.14</entry>
+        <entry key="port">5432</entry>
+<!--         <entry key="host">127.0.0.1</entry> -->
+<!--         <entry key="port">5433</entry> -->
+        <!-- <entry key="host">210.101.103.91</entry>
+        <entry key="port">9990</entry> -->
+<!--         <entry key="database">2020_06_04_real_sejong</entry> -->
+        <entry key="database">XEUS_SEJONG_DSC</entry>
+        <entry key="schema">xeus</entry> <!-- datasource 는 하나의 schema만 엄격하게 지원함 -->
+        <entry key="user">postgres</entry>
+        <entry key="passwd">geomex12#</entry>
+        <!-- <entry key="passwd">postgres</entry> -->
+
+        <entry key="max connections">20</entry><!-- 20 -->
+        <entry key="min connections">15</entry><!-- 15 -->
+        <entry key="Connection timeout">20</entry>
+        <entry key="validate connections">true</entry>
+        <entry key="Max open prepared statements">100</entry>
+
+        <entry key="Test while idle">true</entry>
+        <entry key="fetch size">1000</entry>
+        <entry key="Expose primary keys">false</entry>
+        <!-- postgis only -->
+        <entry key="preparedStatements">true</entry>
+        <entry key="create database">false</entry>
+    </datastore>
+
+    <crslist>
+        <crs>EPSG:5186</crs> <!-- 중부(60,20) -->
+    </crslist>
+
+    <managed-access>
+       <allowed>10.1.73.100</allowed>
+       <allowed>10.1.73.58</allowed>
+       <denied>10.1.73.77</denied>
+    </managed-access>
+</workspace>

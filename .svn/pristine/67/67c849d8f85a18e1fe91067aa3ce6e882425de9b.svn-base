@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliKmaEarthInfmMapper">
+	<select id="getList" parameterType="HashMap" resultType="EliKmaEarthInfmVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OCR_YMDHMS, POINT_X, POINT_Y, LOC, EARTH_INFM_SCLE, EARTH_INFM_NO_ORD, EARTH_INFM_NO_REF, EARTH_INFM_CD_STN
+
+		FROM xeus.ELI_KMA_EARTH_INFM
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="ocrYmdhms != null and ocrYmdhms != ''">
+				AND OCR_YMDHMS = #{ocrYmdhms}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="earthInfmScle != null and earthInfmScle != ''">
+				AND EARTH_INFM_SCLE = #{earthInfmScle}::numeric
+			</if>
+
+			<if test="earthInfmNoOrd != null and earthInfmNoOrd != ''">
+				AND EARTH_INFM_NO_ORD = #{earthInfmNoOrd}
+			</if>
+
+			<if test="earthInfmNoRef != null and earthInfmNoRef != ''">
+				AND EARTH_INFM_NO_REF = #{earthInfmNoRef}
+			</if>
+
+			<if test="earthInfmCdStn != null and earthInfmCdStn != ''">
+				AND EARTH_INFM_CD_STN = #{earthInfmCdStn}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+
+		<trim prefix="ORDER BY">
+			<if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+				${sortCol} ${sortTyp}
+			</if>
+			<if test="sortCol == null and sortTyp == null">
+				SEQ_NO DESC
+			</if>
+		</trim>
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+	<select id="getItem" parameterType="HashMap" resultType="EliKmaEarthInfmVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OCR_YMDHMS, POINT_X, POINT_Y, LOC, EARTH_INFM_SCLE, EARTH_INFM_NO_ORD, EARTH_INFM_NO_REF, EARTH_INFM_CD_STN
+
+		FROM xeus.ELI_KMA_EARTH_INFM
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="ocrYmdhms != null and ocrYmdhms != ''">
+				AND OCR_YMDHMS = #{ocrYmdhms}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="earthInfmScle != null and earthInfmScle != ''">
+				AND EARTH_INFM_SCLE = #{earthInfmScle}::numeric
+			</if>
+
+			<if test="earthInfmNoOrd != null and earthInfmNoOrd != ''">
+				AND EARTH_INFM_NO_ORD = #{earthInfmNoOrd}
+			</if>
+
+			<if test="earthInfmNoRef != null and earthInfmNoRef != ''">
+				AND EARTH_INFM_NO_REF = #{earthInfmNoRef}
+			</if>
+
+			<if test="earthInfmCdStn != null and earthInfmCdStn != ''">
+				AND EARTH_INFM_CD_STN = #{earthInfmCdStn}
+			</if>
+
+		</where>
+	</select>
+
+
+	<select id="getCount" parameterType="HashMap" resultType="int">
+		SELECT count(*)
+
+		FROM xeus.ELI_KMA_EARTH_INFM
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="ocrYmdhms != null and ocrYmdhms != ''">
+				AND OCR_YMDHMS = #{ocrYmdhms}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="earthInfmScle != null and earthInfmScle != ''">
+				AND EARTH_INFM_SCLE = #{earthInfmScle}::numeric
+			</if>
+
+			<if test="earthInfmNoOrd != null and earthInfmNoOrd != ''">
+				AND EARTH_INFM_NO_ORD = #{earthInfmNoOrd}
+			</if>
+
+			<if test="earthInfmNoRef != null and earthInfmNoRef != ''">
+				AND EARTH_INFM_NO_REF = #{earthInfmNoRef}
+			</if>
+
+			<if test="earthInfmCdStn != null and earthInfmCdStn != ''">
+				AND EARTH_INFM_CD_STN = #{earthInfmCdStn}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+	</select>
+
+
+	<delete id="del" parameterType="HashMap">
+		DELETE FROM xeus.ELI_KMA_EARTH_INFM WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+	</delete>
+
+
+	<insert id="add" parameterType="EliKmaEarthInfmVo">
+		INSERT INTO xeus.ELI_KMA_EARTH_INFM(
+			LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OCR_YMDHMS, POINT_X, POINT_Y, LOC, EARTH_INFM_SCLE, EARTH_INFM_NO_ORD, EARTH_INFM_NO_REF, EARTH_INFM_CD_STN
+		) VALUES (
+			#{lkInfoId}, #{rcvYmdHms}, #{seqNo}::numeric, #{ocrYmdhms}, #{pointX}::numeric, #{pointY}::numeric, #{loc}, #{earthInfmScle}::numeric, #{earthInfmNoOrd}, #{earthInfmNoRef}, #{earthInfmCdStn}
+		);
+	</insert>
+
+
+	<update id="edit" parameterType="EliKmaEarthInfmVo">
+		UPDATE xeus.ELI_KMA_EARTH_INFM SET
+
+			LK_INFO_ID = #{lkInfoId}
+			, RCV_YMD_HMS = #{rcvYmdHms}
+			, SEQ_NO = #{seqNo}::numeric
+
+			<if test="ocrYmdhms != null and ocrYmdhms != ''">
+				, OCR_YMDHMS = #{ocrYmdhms}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				, POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				, POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				, LOC = #{loc}
+			</if>
+
+			<if test="earthInfmScle != null and earthInfmScle != ''">
+				, EARTH_INFM_SCLE = #{earthInfmScle}::numeric
+			</if>
+
+			<if test="earthInfmNoOrd != null and earthInfmNoOrd != ''">
+				, EARTH_INFM_NO_ORD = #{earthInfmNoOrd}
+			</if>
+
+			<if test="earthInfmNoRef != null and earthInfmNoRef != ''">
+				, EARTH_INFM_NO_REF = #{earthInfmNoRef}
+			</if>
+
+			<if test="earthInfmCdStn != null and earthInfmCdStn != ''">
+				, EARTH_INFM_CD_STN = #{earthInfmCdStn}
+			</if>
+
+		WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+
+	</update>
+
+</mapper>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliLogStatMapper">
+    <select id="getEliList" parameterType="HashMap" resultType="EliLogStatVo">
+
+        SELECT   '산불발생정보' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_foa_forest_map
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '우량시단위' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_hrf_rfhr
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '고속도로특별상황관리' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_khc_acc
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '기상정보AWS' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_kma_aws_10m
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '동네예보' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_kma_dfs_shrt
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '지진현황' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_kma_earth_infm
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '기상특보' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_kma_inform
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '응급복구장비' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_nem_emre
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '소방서' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_nem_firs
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+
+        UNION ALL
+
+        SELECT   '시가지도로돌발상황정보' AS "gbn"
+            , COALESCE(SUM(1), 0) AS "all"
+            , COALESCE(SUM(CASE mm WHEN '01' THEN 1 ELSE 0 END), 0) AS "jan"
+            , COALESCE(SUM(CASE mm WHEN '02' THEN 1 ELSE 0 END), 0) AS "feb"
+            , COALESCE(SUM(CASE mm WHEN '03' THEN 1 ELSE 0 END), 0) AS "mar"
+            , COALESCE(SUM(CASE mm WHEN '04' THEN 1 ELSE 0 END), 0) AS "apr"
+            , COALESCE(SUM(CASE mm WHEN '05' THEN 1 ELSE 0 END), 0) AS "may"
+            , COALESCE(SUM(CASE mm WHEN '06' THEN 1 ELSE 0 END), 0) AS "jun"
+            , COALESCE(SUM(CASE mm WHEN '07' THEN 1 ELSE 0 END), 0) AS "jul"
+            , COALESCE(SUM(CASE mm WHEN '08' THEN 1 ELSE 0 END), 0) AS "aug"
+            , COALESCE(SUM(CASE mm WHEN '09' THEN 1 ELSE 0 END), 0) AS "sep"
+            , COALESCE(SUM(CASE mm WHEN '10' THEN 1 ELSE 0 END), 0) AS "oct"
+            , COALESCE(SUM(CASE mm WHEN '11' THEN 1 ELSE 0 END), 0) AS "nov"
+            , COALESCE(SUM(CASE mm WHEN '12' THEN 1 ELSE 0 END), 0) AS "dec"
+        FROM    ( SELECT lk_info_id
+                      , substring(rcv_ymd_hms, 1, 4) AS yy
+                      , substring(rcv_ymd_hms, 5, 2) AS mm
+                FROM xeus.eli_rtsa_occurid
+                <where>
+                    <if test="year != null and year != ''">
+                        rcv_ymd_hms <![CDATA[ >= ]]> #{year}||'0101000000' AND rcv_ymd_hms <![CDATA[ <= ]]> #{year}||'1231235959'
+                    </if>
+
+                </where>
+
+                ) AS r
+    </select>
+</mapper>

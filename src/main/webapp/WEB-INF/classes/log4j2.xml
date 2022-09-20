@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <!-- tomcat startup.bat실행히 bin/logs/event 위치에 생김 -->
+        <!-- tomcat service 실행히 logs/event 위치에 생김 -->
+        <Property name="log-path">logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%c] %m%n" />
+        </Console>
+
+        <File name="smartcity-event-appender" fileName="${log-path}/event/smartcity-event.log">
+            <PatternLayout>
+                <pattern>
+                    %d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+<!--         <File name="Send-Appender" fileName="${log-path}/event/send-event.log"> -->
+<!--             <PatternLayout> -->
+<!--                 <pattern> -->
+<!--                     %d{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n -->
+<!--                 </pattern> -->
+<!--             </PatternLayout> -->
+<!--         </File> -->
+		 <appender name="LOG_FILE_2" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  			<file>${log-path}</file>
+  			<append>true</append>
+  			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+   			<!-- daily rollover -->
+   				<fileNamePattern>${GW_LOG_PATH_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+  			 	<timeBasedFileNamingAndTriggeringPolicy  class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+    			<!-- or whenever the file size reaches 50MB -->
+   					 <maxFileSize>10KB</maxFileSize>
+   				</timeBasedFileNamingAndTriggeringPolicy>
+  				 <!-- keep 30 days' worth of history -->
+  				<maxHistory>1</maxHistory>
+ 			</rollingPolicy>
+ 			<encoder>
+  				<pattern>%d{HH:mm:ss.SSS} %-6level %logger{35} - %msg%n</pattern>
+  			</encoder>
+ 		  </appender>
+    </Appenders>
+    <Loggers>
+        <Logger name="geomex.mapservice." level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="java.sql" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.geotools" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.egovframework" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="jdbc.sqltiming" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework.aop.interceptor.CustomizableTraceInterceptor" level="TRACE" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+
+        <!-- 119로 부터 수신된 메시지 로그 기록 -->
+        <Logger name="geomex.xeus.smartcity.event" level="debug">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="smartcity-event-appender" level="debug" />
+        </Logger>
+
+        <!-- ESE로 송신한 메시지 로그 기록 -->
+<!--         <Logger name="geomex.indcs.event.service.EventSocketSendService" level="debug"> -->
+<!--             <AppenderRef ref="console" /> -->
+<!--             <AppenderRef ref="Send-Appender" level="debug" /> -->
+<!--         </Logger> -->
+
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>

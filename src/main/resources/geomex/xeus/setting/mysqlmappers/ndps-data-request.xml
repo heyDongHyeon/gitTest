@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.ndps.service.NdpsMapper">
+
+
+	<select id="getEqbList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT BRDCST_TRMNL_SE as se, BRDCST_TRMNL_NM as nm, BRDCST_TRMNL_INNB as innb, BRDCST_TRMNL_TELNO as telno, BRDCST_TRMNL_LC as lc, BRDCST_TRMNL_LA as la, BRDCST_TRMNL_LO as lo
+			FROM sejong.brdcst_trmnls_view
+			<where>
+				BRDCST_TRMNL_SE = #{se}
+			</where>
+
+	</select>
+
+
+	<select id="getAllList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT BRDCST_TRMNL_SE as se, BRDCST_TRMNL_NM as nm, BRDCST_TRMNL_INNB as innb, BRDCST_TRMNL_TELNO as telno, BRDCST_TRMNL_LC as lc, BRDCST_TRMNL_LA as la, BRDCST_TRMNL_LO as lo
+		FROM sejong.brdcst_trmnls_view
+
+	</select>
+
+	<select id="getList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT tt1.BRDCST_TRMNL_INNB as innb
+		, DATE_FORMAT(MESURE_DT, '%Y%m%d') as dt
+		, tt2.BRDCST_TRMNL_NM  as nm
+		, tt2.BRDCST_TRMNL_LC  as addr
+		, tt2.BRDCST_TRMNL_LA  as lat
+		, tt2.BRDCST_TRMNL_LO  as lon
+		FROM sejong.weather_view tt1
+		LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+		<where>
+ DATE_FORMAT(MESURE_DT, '%Y-%m-%d') = #{dt}
+
+			AND tt2.BRDCST_TRMNL_SE = #{se}
+			AND tt2.BRDCST_TRMNL_NM like concat_ws(#{nm}, '%', '%')
+		</where>
+		GROUP BY innb, DATE_FORMAT(MESURE_DT, '%Y%m%d')
+	</select>
+
+	<select id="getAwsList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT tt1.BRDCST_TRMNL_INNB as innb
+		, DATE_FORMAT(MESURE_DT, '%Y%m%d') as dt
+		, tt2.BRDCST_TRMNL_NM  as nm
+		, tt2.BRDCST_TRMNL_LC  as addr
+		, tt2.BRDCST_TRMNL_LA  as lat
+		, tt2.BRDCST_TRMNL_LO  as lon
+		FROM sejong.awsdata_view tt1
+		LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+		<where>
+ 			DATE_FORMAT(MESURE_DT, '%Y-%m-%d') = #{dt}
+
+			AND tt2.BRDCST_TRMNL_SE = #{se}
+			AND tt2.BRDCST_TRMNL_NM like concat_ws(#{nm}, '%', '%')
+		</where>
+		GROUP BY innb, DATE_FORMAT(MESURE_DT, '%Y%m%d')
+	</select>
+
+	<select id="getData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT BRDCST_TRMNL_INNB as innb, MESURE_DATA as data, DATE_FORMAT(MESURE_DT,  '%Y-%m-%d %H:%i:%s') as dt
+		FROM sejong.weather_view
+		<where>
+			BRDCST_TRMNL_INNB = ${innb}
+			AND DATE_FORMAT(MESURE_DT, '%Y-%m-%d') = #{dt}
+		</where>
+	</select>
+
+	<select id="getAwsData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+			BRDCST_TRMNL_INNB as innb,
+			TEMP_DATA as tempData,
+			HUMI_DATA as humiData,
+			WDIR_DATA as wdirData,
+			WSPD_DATA as wspdData,
+			DATE_FORMAT(MESURE_DT,  '%Y-%m-%d %H:%i:%s') as dt
+		FROM sejong.awsdata_view
+		<where>
+			BRDCST_TRMNL_INNB = ${innb}
+			AND DATE_FORMAT(MESURE_DT, '%Y-%m-%d') = #{dt}
+		</where>
+	</select>
+
+	<select id="getRealTimeData" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+
+			T1.BRDCST_TRMNL_INNB as innb,
+			T3.MESURE_DATA as data,
+			DATE_FORMAT(T1.MESURE_DT,  '%Y-%m-%d %H:%i:%s') as dt,
+			T2.BRDCST_TRMNL_LA  as lat,
+			T2.BRDCST_TRMNL_LO  as lon
+			, T2.BRDCST_TRMNL_LC  as addr
+			, T2.BRDCST_TRMNL_SE as se
+			, T2.BRDCST_TRMNL_NM as nm
+		FROM (
+			SELECT
+				BRDCST_TRMNL_INNB
+				, max(MESURE_DT) MESURE_DT
+			FROM sejong.weather_view
+			WHERE DATE_FORMAT(MESURE_DT, '%Y-%m-%d') = #{dat}
+			GROUP BY BRDCST_TRMNL_INNB
+		) T1
+
+		JOIN sejong.weather_view T3 ON T1.BRDCST_TRMNL_INNB = T3.BRDCST_TRMNL_INNB and T1.MESURE_DT = T3.MESURE_DT
+		LEFT JOIN sejong.brdcst_trmnls_view T2 on T1.BRDCST_TRMNL_INNB = T2.BRDCST_TRMNL_INNB
+		WHERE BRDCST_TRMNL_SE IN ('B03101','B03103')
+	</select>
+
+	<select id="getStatYear" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				item,
+   				'평균,최대,최소,합계' AS col,
+
+   				concat(
+				<foreach collection="datList" item="date" separator="" >
+   					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN avg END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN max END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN min END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN sum END), '0'), ';' ,
+   				</foreach>
+   				 '' )
+   				AS cate
+
+			FROM (SELECT DATE_FORMAT(MESURE_DT, '%Y') dat
+						 , tt2.BRDCST_TRMNL_NM AS item
+						 , '평균,최대,최소,합계' AS col
+			             , round(avg(${valueType}), 1) avg
+			             , round(max(${valueType}), 1) max
+			             , round(min(${valueType}), 1) min
+			             , round(sum(${valueType}), 1) sum
+
+			          FROM sejong.${tableName} tt1
+
+			          LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+			         WHERE MESURE_DT >=  '2018-01-01'
+			         and tt2.BRDCST_TRMNL_SE = #{ctgory}
+			         AND ${valueType} <![CDATA[ <> ]]> 0
+			        <if test="nm != null and nm != '' ">
+					 AND tt2.BRDCST_TRMNL_NM LIKE concat(#{nm}, '%')
+					</if>
+
+			         GROUP BY item, DATE_FORMAT(MESURE_DT, '%Y')
+			        ) utt1
+GROUP BY item
+		UNION ALL
+		(
+			SELECT
+   				item,
+   				'평균,최대,최소,합계' AS col,
+
+   				concat(
+				<foreach collection="datList" item="date" separator="" >
+   					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN avg END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN max END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN min END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.year}' THEN sum END), '0'), ';' ,
+   				</foreach>
+   				 '' )
+
+   				AS cate
+
+			FROM (SELECT DATE_FORMAT(MESURE_DT, '%Y') dat
+						 , '차트' AS item
+						 , '평균,최대,최소,합계' AS col
+			             , round(avg(${valueType}), 1) avg
+			             , round(max(${valueType}), 1) max
+			             , round(min(${valueType}), 1) min
+			             , round(sum(${valueType}), 1) sum
+
+			          FROM sejong.${tableName} tt1
+
+			          LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+			         WHERE MESURE_DT >=  '2018-01-01'
+			         and tt2.BRDCST_TRMNL_SE = #{ctgory}
+			         AND ${valueType} <![CDATA[ <> ]]> 0
+ 					<if test="nm != null and nm != '' ">
+					  AND tt2.BRDCST_TRMNL_NM LIKE concat(#{nm}, '%')
+					</if>
+			         GROUP BY DATE_FORMAT(MESURE_DT, '%Y')
+			        ) utt2
+		)
+	</select>
+
+	<select id="getStatMonth" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				item,
+   				'평균,최대,최소,합계' AS col,
+
+   				concat(
+				<foreach collection="datList" item="date" separator="" >
+   					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN avg END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN max END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN min END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN sum END), '0'), ';' ,
+   				</foreach>
+   				 '' ) AS cate
+
+
+			FROM (SELECT DATE_FORMAT(MESURE_DT, '%m') dat
+						 , tt2.BRDCST_TRMNL_NM AS item
+						 , '평균,최대,최소,합계' AS col
+			             , round(avg(${valueType}), 1) avg
+			             , round(max(${valueType}), 1) max
+			             , round(min(${valueType}), 1) min
+			             , round(sum(${valueType}), 1) sum
+
+			          FROM sejong.${tableName} tt1
+
+			          LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+			         WHERE MESURE_DT >=  '${year}-01-01'
+			         AND concat(${year}+1, '-01-01') > MESURE_DT
+			         and tt2.BRDCST_TRMNL_SE = #{ctgory}
+			         AND ${valueType} <![CDATA[ <> ]]> 0
+					 <if test="nm != null and nm != '' ">
+					  AND tt2.BRDCST_TRMNL_NM LIKE concat(#{nm}, '%')
+					</if>
+			         GROUP BY item, DATE_FORMAT(MESURE_DT, '%m')
+			        ) utt1
+GROUP BY item
+		UNION ALL
+		(
+			SELECT
+   				item,
+   				'평균,최대,최소,합계' AS col,
+
+   				concat(
+				<foreach collection="datList" item="date" separator="" >
+   					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN avg END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN max END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN min END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.month}' THEN sum END), '0'), ';' ,
+   				</foreach>
+   				 '' ) AS cate
+
+
+
+			FROM (SELECT DATE_FORMAT(MESURE_DT, '%m') dat
+						 , '차트' AS item
+						 , '평균,최대,최소,합계' AS col
+			             , round(avg(${valueType}), 1) avg
+			             , round(max(${valueType}), 1) max
+			             , round(min(${valueType}),1 ) min
+			             , round(sum(${valueType}),1 ) sum
+
+			          FROM sejong.${tableName} tt1
+
+			          LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+			         WHERE MESURE_DT >=  '${year}-01-01'
+			         AND concat(${year}+1, '-01-01') > MESURE_DT
+			         and tt2.BRDCST_TRMNL_SE =  #{ctgory}
+			         AND ${valueType} <![CDATA[ <> ]]> 0
+					<if test="nm != null and nm != '' ">
+					 AND tt2.BRDCST_TRMNL_NM LIKE concat(#{nm}, '%')
+					</if>
+			         GROUP BY DATE_FORMAT(MESURE_DT, '%m')
+			        ) utt2
+		)
+	</select>
+	<select id="getStatDay" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+   				item,
+   				'평균,최대,최소,합계' AS col,
+
+   				concat(
+				<foreach collection="datList" item="date" separator="" >
+   					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN avg END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN max END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN min END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN sum END), '0'), ';' ,
+   				</foreach>
+   				 '' )
+
+   				AS cate
+
+			FROM (SELECT DATE_FORMAT(MESURE_DT, '%d') dat
+						 , tt2.BRDCST_TRMNL_NM AS item
+						 , '평균,최대,최소,합계' AS col
+			             , round(avg(${valueType}),2) avg
+			             , round(max(${valueType}),2) max
+			             , round(min(${valueType}),2) min
+			             , round(sum(${valueType}),2) sum
+
+			          FROM sejong.${tableName} tt1
+
+			          LEFT JOIN sejong.brdcst_trmnls_view tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+			         WHERE DATE_FORMAT(MESURE_DT, '%Y-%m') = '${year}-${month}'
+
+			         and tt2.BRDCST_TRMNL_SE = #{ctgory}
+			         AND ${valueType} <![CDATA[ <> ]]> 0
+					<if test="nm != null and nm != '' ">
+					 AND tt2.BRDCST_TRMNL_NM LIKE concat(#{nm}, '%')
+					</if>
+			         GROUP BY item, DATE_FORMAT(MESURE_DT, '%d')
+			        ) utt1
+		GROUP BY item
+		UNION ALL
+		(
+			SELECT
+   				item,
+   				'평균,최대,최소,합계' AS col,
+
+   				concat(
+				<foreach collection="datList" item="date" separator="" >
+   					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN avg END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN max END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN min END), '0'), ',' ,
+					IFNULL(SUM(CASE dat WHEN '${date.day}' THEN sum END), '0'), ';' ,
+   				</foreach>
+   				 '' ) AS cate
+
+
+			FROM (SELECT DATE_FORMAT(MESURE_DT, '%d') dat
+						 , '차트' AS item
+						 , '평균,최대,최소,합계' AS col
+			             , round(avg(${valueType}),2) avg
+			             , round(max(${valueType}),2) max
+			             , round(min(${valueType}),2) min
+			             , round(sum(${valueType}),2) sum
+
+			          FROM sejong.${tableName} tt1
+			          LEFT JOIN sejong.brdcst_trmnls_view tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+			         WHERE DATE_FORMAT(MESURE_DT, '%Y-%m') = '${year}-${month}'
+			         and tt2.BRDCST_TRMNL_SE = #{ctgory}
+			         AND ${valueType} <![CDATA[ <> ]]> 0
+			       <if test="nm != null and nm != '' ">
+					 AND tt2.BRDCST_TRMNL_NM LIKE concat(#{nm}, '%')
+					</if>
+			         GROUP BY DATE_FORMAT(MESURE_DT, '%d')
+			        ) utt2
+		)
+	</select>
+
+	<select id="getRainEqbList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+		SELECT BRDCST_TRMNL_INNB as innb, BRDCST_TRMNL_NM  as nm
+
+		FROM sejong.brdcst_trmnls_view
+
+		WHERE
+			BRDCST_TRMNL_SE = 'B03101'
+
+		ORDER BY nm
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+	<select id="getTodayRainList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+
+		SELECT tt1.BRDCST_TRMNL_INNB as innb
+		, DATE_FORMAT(MESURE_DT, '%Y%m%d') as dt
+		, SUM(tt1.MESURE_DATA) as data
+		, tt2.BRDCST_TRMNL_NM  as nm
+		, tt2.BRDCST_TRMNL_LC  as addr
+		, tt2.BRDCST_TRMNL_LA  as lat
+		, tt2.BRDCST_TRMNL_LO  as lon
+		FROM sejong.weather_view tt1
+		LEFT JOIN sejong.brdcst_trmnls_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+		WHERE
+ 			DATE_FORMAT(MESURE_DT, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+
+			AND tt2.BRDCST_TRMNL_SE = 'B03101'
+
+		GROUP BY innb, DATE_FORMAT(MESURE_DT, '%Y%m%d')
+
+		ORDER BY nm
+
+<!-- 		<if test="limit != null and limit != '' and offset != null and offset != ''"> -->
+<!-- 			LIMIT ${limit} OFFSET ${offset} -->
+<!-- 		</if> -->
+	</select>
+
+	<select id="getRecentAwsList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT
+		  temp.innb,
+		  temp.nm,
+		  temp.addr,
+		  temp.lat,
+		  temp.lon,
+		  awsdata.MESURE_DT as dt,
+		  awsdata.TEMP_DATA as temp,
+		  awsdata.HUMI_DATA as humi,
+		  awsdata.WDIR_DATA as wdir,
+		  awsdata.WSPD_DATA as wspd
+		FROM
+		 (
+
+			SELECT
+			  tt1.BRDCST_TRMNL_INNB as innb,
+			  MAX(MESURE_DT) as mesure_dt,
+			  tt1.BRDCST_TRMNL_NM as nm,
+			  tt1.BRDCST_TRMNL_LC as addr,
+			  tt1.BRDCST_TRMNL_LA as lat,
+			  tt1.BRDCST_TRMNL_LO as lon
+			FROM
+			  sejong.brdcst_trmnls_view tt1
+			  LEFT JOIN  sejong.awsdata_view as tt2 on tt1.BRDCST_TRMNL_INNB = tt2.BRDCST_TRMNL_INNB
+
+
+			  WHERE
+			  	tt1.BRDCST_TRMNL_SE = 'B03105'
+
+			  GROUP BY  innb
+
+		  ) AS temp
+
+		  LEFT join sejong.awsdata_view as awsdata on temp.innb = awsdata.BRDCST_TRMNL_INNB  and temp.mesure_dt = awsdata.MESURE_DT  AND DATE_FORMAT(awsdata.mesure_dt, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')
+
+
+		  ORDER BY nm ASC
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.tvius.service.CrmsSysParamMapper">
+
+    <select id="getList" parameterType="HashMap" resultType="CrmsSysParamVo">
+        SELECT prop_key, prop_nm, prop_value
+
+        FROM xeus.mt_sys_prop
+
+        <where>
+            <if test="propKey != null and propKey != ''">
+                AND prop_key = #{propKey}
+            </if>
+
+            <if test="propValue != null and propValue != ''">
+                AND prop_value = #{propValue}
+            </if>
+
+        </where>
+
+        <trim prefix="ORDER BY">
+        	order_key asc
+           <!--  <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+                ${sortCol} ${sortTyp}
+            </if>
+            <if test="sortCol == null and sortTyp == null">
+                prop_key ASC
+            </if> -->
+        </trim>
+
+    </select>
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+        SELECT count(*) FROM xeus.mt_sys_prop
+
+        <where>
+            <if test="propKey != null and propKey != ''">
+                AND prop_key = #{propKey}
+            </if>
+
+            <if test="propNm != null and propNm != ''">
+                AND prop_nm = #{propNm}
+            </if>
+
+            <if test="propValue != null and propValue != ''">
+                AND prop_value = #{propValue}
+            </if>
+
+        </where>
+    </select>
+
+    <delete id="del" parameterType="HashMap">
+        DELETE FROM xeus.mt_sys_prop WHERE prop_key = #{propKey}
+    </delete>
+
+
+    <insert id="add" parameterType="CrmsSysParamVo">
+        INSERT INTO xeus.mt_sys_prop(prop_key, prop_nm, prop_value)
+        VALUES (#{propKey}, #{propNm}, #{propValue}
+    </insert>
+
+
+    <update id="edit" parameterType="CrmsSysParamVo">
+        UPDATE xeus.mt_sys_prop
+
+        SET
+            prop_value = #{propValue},
+            prop_nm = #{propNm}
+
+        WHERE prop_key = #{propKey}
+    </update>
+
+    <update id="editSysParam" parameterType="CrmsSysParamVo">
+
+        <if test="snowLimit != null and snowLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{snowLimit} WHERE prop_key = 'event.snow_limit';
+  		</if>
+        <if test="fullrainLimit != null and fullrainLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{fullrainLimit} WHERE prop_key = 'event.fullrain_limit';
+  		</if>
+
+        <if test="rainAvg != null and rainAvg != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{rainAvg} WHERE prop_key = 'event.rain_avg';
+  		</if>
+        <if test="hourrainLimit != null and hourrainLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{hourrainLimit} WHERE prop_key = 'event.hourrain_limit';
+        </if>
+
+        <if test="minrainLimit != null and minrainLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{minrainLimit} WHERE prop_key = 'event.minrain_limit';
+        </if>
+
+        <if test="dayrainLimit != null and dayrainLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{dayrainLimit} WHERE prop_key = 'event.dayrain_limit';
+        </if>
+
+        <if test="avgLimit != null and avgLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{avgLimit} WHERE prop_key = 'event.avg_limit';
+        </if>
+
+        <if test="dimLimit != null and dimLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{dimLimit} WHERE prop_key = 'event.dim_limit';
+        </if>
+
+        <if test="hmLimit != null and hmLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{hmLimit} WHERE prop_key = 'event.hm_limit';
+        </if>
+        <if test="windLimit != null and windLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{windLimit} WHERE prop_key = 'event.wind_limit';
+        </if>
+
+        <if test="timeLimit != null and timeLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{timeLimit} WHERE prop_key = 'event.time_limit';
+        </if>
+
+        <if test="ndmsEvt != null and ndmsEvt != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{ndmsEvt} WHERE prop_key = 'event.ndms_evt';
+        </if>
+
+        <if test="cctvEvt != null and cctvEvt != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{cctvEvt} WHERE prop_key = 'event.cctv_evt';
+        </if>
+
+        <if test="ivcpEvt != null and ivcpEvt != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{ivcpEvt} WHERE prop_key = 'event.ivcp_evt';
+        </if>
+        
+        <if test="ndpsEvt != null and ndpsEvt != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{ndpsEvt} WHERE prop_key = 'event.ndps_evt';
+        </if>
+
+        <if test="sendNum != null and sendNum != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{sendNum} WHERE prop_key = 'sms.send_num';
+        </if>
+
+        <if test="bellTime != null and bellTime != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{bellTime} WHERE prop_key = 'event.bell_time';
+        </if>
+        <if test="bellEvt != null and bellEvt != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{bellEvt} WHERE prop_key = 'event.bell_evt';
+        </if>
+        <if test="bellLed != null and bellLed != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{bellLed} WHERE prop_key = 'event.bell_led';
+        </if>
+
+        <if test="loginLockCnt != null and loginLockCnt != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{loginLockCnt} WHERE prop_key = 'sys.login_lock_cnt';
+        </if>
+		<if test="netDistLimit != null and netDistLimit != ''">
+            UPDATE xeus.mt_sys_prop SET prop_value = #{netDistLimit} WHERE prop_key = 'cctv.net_dist_limit';
+        </if>
+
+    </update>
+
+</mapper>

@@ -1,0 +1,104 @@
+.stat_btn {
+    height: 34px;
+    background: #4582ac;
+    width: 100px;
+    border: none;
+    color: #f6f6f6;
+    margin: 0;
+    cursor: pointer;
+    margin-left: 7px;
+}
+
+.stat_gray_btn {
+    background: #555;
+}
+
+.stat_gray_btn:hover {
+    background: #4582ac;
+}
+
+.stat_event {
+    width : 190px !important;
+}
+
+#stat_change_btn, #stat_excel_btn {
+	float: right;
+}
+
+#search select.non{
+	display: none;
+}
+
+#search span.non{
+	display: none;
+}
+
+#search select option.non{
+	display: none;
+}
+
+#search select option.active{
+	display: block !important;
+}
+
+#stat_wrap{
+	background : rgb(59, 59, 59)
+}
+
+#stat_wrap #wrap{
+	height:100% !important;
+}
+
+#stat_wrap #wrap > div{
+	color: #f6f6f6;
+}
+
+/* #stat_wrap #wrap > #search{
+	background:#30303A;
+	paddung:16px 0;
+}
+
+#stat_wrap #wrap > #search > select{
+	background:#555;
+	border:none;
+	color:#f6f6f6;
+}
+ */
+#stat_wrap #wrap > #content{
+}
+
+#wrap #content #stat_table_title{
+	font-weight: bold;
+    font-size: 14px;
+    margin:10px 0;
+    padding-left: 10px;
+    background: rgb(59, 59, 59);
+}
+
+#wrap #content #stat_table_type{
+	display: none;
+}
+
+#wrap #content #stat_chart_type{
+	background:none;
+}
+/*
+#wrap #content #userList th{
+	background:#30303A;
+	border:none;
+	color:#f6f6f6;
+}
+
+#wrap #content #userList td{
+	background: rgb(59, 59, 59);
+    border: 1px solid #333;
+    border-right:none;
+    font-size: 13px;
+    padding: 10px;
+    text-align: center;
+    color: #f6f6f6;
+}
+
+#wrap #content #userList td:FIRST-CHILD {
+	  border-left:none;
+} */

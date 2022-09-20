@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.equipmgr.service.DisbordMapper">
+
+	<select id="getList" parameterType="java.util.HashMap" resultType="DisbordVo">
+		SELECT disbord.mgr_no, disbord.bord_nm, disbord.gbn_nm, disbord.maker_nm, disbord.tec_spe, disbord.loc_desc, disbord.rmark, disbord.tm_lat, disbord.tm_lon, disbord.phone_number, disbord.expression_method, disbord.standard, disbord.install_date, disbord.install_cost, disbord.note
+		, sig.sig_kor_nm || ' ' || emd.emd_kor_nm || ' ' || li.li_kor_nm || ' ' || cbnd.jibun AS addr
+		FROM xeus.asset_disbord as disbord
+
+			        LEFT JOIN xeus.kras_cbnd_as AS cbnd ON st_intersects(cbnd._geometry, disbord._geometry)
+        LEFT JOIN xeus.kais_sig_as sig on sig.sig_cd = substr(cbnd.pnu, 0, 6)
+        LEFT JOIN xeus.kais_emd_as emd on emd.emd_cd = substr(cbnd.pnu, 0, 9)
+        LEFT JOIN xeus.kais_li_as li on li.li_cd = substr(cbnd.pnu, 0, 11)
+
+				<where>
+					<if test="objName != null and objName != ''">
+		                AND (disbord.bord_nm like '%'||#{objName}||'%' OR loc_desc like '%'||#{objName}||'%')
+		            </if>
+					<if test="emdCd != null and emdCd != ''">
+		                st_intersects(emd._geometry, disbord._geometry)
+
+		                AND emd.emd_cd = #{emdCd}
+		            </if>
+					<if test="mgrNo != null and mgrNo != ''">
+						AND mgr_no = #{mgrNo}
+					</if>
+				</where>
+				ORDER BY mgr_no
+	</select>
+	<select id="getItem" parameterType="java.util.HashMap" resultType="DisbordVo">
+		SELECT mgr_no, bord_nm, gbn_nm, maker_nm, tec_spe, loc_desc, rmark, tm_lat, tm_lon, phone_number, expression_method, standard, install_date, install_cost, note
+			FROM xeus.asset_disbord
+				where mgr_no=#{mgrNo}
+	</select>
+	<select id="getMgr" parameterType="HashMap" resultType="DisbordVo">
+     	SELECT array_to_string(array_agg(mgr.mgr_spot||'/'||mgr.mgr_belong||'/'||mgr.mgr_level||'/'||mgr.mgr_nm||'/'||mgr.mgr_tel||'/'||mgr.mgr_phone||'/'||mgr.mgr_sub_no ), ',') as strMgr
+			FROM xeus.asset_disbord AS disbord
+				LEFT JOIN xeus.asset_eqb_aws_mgr AS mgr
+					ON disbord.mgr_no = mgr.mgr_no
+						where disbord.mgr_no = #{mgrNo}
+							GROUP BY disbord.mgr_no
+    </select>
+
+	<insert id="add" parameterType="VoiceVo">
+		WITH myconstants AS(
+			INSERT INTO xeus.asset_disbord(
+	              		mgr_no, bord_nm, gbn_nm, maker_nm, tec_spe, loc_desc, rmark, _annox, _annoy, _geometry, tm_lat, tm_lon, phone_number, expression_method, standard, install_date, install_cost, note
+	              	)
+		    VALUES(
+		    		(SELECT
+	             		 'DIS' ||
+	             		 (case length((num + 1)::text)::integer
+	               		 when 1 then '000000'
+	               		 when 2 then '00000'
+	               		 when 3 then '0000'
+	                	 when 4 then '000'
+	                	 when 5 then '00'
+	                	 when 6 then '0'
+	               	     when 7 then ''
+	            		  end) || num + 1 AS val
+	           				 FROM generate_series(
+	               				 (SELECT coalesce(substring(max(mgr_no), 4)::numeric, 0) FROM xeus.asset_disbord),
+	                			 (SELECT coalesce(substring(max(mgr_no), 4)::numeric, 0) FROM xeus.asset_disbord)
+	           					 ) AS num),
+		 			#{bordNm},
+		 			#{gbnNm},
+		 			#{makerNm},
+		 			#{tecSpe},
+		 			#{locDesc},
+		 			#{rmark},
+		    		(SELECT st_x(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186))),
+		    		(SELECT st_y(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186))),
+		    		(SELECT st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)),
+		    		#{tmLat}::numeric,
+		    		#{tmLon}::numeric,
+		    		#{phoneNumber},
+					#{expressionMethod},
+					#{standard},
+					#{installDate},
+					#{installCost},
+					#{note}
+
+		    	 )
+		    	 RETURNING mgr_no
+		     )
+			 <!-- 	   	eqb_aws_mgr에 insert -->
+		   	 INSERT INTO xeus.asset_eqb_aws_mgr(
+		              mgr_no, mgr_spot, mgr_belong, mgr_level, mgr_nm, mgr_tel, mgr_phone,mgr_sub_no
+		     )
+			 VALUES
+	   		<foreach collection="mgr" item="item" open="" separator="," close="">
+	           	(
+	           		(select mgr_no from myconstants),
+	           		#{item.mgrSpot}, #{item.mgrBelong}, #{item.mgrLevel}, #{item.mgrNm}, #{item.mgrTel}, #{item.mgrPhone}, #{item.mgrSubNo}::Integer
+	           	)
+	       	</foreach>
+	</insert>
+	<update id="edit" parameterType="DisbordVo">
+		UPDATE xeus.asset_disbord
+			SET
+				mgr_no=#{mgrNo}
+				<if test="bordNm != null and bordNm != ''">
+                	, bord_nm = #{bordNm}
+            	</if>
+            	<if test="gbnNm != null and gbnNm != ''">
+                	, gbn_nm = #{gbnNm}
+            	</if>
+            	<if test="makerNm != null and makerNm != ''">
+                	, maker_nm = #{makerNm}
+            	</if>
+            	<if test="tecSpe != null and tecSpe != ''">
+                	, tec_spe = #{tecSpe}
+            	</if>
+            	<if test="rmark != null and rmark != ''">
+                	, rmark = #{rmark}
+            	</if>
+            	<if test="locDesc != null and locDesc != ''">
+                	, loc_desc = #{locDesc}
+            	</if>
+            	<if test="tmLon != null and tmLon != ''">
+            		<if test="tmLat != null and tmLat != ''">
+	                	, _annox=(SELECT st_x(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)))
+	                	, _annoy=(SELECT st_y(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)))
+	                	,_geometry=(SELECT st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186))
+	                	,tm_lat=#{tmLat}::numeric
+		    			,tm_lon=#{tmLon}::numeric
+                	</if>
+            	</if>
+            	<if test="phoneNumber != null and phoneNumber != ''">
+                	, phone_number = #{phoneNumber}
+            	</if>
+            	<if test="expressionMethod != null and expressionMethod != ''">
+                	, expression_method = #{expressionMethod}
+            	</if>
+            	<if test="standard != null and standard != ''">
+                	, standard = #{standard}
+            	</if>
+            	<if test="installDate != null and installDate != ''">
+                	, install_date = #{installDate}
+            	</if>
+            	<if test="installCost != null and installCost != ''">
+                	, install_cost = #{installCost}
+            	</if>
+            	<if test="note != null and note != ''">
+                	, note = #{note}
+            	</if>
+
+				WHERE mgr_no=#{mgrNo}
+	</update>
+	<delete id="del" parameterType="java.util.HashMap">
+		DELETE FROM xeus.asset_disbord
+			WHERE mgr_no=#{mgrNo};
+
+		DELETE FROM xeus.asset_eqb_aws_mgr
+			WHERE mgr_no=#{mgrNo};
+	</delete>
+</mapper>

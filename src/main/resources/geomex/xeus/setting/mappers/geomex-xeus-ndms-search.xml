@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.ndms.service.NdmsMapper">
+
+  <select id="getListAws" parameterType="HashMap" resultType="HashMap">
+    SELECT userdefineareanm, dt_obz, wind_wd, wv_ws, at_avg_ta, wthr_hm,
+    ap_pa, ap_ps, wthr_yn, wthr_1hr, wthr_day, cord_lat, cord_lon, cord_ht, dt_regt, cd_stn
+      FROM xeus.ndms_kma_aws
+  </select>
+
+  <select id="getListByInf119Mstr" parameterType="HashMap" resultType="HashMap">
+	    SELECT inf._gid, inf._annox, inf._annoy, rept_dt, end_dt, orgn_id, rept_area_nm, rept_desc, dstr_area_nm, pttn_nm1, pttn_nm2, pttn_nm3, dstr_state, caus_nm, dstr_scop_cd, dstr_scop_nm, dstr_stat_fl, dstr_stat_cd, dstr_stat_nm, ctrler_nm, ctrler_tel, updt_dttm, dstr_no, dt_regt, inf._geometry,
+	    	  division, casualties, property_damage, memo
+	    FROM xeus.inf_119_mstr AS inf
+	    LEFT JOIN xeus.kais_emd_as AS emd ON st_intersects ( emd._geometry, inf._geometry )
+
+	    <where>
+
+		    <if test="startDate != null and startDate != ''">
+		        <if test="endDate != null and endDate != ''">
+		        	AND TO_DATE(rept_dt,'YYYYMMDDHH24MISS') BETWEEN #{startDate} :: DATE AND #{endDate} :: DATE
+		        </if>
+	        </if>
+
+	        <if test="reptDt != null and reptDt != ''">
+	             AND rept_dt = #{reptDt}
+	    	</if>
+
+	    	<if test="emdCd != null and emdCd != ''">
+           		AND emd.emd_cd = #{emdCd}
+       		</if>
+       		<if test="division != null and division != ''">
+           		AND inf.division = #{division}
+       		</if>
+
+	    </where>
+
+	    <trim prefix="ORDER BY">
+	        <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+	            ${sortCol} ${sortTyp}
+	        </if>
+	        <if test="sortCol == null and sortTyp == null">
+	            _gid asc
+	        </if>
+	    </trim>
+
+	    <if test="limit != null and limit != '' and offset != null and offset != ''">
+	        LIMIT ${limit} OFFSET ${offset}
+	    </if>
+
+  </select>
+
+
+  <select id="getStatByInf119Mstr" parameterType="HashMap" resultType="HashMap">
+
+	  SELECT division,
+	       String_agg(casualties, ',') AS casualties,
+	       String_agg(cnt :: text, ',') AS casualties_cnt,
+	       SUM(cnt) :: TEXT AS division_cnt
+	  FROM
+	  (
+	  		SELECT division,
+	               casualties,
+	               Count(*) AS CNT
+	        FROM   xeus.inf_119_mstr inf
+	        LEFT JOIN xeus.kais_emd_as AS emd ON st_intersects ( emd._geometry, inf._geometry )
+
+	        <where>
+	        	<if test="startDate != null and startDate != ''">
+	            	<if test="endDate != null and endDate != ''">
+	                	AND TO_DATE(rept_dt,'YYYYMMDDHH24MISS') BETWEEN #{startDate} :: DATE AND #{endDate} :: DATE
+	                </if>
+	            </if>
+
+	            <if test="reptDt != null and reptDt != ''">
+	            	AND rept_dt = #{reptDt}
+	       		</if>
+
+	       		<if test="emdCd != null and emdCd != ''">
+           			AND emd.emd_cd = #{emdCd}
+       			</if>
+       		</where>
+
+	        GROUP  BY division,
+	                  casualties
+	  ) AS foo
+
+	  GROUP BY division
+
+  </select>
+
+  <insert id="insertByInf119Mstr" parameterType="hashMap">
+      INSERT INTO xeus.inf_119_mstr(
+<!-- 	             _annox, -->
+<!-- 	             _annoy, -->
+               <if test="_annox != null and _annox != ''">
+                    _annox,
+               </if>
+               <if test="_annoy != null and _annoy != ''">
+                    _annoy,
+               </if>
+               rept_dt,
+               end_dt,
+               orgn_id,
+               rept_area_nm,
+               rept_desc,
+               dstr_area_nm,
+               pttn_nm1,
+               pttn_nm2,
+               pttn_nm3,
+               dstr_state,
+               caus_nm,
+               dstr_scop_cd,
+               dstr_scop_nm,
+               dstr_stat_fl,
+               dstr_stat_cd,
+               dstr_stat_nm,
+               ctrler_nm,
+               ctrler_tel,
+               updt_dttm,
+               dstr_no,
+               dt_regt
+               <if test="point != null and point != ''">
+                    ,_geometry
+               </if>
+          )
+      VALUES (
+
+   	     <if test="_annox != null and _annox != ''">
+               #{_annox}::NUMERIC,
+         </if>
+         <if test="_annoy != null and _annoy != ''">
+               #{_annoy}::NUMERIC,
+         </if>
+         #{reptDt},
+         #{endDt},
+         #{orgnId},
+         #{reptAreaNm},
+         #{reptDesc},
+         #{dstrAreaNm},
+         #{pttnNm1},
+         #{pttnNm2},
+         #{pttnNm3},
+         #{dstrState},
+         #{causNm},
+         #{dstrScopCd},
+         #{dstrScopNm},
+         #{dstrStatFl},
+         #{dstrStatCd},
+         #{dstrStatNm},
+         #{ctrlerNm},
+         #{ctrlerTel},
+         #{updtDttm},
+         #{dstrNo},
+         #{dtRegt}
+         <if test="point != null and point != ''">
+                     ,ST_Transform ( ST_GeomFromText ( #{point}, 4326 ), 5186 )
+               </if>
+         );
+  </insert>
+
+  <update id="editByInf119Mstr" parameterType="hashMap">
+  	UPDATE xeus.inf_119_mstr SET
+            _gid = #{_gid} :: numeric
+
+            <if test="division != null and division != ''">
+                , division = #{division}
+            </if>
+
+            <if test="casualties != null and casualties != ''">
+                , casualties = #{casualties}
+            </if>
+
+            <if test="propertyDamage != null and propertyDamage != ''">
+                , property_damage = #{propertyDamage}
+            </if>
+
+            <if test="memo != null and memo != ''">
+                , memo = #{memo}
+            </if>
+            <if test="_annox != null and _annox != ''">
+            	<if test="_annoy != null and _annoy != ''">
+					,_annox = #{_annox} :: numeric
+	    			,_annoy = #{_annoy} :: numeric
+<!--                  	,geometry = (SELECT ST_TRANSFORM(ST_SETSRID((ST_GEOMETRYFROMTEXT('POINT('||#{_annox}||' '||#{_annoy}||'))), 4326), 5186)) -->
+                 	,_geometry = (SELECT st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{_annox}||' '||#{_annoy}||')')), 4326), 5186))
+            	</if>
+            </if>
+
+  	WHERE _gid = #{_gid} :: numeric
+
+  </update>
+
+</mapper>

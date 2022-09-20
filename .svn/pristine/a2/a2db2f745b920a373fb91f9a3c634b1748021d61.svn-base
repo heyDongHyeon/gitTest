@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliHrfRfhrMapper">
+    <select id="getList" parameterType="HashMap" resultType="EliHrfRfhrVo">
+        SELECT lk_info_id, rcv_ymd_hms, seq_no, obsvt_id, obsvt_nm, rfhr_status, obsvt_ymdhm, hrrf, point_x, point_y
+
+        FROM xeus.ELI_HRF_RFHR
+
+        <where>
+
+            <if test="lkInfoId != null and lkInfoId != ''">
+                AND LK_INFO_ID = #{lkInfoId}
+            </if>
+
+            <if test="rcvYmdHms != null and rcvYmdHms != ''">
+                AND RCV_YMD_HMS = #{rcvYmdHms}
+            </if>
+
+            <if test="seqNo != null and seqNo != ''">
+                AND SEQ_NO = #{seqNo}::numeric
+            </if>
+
+            <if test="obsvtId != null and obsvtId != ''">
+                AND OBSVT_ID = #{obsvtId}
+            </if>
+
+            <if test="obsvtNm != null and obsvtNm != ''">
+                AND OBSVT_NM = #{obsvtNm}
+            </if>
+
+            <if test="rfhrStatus != null and rfhrStatus != ''">
+                AND RFHR_STATUS = #{rfhrStatus}::numeric
+            </if>
+
+            <if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+                AND OBSVT_YMDHM = #{obsvtYmdhm}
+            </if>
+
+            <if test="hrrf != null and hrrf != ''">
+                AND HRRF = #{hrrf}::numeric
+            </if>
+
+            <if test="pointX != null and pointX != ''">
+                AND POINT_X = #{pointX}::numeric
+            </if>
+
+            <if test="pointY != null and pointY != ''">
+                AND POINT_Y = #{pointY}::numeric
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+        </where>
+
+        <trim prefix="ORDER BY">
+            <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+                ${sortCol} ${sortTyp}
+            </if>
+            <if test="sortCol == null and sortTyp == null">
+                SEQ_NO DESC
+            </if>
+        </trim>
+
+        <if test="limit != null and limit != '' and offset != null and offset != ''">
+            LIMIT ${limit} OFFSET ${offset}
+        </if>
+
+    </select>
+
+
+    <select id="getItem" parameterType="HashMap" resultType="EliHrfRfhrVo">
+        SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OBSVT_ID, OBSVT_NM, RFHR_STATUS, OBSVT_YMDHM, HRRF, POINT_X, POINT_Y
+
+        FROM xeus.ELI_HRF_RFHR
+
+        <where>
+
+            <if test="lkInfoId != null and lkInfoId != ''">
+                AND LK_INFO_ID = #{lkInfoId}
+            </if>
+
+            <if test="rcvYmdHms != null and rcvYmdHms != ''">
+                AND RCV_YMD_HMS = #{rcvYmdHms}
+            </if>
+
+            <if test="seqNo != null and seqNo != ''">
+                AND seq_no = #{seqNo}::numeric
+            </if>
+
+            <if test="obsvtId != null and obsvtId != ''">
+                AND OBSVT_ID = #{obsvtId}
+            </if>
+
+            <if test="obsvtNm != null and obsvtNm != ''">
+                AND OBSVT_NM = #{obsvtNm}
+            </if>
+
+            <if test="rfhrStatus != null and rfhrStatus != ''">
+                AND RFHR_STATUS = #{rfhrStatus}::numeric
+            </if>
+
+            <if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+                AND OBSVT_YMDHM = #{obsvtYmdhm}
+            </if>
+
+            <if test="hrrf != null and hrrf != ''">
+                AND HRRF = #{hrrf}::numeric
+            </if>
+
+            <if test="pointX != null and pointX != ''">
+                AND POINT_X = #{pointX}::numeric
+            </if>
+
+            <if test="pointY != null and pointY != ''">
+                AND POINT_Y = #{pointY}::numeric
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+        SELECT count(*)
+
+        FROM xeus.ELI_HRF_RFHR
+
+        <where>
+
+            <if test="lkInfoId != null and lkInfoId != ''">
+                AND LK_INFO_ID = #{lkInfoId}
+            </if>
+
+            <if test="rcvYmdHms != null and rcvYmdHms != ''">
+                AND RCV_YMD_HMS = #{rcvYmdHms}
+            </if>
+
+            <if test="seqNo != null and seqNo != ''">
+                AND SEQ_NO = #{seqNo}::numeric
+            </if>
+
+            <if test="obsvtId != null and obsvtId != ''">
+                AND OBSVT_ID = #{obsvtId}
+            </if>
+
+            <if test="obsvtNm != null and obsvtNm != ''">
+                AND OBSVT_NM = #{obsvtNm}
+            </if>
+
+            <if test="rfhrStatus != null and rfhrStatus != ''">
+                AND RFHR_STATUS = #{rfhrStatus}::numeric
+            </if>
+
+            <if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+                AND OBSVT_YMDHM = #{obsvtYmdhm}
+            </if>
+
+            <if test="hrrf != null and hrrf != ''">
+                AND HRRF = #{hrrf}::numeric
+            </if>
+
+            <if test="pointX != null and pointX != ''">
+                AND POINT_X = #{pointX}::numeric
+            </if>
+
+            <if test="pointY != null and pointY != ''">
+                AND POINT_Y = #{pointY}::numeric
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+        </where>
+    </select>
+
+
+    <delete id="del" parameterType="HashMap">
+        DELETE FROM xeus.ELI_HRF_RFHR WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+
+    </delete>
+
+
+    <insert id="add" parameterType="EliHrfRfhrVo">
+        INSERT xeus.INTO ELI_HRF_RFHR(
+            LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, OBSVT_ID, OBSVT_NM, RFHR_STATUS, OBSVT_YMDHM, HRRF, POINT_X, POINT_Y
+        ) VALUES (
+            #{lkInfoId}, #{rcvYmdHms}, #{seqNo}::numeric, #{obsvtId}, #{obsvtNm}, #{rfhrStatus}::numeric, #{obsvtYmdhm}, #{hrrf}::numeric, #{pointX}::numeric, #{pointY}::numeric
+        );
+    </insert>
+
+
+    <update id="edit" parameterType="EliHrfRfhrVo">
+        UPDATE xeus.ELI_HRF_RFHR SET
+
+            LK_INFO_ID = #{lkInfoId}
+            , RCV_YMD_HMS = #{rcvYmdHms}
+            , SEQ_NO = #{seqNo}::numeric
+
+            <if test="obsvtId != null and obsvtId != ''">
+                , OBSVT_ID = #{obsvtId}
+            </if>
+
+            <if test="obsvtNm != null and obsvtNm != ''">
+                , OBSVT_NM = #{obsvtNm}
+            </if>
+
+            <if test="rfhrStatus != null and rfhrStatus != ''">
+                , RFHR_STATUS = #{rfhrStatus}::numeric
+            </if>
+
+            <if test="obsvtYmdhm != null and obsvtYmdhm != ''">
+                , OBSVT_YMDHM = #{obsvtYmdhm}
+            </if>
+
+            <if test="hrrf != null and hrrf != ''">
+                , HRRF = #{hrrf}::numeric
+            </if>
+
+            <if test="pointX != null and pointX != ''">
+                , POINT_X = #{pointX}::numeric
+            </if>
+
+            <if test="pointY != null and pointY != ''">
+                , POINT_Y = #{pointY}::numeric
+            </if>
+
+        WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+
+    </update>
+
+</mapper>

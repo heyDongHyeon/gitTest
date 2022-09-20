@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliKmaDfsShrtMapper">
+	<select id="getList" parameterType="HashMap" resultType="EliKmaDfsShrtVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, FC_YMDHM, LOC, POINT_X, POINT_Y, RAIN_1, RAIN_2, RAIN_3, RAIN_4, RAIN_5, WAD_1, WAD_2, WAD_3, WAD_4, WAD_5, TEM_1, TEM_2, TEM_3, TEM_4, TEM_5, HUM_1, HUM_2, HUM_3, HUM_4, HUM_5
+
+		FROM xeus.ELI_KMA_DFS_SHRT
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="fcYmdhm != null and fcYmdhm != ''">
+				AND FC_YMDHM = #{fcYmdhm}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="rain1 != null and rain1 != ''">
+				AND RAIN_1 = #{rain1}
+			</if>
+
+			<if test="rain2 != null and rain2 != ''">
+				AND RAIN_2 = #{rain2}
+			</if>
+
+			<if test="rain3 != null and rain3 != ''">
+				AND RAIN_3 = #{rain3}
+			</if>
+
+			<if test="rain4 != null and rain4 != ''">
+				AND RAIN_4 = #{rain4}
+			</if>
+
+			<if test="rain5 != null and rain5 != ''">
+				AND RAIN_5 = #{rain5}
+			</if>
+
+			<if test="wad1 != null and wad1 != ''">
+				AND WAD_1 = #{wad1}
+			</if>
+
+			<if test="wad2 != null and wad2 != ''">
+				AND WAD_2 = #{wad2}
+			</if>
+
+			<if test="wad3 != null and wad3 != ''">
+				AND WAD_3 = #{wad3}
+			</if>
+
+			<if test="wad4 != null and wad4 != ''">
+				AND WAD_4 = #{wad4}
+			</if>
+
+			<if test="wad5 != null and wad5 != ''">
+				AND WAD_5 = #{wad5}
+			</if>
+
+			<if test="tem1 != null and tem1 != ''">
+				AND TEM_1 = #{tem1}
+			</if>
+
+			<if test="tem2 != null and tem2 != ''">
+				AND TEM_2 = #{tem2}
+			</if>
+
+			<if test="tem3 != null and tem3 != ''">
+				AND TEM_3 = #{tem3}
+			</if>
+
+			<if test="tem4 != null and tem4 != ''">
+				AND TEM_4 = #{tem4}
+			</if>
+
+			<if test="tem5 != null and tem5 != ''">
+				AND TEM_5 = #{tem5}
+			</if>
+
+			<if test="hum1 != null and hum1 != ''">
+				AND HUM_1 = #{hum1}
+			</if>
+
+			<if test="hum2 != null and hum2 != ''">
+				AND HUM_2 = #{hum2}
+			</if>
+
+			<if test="hum3 != null and hum3 != ''">
+				AND HUM_3 = #{hum3}
+			</if>
+
+			<if test="hum4 != null and hum4 != ''">
+				AND HUM_4 = #{hum4}
+			</if>
+
+			<if test="hum5 != null and hum5 != ''">
+				AND HUM_5 = #{hum5}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+
+		<trim prefix="ORDER BY">
+			<if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+				${sortCol} ${sortTyp}
+			</if>
+			<if test="sortCol == null and sortTyp == null">
+				SEQ_NO asc
+			</if>
+		</trim>
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+	<select id="getItem" parameterType="HashMap" resultType="EliKmaDfsShrtVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, FC_YMDHM, LOC, POINT_X, POINT_Y, RAIN_1, RAIN_2, RAIN_3, RAIN_4, RAIN_5, WAD_1, WAD_2, WAD_3, WAD_4, WAD_5, TEM_1, TEM_2, TEM_3, TEM_4, TEM_5, HUM_1, HUM_2, HUM_3, HUM_4, HUM_5
+
+		FROM xeus.ELI_KMA_DFS_SHRT
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="fcYmdhm != null and fcYmdhm != ''">
+				AND FC_YMDHM = #{fcYmdhm}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="rain1 != null and rain1 != ''">
+				AND RAIN_1 = #{rain1}
+			</if>
+
+			<if test="rain2 != null and rain2 != ''">
+				AND RAIN_2 = #{rain2}
+			</if>
+
+			<if test="rain3 != null and rain3 != ''">
+				AND RAIN_3 = #{rain3}
+			</if>
+
+			<if test="rain4 != null and rain4 != ''">
+				AND RAIN_4 = #{rain4}
+			</if>
+
+			<if test="rain5 != null and rain5 != ''">
+				AND RAIN_5 = #{rain5}
+			</if>
+
+			<if test="wad1 != null and wad1 != ''">
+				AND WAD_1 = #{wad1}
+			</if>
+
+			<if test="wad2 != null and wad2 != ''">
+				AND WAD_2 = #{wad2}
+			</if>
+
+			<if test="wad3 != null and wad3 != ''">
+				AND WAD_3 = #{wad3}
+			</if>
+
+			<if test="wad4 != null and wad4 != ''">
+				AND WAD_4 = #{wad4}
+			</if>
+
+			<if test="wad5 != null and wad5 != ''">
+				AND WAD_5 = #{wad5}
+			</if>
+
+			<if test="tem1 != null and tem1 != ''">
+				AND TEM_1 = #{tem1}
+			</if>
+
+			<if test="tem2 != null and tem2 != ''">
+				AND TEM_2 = #{tem2}
+			</if>
+
+			<if test="tem3 != null and tem3 != ''">
+				AND TEM_3 = #{tem3}
+			</if>
+
+			<if test="tem4 != null and tem4 != ''">
+				AND TEM_4 = #{tem4}
+			</if>
+
+			<if test="tem5 != null and tem5 != ''">
+				AND TEM_5 = #{tem5}
+			</if>
+
+			<if test="hum1 != null and hum1 != ''">
+				AND HUM_1 = #{hum1}
+			</if>
+
+			<if test="hum2 != null and hum2 != ''">
+				AND HUM_2 = #{hum2}
+			</if>
+
+			<if test="hum3 != null and hum3 != ''">
+				AND HUM_3 = #{hum3}
+			</if>
+
+			<if test="hum4 != null and hum4 != ''">
+				AND HUM_4 = #{hum4}
+			</if>
+
+			<if test="hum5 != null and hum5 != ''">
+				AND HUM_5 = #{hum5}
+			</if>
+
+		</where>
+	</select>
+
+
+	<select id="getCount" parameterType="HashMap" resultType="int">
+		SELECT count(*)
+
+		FROM xeus.ELI_KMA_DFS_SHRT
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="fcYmdhm != null and fcYmdhm != ''">
+				AND FC_YMDHM = #{fcYmdhm}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="rain1 != null and rain1 != ''">
+				AND RAIN_1 = #{rain1}
+			</if>
+
+			<if test="rain2 != null and rain2 != ''">
+				AND RAIN_2 = #{rain2}
+			</if>
+
+			<if test="rain3 != null and rain3 != ''">
+				AND RAIN_3 = #{rain3}
+			</if>
+
+			<if test="rain4 != null and rain4 != ''">
+				AND RAIN_4 = #{rain4}
+			</if>
+
+			<if test="rain5 != null and rain5 != ''">
+				AND RAIN_5 = #{rain5}
+			</if>
+
+			<if test="wad1 != null and wad1 != ''">
+				AND WAD_1 = #{wad1}
+			</if>
+
+			<if test="wad2 != null and wad2 != ''">
+				AND WAD_2 = #{wad2}
+			</if>
+
+			<if test="wad3 != null and wad3 != ''">
+				AND WAD_3 = #{wad3}
+			</if>
+
+			<if test="wad4 != null and wad4 != ''">
+				AND WAD_4 = #{wad4}
+			</if>
+
+			<if test="wad5 != null and wad5 != ''">
+				AND WAD_5 = #{wad5}
+			</if>
+
+			<if test="tem1 != null and tem1 != ''">
+				AND TEM_1 = #{tem1}
+			</if>
+
+			<if test="tem2 != null and tem2 != ''">
+				AND TEM_2 = #{tem2}
+			</if>
+
+			<if test="tem3 != null and tem3 != ''">
+				AND TEM_3 = #{tem3}
+			</if>
+
+			<if test="tem4 != null and tem4 != ''">
+				AND TEM_4 = #{tem4}
+			</if>
+
+			<if test="tem5 != null and tem5 != ''">
+				AND TEM_5 = #{tem5}
+			</if>
+
+			<if test="hum1 != null and hum1 != ''">
+				AND HUM_1 = #{hum1}
+			</if>
+
+			<if test="hum2 != null and hum2 != ''">
+				AND HUM_2 = #{hum2}
+			</if>
+
+			<if test="hum3 != null and hum3 != ''">
+				AND HUM_3 = #{hum3}
+			</if>
+
+			<if test="hum4 != null and hum4 != ''">
+				AND HUM_4 = #{hum4}
+			</if>
+
+			<if test="hum5 != null and hum5 != ''">
+				AND HUM_5 = #{hum5}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+	</select>
+
+
+	<delete id="del" parameterType="HashMap">
+		DELETE FROM xeus.ELI_KMA_DFS_SHRT WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+	</delete>
+
+
+	<insert id="add" parameterType="EliKmaDfsShrtVo">
+		INSERT INTO xeus.ELI_KMA_DFS_SHRT(
+			LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, FC_YMDHM, LOC, POINT_X, POINT_Y, RAIN_1, RAIN_2, RAIN_3, RAIN_4, RAIN_5, WAD_1, WAD_2, WAD_3, WAD_4, WAD_5, TEM_1, TEM_2, TEM_3, TEM_4, TEM_5, HUM_1, HUM_2, HUM_3, HUM_4, HUM_5
+		) VALUES (
+			#{lkInfoId}, #{rcvYmdHms}, #{seqNo}::numeric, #{fcYmdhm}, #{loc}, #{pointX}::numeric, #{pointY}::numeric, #{rain1}, #{rain2}, #{rain3}, #{rain4}, #{rain5}, #{wad1}, #{wad2}, #{wad3}, #{wad4}, #{wad5}, #{tem1}, #{tem2}, #{tem3}, #{tem4}, #{tem5}, #{hum1}, #{hum2}, #{hum3}, #{hum4}, #{hum5}
+		);
+	</insert>
+
+
+	<update id="edit" parameterType="EliKmaDfsShrtVo">
+		UPDATE xeus.ELI_KMA_DFS_SHRT SET
+
+			LK_INFO_ID = #{lkInfoId}
+			, RCV_YMD_HMS = #{rcvYmdHms}
+			, SEQ_NO = #{seqNo}::numeric
+
+			<if test="fcYmdhm != null and fcYmdhm != ''">
+				, FC_YMDHM = #{fcYmdhm}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				, LOC = #{loc}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				, POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				, POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="rain1 != null and rain1 != ''">
+				, RAIN_1 = #{rain1}
+			</if>
+
+			<if test="rain2 != null and rain2 != ''">
+				, RAIN_2 = #{rain2}
+			</if>
+
+			<if test="rain3 != null and rain3 != ''">
+				, RAIN_3 = #{rain3}
+			</if>
+
+			<if test="rain4 != null and rain4 != ''">
+				, RAIN_4 = #{rain4}
+			</if>
+
+			<if test="rain5 != null and rain5 != ''">
+				, RAIN_5 = #{rain5}
+			</if>
+
+			<if test="wad1 != null and wad1 != ''">
+				, WAD_1 = #{wad1}
+			</if>
+
+			<if test="wad2 != null and wad2 != ''">
+				, WAD_2 = #{wad2}
+			</if>
+
+			<if test="wad3 != null and wad3 != ''">
+				, WAD_3 = #{wad3}
+			</if>
+
+			<if test="wad4 != null and wad4 != ''">
+				, WAD_4 = #{wad4}
+			</if>
+
+			<if test="wad5 != null and wad5 != ''">
+				, WAD_5 = #{wad5}
+			</if>
+
+			<if test="tem1 != null and tem1 != ''">
+				, TEM_1 = #{tem1}
+			</if>
+
+			<if test="tem2 != null and tem2 != ''">
+				, TEM_2 = #{tem2}
+			</if>
+
+			<if test="tem3 != null and tem3 != ''">
+				, TEM_3 = #{tem3}
+			</if>
+
+			<if test="tem4 != null and tem4 != ''">
+				, TEM_4 = #{tem4}
+			</if>
+
+			<if test="tem5 != null and tem5 != ''">
+				, TEM_5 = #{tem5}
+			</if>
+
+			<if test="hum1 != null and hum1 != ''">
+				, HUM_1 = #{hum1}
+			</if>
+
+			<if test="hum2 != null and hum2 != ''">
+				, HUM_2 = #{hum2}
+			</if>
+
+			<if test="hum3 != null and hum3 != ''">
+				, HUM_3 = #{hum3}
+			</if>
+
+			<if test="hum4 != null and hum4 != ''">
+				, HUM_4 = #{hum4}
+			</if>
+
+			<if test="hum5 != null and hum5 != ''">
+				, HUM_5 = #{hum5}
+			</if>
+
+		WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+
+	</update>
+
+</mapper>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.equipmgr.service.MobileMapper">
+
+	<select id="getList" parameterType="HashMap" resultType="MobileVo">
+        SELECT mobile.mgr_no, mobile.user_id, usr.user_nm, mobile.purp_cd, mobile.model_nm
+        	, mobile.device_id, mobile.auth_stat_cd, mobile.stat_chg_dat
+        	, mobile.acpt_usr_id, acptUsr.user_nm, mobile.last_log_dat, mobile.login_yn
+
+        FROM xeus.asset_mobile mobile
+        LEFT JOIN xeus.mt_usr_desc usr ON mobile.user_id = usr.user_id
+        LEFT JOIN xeus.mt_usr_desc acptUsr ON mobile.acpt_usr_id = acptUsr.user_id
+
+        <where>
+
+            <if test="mgrNo != null and mgrNo != ''">
+                AND mobile.mgr_no = #{mgrNo}
+            </if>
+
+            <if test="userId != null and userId != ''">
+                AND mobile.user_id = #{userId}
+            </if>
+
+            <if test="purpCd != null and purpCd != ''">
+                AND mobile.purp_cd = #{purpCd}
+            </if>
+
+            <if test="modelNm != null and modelNm != ''">
+                AND mobile.model_nm LIKE '%'||#{modelNm}||'%'
+            </if>
+
+            <if test="deviceId != null and deviceId != ''">
+                AND mobile.device_id = #{deviceId}
+            </if>
+
+            <if test="authStatCd != null and authStatCd != ''">
+                AND mobile.auth_stat_cd = #{authStatCd}
+            </if>
+
+            <if test="statChgDat != null and statChgDat != ''">
+                AND mobile.stat_chg_dat = #{statChgDat}
+            </if>
+
+            <if test="acptUsrId != null and acptUsrId != ''">
+                AND mobile.acpt_usr_id = #{acptUsrId}
+            </if>
+
+            <if test="lastLogDat != null and lastLogDat != ''">
+                AND mobile.last_log_dat = #{lastLogDat}
+            </if>
+
+            <if test="loginYn != null and loginYn != ''">
+                AND mobile.login_yn = #{loginYn}
+            </if>
+
+            <if test="userIdOrNm != null and userIdOrNm != ''">
+                <!-- (usr.user_id = #{userIdOrNm} OR usr.user_nm = #{userIdOrNm}) -->
+                AND (mobile.user_id LIKE '%'||#{userIdOrNm}||'%' OR usr.user_nm LIKE '%'||#{userIdOrNm}||'%')
+            </if>
+
+        </where>
+
+        <trim prefix="ORDER BY">
+            <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+                ${sortCol} ${sortTyp}
+            </if>
+            <if test="sortCol == null and sortTyp == null">
+                mgr_no asc
+            </if>
+        </trim>
+
+        <if test="limit != null and limit != '' and offset != null and offset != ''">
+            LIMIT ${limit} OFFSET ${offset}
+        </if>
+
+    </select>
+
+
+    <select id="getItem" parameterType="HashMap" resultType="MobileVo">
+        SELECT mgr_no, user_id, purp_cd, model_nm, device_id, auth_stat_cd, stat_chg_dat, acpt_usr_id, last_log_dat, login_yn
+
+        FROM xeus.asset_mobile
+
+        <where>
+
+            <if test="mgrNo != null and mgrNo != ''">
+                AND mgr_no = #{mgrNo}
+            </if>
+
+            <if test="userId != null and userId != ''">
+                AND user_id = #{userId}
+            </if>
+
+            <if test="purpCd != null and purpCd != ''">
+                AND purp_cd = #{purpCd}
+            </if>
+
+            <if test="modelNm != null and modelNm != ''">
+                AND model_nm = #{modelNm}
+            </if>
+
+            <if test="deviceId != null and deviceId != ''">
+                AND device_id = #{deviceId}
+            </if>
+
+            <if test="authStatCd != null and authStatCd != ''">
+                AND auth_stat_cd = #{authStatCd}
+            </if>
+
+            <if test="statChgDat != null and statChgDat != ''">
+                AND stat_chg_dat = #{statChgDat}
+            </if>
+
+            <if test="acptUsrId != null and acptUsrId != ''">
+                AND acpt_usr_id = #{acptUsrId}
+            </if>
+
+            <if test="lastLogDat != null and lastLogDat != ''">
+                AND last_log_dat = #{lastLogDat}
+            </if>
+
+            <if test="loginYn != null and loginYn != ''">
+                AND login_yn = #{loginYn}
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+        SELECT count(*)
+
+        FROM xeus.asset_mobile mobile
+        LEFT JOIN xeus.mt_usr_desc usr ON mobile.user_id = usr.user_id
+        LEFT JOIN xeus.mt_usr_desc acptUsr ON mobile.acpt_usr_id = acptUsr.user_id
+
+        <where>
+
+            <if test="mgrNo != null and mgrNo != ''">
+                AND mobile.mgr_no = #{mgrNo}
+            </if>
+
+            <if test="userId != null and userId != ''">
+                AND mobile.user_id = #{userId}
+            </if>
+
+            <if test="purpCd != null and purpCd != ''">
+                AND mobile.purp_cd = #{purpCd}
+            </if>
+
+            <if test="modelNm != null and modelNm != ''">
+                AND mobile.model_nm LIKE '%'||#{modelNm}||'%'
+            </if>
+
+            <if test="deviceId != null and deviceId != ''">
+                AND mobile.device_id = #{deviceId}
+            </if>
+
+            <if test="authStatCd != null and authStatCd != ''">
+                AND mobile.auth_stat_cd = #{authStatCd}
+            </if>
+
+            <if test="statChgDat != null and statChgDat != ''">
+                AND mobile.stat_chg_dat = #{statChgDat}
+            </if>
+
+            <if test="acptUsrId != null and acptUsrId != ''">
+                AND mobile.acpt_usr_id = #{acptUsrId}
+            </if>
+
+            <if test="lastLogDat != null and lastLogDat != ''">
+                AND mobile.last_log_dat = #{lastLogDat}
+            </if>
+
+            <if test="loginYn != null and loginYn != ''">
+                AND mobile.login_yn = #{loginYn}
+            </if>
+
+            <if test="userIdOrNm != null and userIdOrNm != ''">
+                <!-- (usr.user_id = #{userIdOrNm} OR usr.user_nm = #{userIdOrNm}) -->
+                AND (mobile.user_id LIKE '%'||#{userIdOrNm}||'%' OR usr.user_nm LIKE '%'||#{userIdOrNm}||'%')
+            </if>
+
+        </where>
+    </select>
+
+
+    <delete id="del" parameterType="HashMap">
+        DELETE FROM xeus.asset_mobile WHERE mgr_no = #{mgrNo}
+    </delete>
+
+
+    <insert id="add" parameterType="MobileVo">
+        INSERT INTO xeus.asset_mobile(
+            mgr_no, user_id, purp_cd, model_nm, device_id, auth_stat_cd, stat_chg_dat, acpt_usr_id, last_log_dat, login_yn
+        ) VALUES (
+            (SELECT
+              'MOB' ||
+              (case length((num + 1)::text)::integer
+                when 1 then '000000'
+                when 2 then '00000'
+                when 3 then '0000'
+                when 4 then '000'
+                when 5 then '00'
+                when 6 then '0'
+              end) || num + 1 AS val
+            FROM generate_series(
+                (SELECT coalesce(substring(max(mgr_no), 4)::numeric, 0) FROM xeus.asset_mobile),
+                (SELECT coalesce(substring(max(mgr_no), 4)::numeric, 0) FROM xeus.asset_mobile)
+            ) AS num)
+            , #{userId}, #{purpCd}, #{modelNm}, #{deviceId}, #{authStatCd}, #{statChgDat}, #{acptUsrId}, #{lastLogDat}, #{loginYn}
+        );
+    </insert>
+
+
+    <update id="edit" parameterType="MobileVo">
+        UPDATE xeus.asset_mobile
+
+        SET
+            mgr_no = #{mgrNo}
+
+            <if test="userId != null and userId != ''">
+                , user_id = #{userId}
+            </if>
+
+            <if test="purpCd != null and purpCd != ''">
+                , purp_cd = #{purpCd}
+            </if>
+
+            <if test="modelNm != null and modelNm != ''">
+                , model_nm = #{modelNm}
+            </if>
+
+            <if test="deviceId != null and deviceId != ''">
+                , device_id = #{deviceId}
+            </if>
+
+            <if test="authStatCd != null and authStatCd != ''">
+                , auth_stat_cd = #{authStatCd}
+            </if>
+
+            <if test="statChgDat != null and statChgDat != ''">
+                , stat_chg_dat = #{statChgDat}
+            </if>
+
+            <if test="acptUsrId != null and acptUsrId != ''">
+                , acpt_usr_id = #{acptUsrId}
+            </if>
+
+            <if test="lastLogDat != null and lastLogDat != ''">
+                , last_log_dat = #{lastLogDat}
+            </if>
+
+            <if test="loginYn != null and loginYn != ''">
+                , login_yn = #{loginYn}
+            </if>
+
+        WHERE mgr_no = #{mgrNo}
+
+    </update>
+
+</mapper>

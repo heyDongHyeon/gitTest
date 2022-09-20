@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.equipmgr.service.BrdcstTrmnlsMapper">
+
+	<select id="getList" parameterType="java.util.HashMap" resultType="geomex.xeus.equipmgr.service.BrdcstTrmnlsVo">
+
+		SELECT se, innb, nm, telno, lc, la, lo
+		FROM xeus.brdcst_trmnls_view brdcst
+		LEFT JOIN xeus.kais_emd_as AS emd ON st_intersects ( emd._geometry, brdcst._geometry )
+
+		<where>
+			    AND se = #{se}
+			<!--장비명 -->
+			<if test="objName != null and objName != ''">
+				AND nm LIKE concat_ws(#{objName},'%','%')
+			</if>
+			<!--읍면동 -->
+			<if test="emdCd != null and emdCd != ''">
+           		AND emd.emd_cd = #{emdCd}
+       		</if>
+       		<if test="center != null and center != '' and radius != null and radius != ''">
+                AND ST_Intersects(ST_SetSrid(ST_Buffer(ST_GeomFromeWkt(#{center}), #{radius}::numeric), 5186), brdcst._geometry)
+            </if>
+            <if test="wkt != null and wkt != ''">
+                AND ST_Intersects(ST_SetSrid(ST_Multi(ST_GeomFromeWkt(#{wkt})), 5186), brdcst._geometry)
+            </if>
+		</where>
+	</select>
+	<select id="getItem" parameterType="java.util.HashMap" resultType="geomex.xeus.equipmgr.service.BrdcstTrmnlsVo">
+		SELECT se, innb, nm, telno, lc, la, lo
+		FROM xeus.brdcst_trmnls_view brdcst
+		LEFT JOIN xeus.kais_emd_as AS emd ON st_intersects ( emd._geometry, brdcst._geometry )
+
+		<where>
+			    AND se = #{se}
+			<!--장비명 -->
+			<if test="objName != null and objName != ''">
+				AND nm LIKE concat_ws(#{objName},'%','%')
+			</if>
+			<!--읍면동 -->
+			<if test="emdCd != null and emdCd != ''">
+           		AND emd.emd_cd = #{emdCd}
+       		</if>
+       		<if test="center != null and center != '' and radius != null and radius != ''">
+                AND ST_Intersects(ST_SetSrid(ST_Buffer(ST_GeomFromeWkt(#{center}), #{radius}::numeric), 5186), brdcst._geometry)
+            </if>
+            <if test="wkt != null and wkt != ''">
+                AND ST_Intersects(ST_SetSrid(ST_Multi(ST_GeomFromeWkt(#{wkt})), 5186), brdcst._geometry)
+            </if>
+            <if test="nm != null and nm != ''">
+                AND brdcst.nm = #{nm}
+            </if>
+             <if test="innb != null and innb != ''">
+                AND brdcst.innb = #{innb}
+            </if>
+		</where>
+	</select>
+	<insert id="add" parameterType="hashMap">
+			INSERT INTO xeus.brdcst_trmnls_view(
+
+           		_annox,
+               	_annoy,
+               group_innb,
+			   orgnzt_innb,
+			   group_nm,
+			   group_se,
+			   upper_group_innb,
+			   group_ordr,
+			   innb,
+			   se,
+			   nm,
+			   lc,
+			   telno,
+			   instlde,
+			   instl_se,
+			   srcelct_se,
+			   outpt_se,
+			   la,
+			   lo,
+               _geometry
+          )
+	      VALUES (
+
+	   	     <if test="_annox != null and _annox != ''">
+             	#{_annox}::NUMERIC,
+	         </if>
+	         <if test="_annoy != null and _annoy != ''">
+             	#{_annoy}::NUMERIC,
+	         </if>
+			#{groupInnb},
+			#{orgnztInnb},
+			#{groupNm},
+			#{groupSe},
+			#{upperGroupInnb},
+			#{groupOrdr},
+			#{innb},
+			#{se},
+			#{nm},
+			#{lc},
+			#{telno},
+			#{instlde},
+			#{instlSe},
+			#{srcelctSe},
+			#{outptSe},
+			#{la},
+			#{lo}
+            ,ST_Transform ( ST_GeomFromText ( #{point}, 4326 ), 5186 )
+         );
+	</insert>
+	<update id="edit" parameterType="hashMap">
+		UPDATE xeus.asset_eqb_voice
+			SET fcl_gbn_nm=#{fclGbnNm},
+				loc_nm=#{locNm},
+				loc_addr=#{locAddr},
+				loc_addr_detail=#{locAddrDetail},
+				rs_info=#{rsInfo},
+				std_date=#{stdDate},
+				end_date=#{endDate},
+				biz_exp=#{bizExp},
+				warn_dsc=#{warnDsc},
+				comm_mtd=#{commMtd},
+				biz_nm=#{bizNm},
+				doc_mgr_no=#{docMgrNo},
+				tm_lat=#{tmLat}::numeric,
+				tm_lon=#{tmLon}::numeric,
+				_geometry=(SELECT st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)),
+				_annox=(SELECT st_x(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186))),
+	    		_annoy=(SELECT st_y(st_transform(st_setsrid((ST_GeometryFromText('POINT('||#{tmLon}||' '||#{tmLat}||')')), 4326), 5186)))
+					WHERE mgr_no=#{mgrNo};
+		<if test="mgr != null">
+			<foreach collection="mgr" item="item" open="" separator=";" close="">
+				UPDATE xeus.asset_eqb_aws_mgr
+					SET
+		           		 mgr_spot=#{item.mgrSpot}
+		           		,mgr_belong=#{item.mgrBelong}
+		           		,mgr_level=#{item.mgrLevel}
+		           		,mgr_nm=#{item.mgrNm}
+		           		,mgr_tel=#{item.mgrTel}
+		           		,mgr_phone=#{item.mgrPhone}
+		        	WHERE mgr_no=#{mgrNo} and mgr_sub_no=#{item.mgrSubNo}::Integer
+		     </foreach>
+        </if>
+	</update>
+	<delete id="del" parameterType="java.util.HashMap">
+		DELETE FROM xeus.brdcst_trmnls_view
+		<where>
+			<if test="mgrNo != null and mgrNo != ''">
+				AND _gid = #{_gid}
+			</if>
+			<if test="innb != null and innb != ''">
+				AND innb = #{innb}
+			</if>
+		</where>
+	</delete>
+</mapper>
+

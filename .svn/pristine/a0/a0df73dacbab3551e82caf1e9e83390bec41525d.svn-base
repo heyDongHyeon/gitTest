@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.ndms.service.NdmsMapper">
+	
+	<select id="getListAws" parameterType="HashMap" resultType="HashMap">
+		SELECT userdefineareanm, dt_obz, wind_wd, wv_ws, at_avg_ta, wthr_hm, 
+		ap_pa, ap_ps, wthr_yn, wthr_1hr, wthr_day, cord_lat, cord_lon, cord_ht, dt_regt, cd_stn
+			FROM xeus.ndms_kma_aws
+	</select>
+</mapper>

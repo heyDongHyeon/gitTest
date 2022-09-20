@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:StyledLayerDescriptor 
+    xmlns:sld="http://www.opengis.net/sld" 
+    xmlns:gml="http://www.opengis.net/gml"
+    xmlns="http://www.opengis.net/sld" 
+    xmlns:ogc="http://www.opengis.net/ogc" 
+    version="1.0.0">
+    <sld:NamedLayer>
+        <sld:Name>kais_emd_as</sld:Name>
+        <sld:UserStyle>
+            <sld:Name>kais_emd_as</sld:Name>
+            <sld:Title>kais_emd_as</sld:Title>
+            <sld:IsDefault>1</sld:IsDefault>
+            <sld:FeatureTypeStyle>
+                <sld:Name>kais_emd_as</sld:Name>
+                <sld:Rule>
+                    <sld:Name>45710250</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710250</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#beaed4</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#857994</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710253</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710253</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#fdc086</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#b1865d</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710256</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710256</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#ffff99</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#b2b26b</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710320</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710320</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#386cb0</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#274b7b</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710330</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710330</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#f0027f</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#a80158</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710340</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710340</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#bf5b17</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#853f10</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710350</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710350</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#666666</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#474747</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710360</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710360</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#7fc97f</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#588c58</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710370</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710370</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#beaed4</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#857994</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710380</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710380</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#fdc086</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#b1865d</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710390</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710390</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#ffff99</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#b2b26b</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710400</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710400</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#386cb0</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#274b7b</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>45710410</sld:Name>
+                    <ogc:Filter>
+                        <ogc:PropertyIsLike wildCard="*" singleChar="?" escape="\">
+                            <ogc:PropertyName>emd_cd</ogc:PropertyName>
+                            <ogc:Literal>45710410</ogc:Literal>
+                        </ogc:PropertyIsLike>
+                    </ogc:Filter>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:PolygonSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#f0027f</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">0.137</sld:CssParameter>
+                        </sld:Fill>
+                        <sld:Stroke>
+                            <sld:CssParameter name="stroke">#a80158</sld:CssParameter>
+                            <sld:CssParameter name="stroke-opacity">0.137</sld:CssParameter>
+                            <sld:CssParameter name="stroke-width">1</sld:CssParameter>
+                        </sld:Stroke>
+                    </sld:PolygonSymbolizer>
+                </sld:Rule>
+                <sld:Rule>
+                    <sld:Name>labelStyle</sld:Name>
+                    <sld:MinScaleDenominator>40000</sld:MinScaleDenominator>
+                    <sld:TextSymbolizer>
+                        <sld:Geometry>
+                            <ogc:PropertyName>_geometry</ogc:PropertyName>
+                        </sld:Geometry>
+                        <sld:Label>
+                            <ogc:PropertyName>emd_kor_nm</ogc:PropertyName>
+                        </sld:Label>
+                        <sld:Font>
+                            <sld:CssParameter name="font-family">굴림</sld:CssParameter>
+                            <sld:CssParameter name="font-style">normal</sld:CssParameter>
+                            <sld:CssParameter name="font-size">12.0</sld:CssParameter>
+                            <sld:CssParameter name="font-color">#000000</sld:CssParameter>
+                        </sld:Font>
+                        <sld:Halo>
+                            <sld:Radius>4.0</sld:Radius>
+                            <sld:Fill>
+                                <sld:CssParameter name="fill">#e6e6e6</sld:CssParameter>
+                            </sld:Fill>
+                        </sld:Halo>
+                        <sld:Fill>
+                            <sld:CssParameter name="fill">#000000</sld:CssParameter>
+                            <sld:CssParameter name="fill-opacity">1</sld:CssParameter>
+                        </sld:Fill>
+                    </sld:TextSymbolizer>
+                </sld:Rule>
+
+            </sld:FeatureTypeStyle>
+        </sld:UserStyle>
+    </sld:NamedLayer>
+</sld:StyledLayerDescriptor>

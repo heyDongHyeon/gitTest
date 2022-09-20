@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliKhcAccMapper">
+	<select id="getList" parameterType="HashMap" resultType="EliKhcAccVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, END_YN, LOC, YMDHM, UPDN, STAT, POINT_X, POINT_Y, G_ID
+
+		FROM xeus.ELI_KHC_ACC
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="endYn != null and endYn != ''">
+				AND END_YN = #{endYn}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="ymdhm != null and ymdhm != ''">
+				AND YMDHM = #{ymdhm}
+			</if>
+
+			<if test="updn != null and updn != ''">
+				AND UPDN = #{updn}
+			</if>
+
+			<if test="stat != null and stat != ''">
+				AND STAT = #{stat}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="gId != null and gId != ''">
+				AND G_ID = #{gId}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+
+		<trim prefix="ORDER BY">
+			<if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+				${sortCol} ${sortTyp}
+			</if>
+			<if test="sortCol == null and sortTyp == null">
+				SEQ_NO DESC
+			</if>
+		</trim>
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+	<select id="getItem" parameterType="HashMap" resultType="EliKhcAccVo">
+		SELECT LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, END_YN, LOC, YMDHM, UPDN, STAT, POINT_X, POINT_Y, G_ID
+
+		FROM xeus.ELI_KHC_ACC
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="endYn != null and endYn != ''">
+				AND END_YN = #{endYn}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="ymdhm != null and ymdhm != ''">
+				AND YMDHM = #{ymdhm}
+			</if>
+
+			<if test="updn != null and updn != ''">
+				AND UPDN = #{updn}
+			</if>
+
+			<if test="stat != null and stat != ''">
+				AND STAT = #{stat}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="gId != null and gId != ''">
+				AND G_ID = #{gId}
+			</if>
+
+		</where>
+	</select>
+
+
+	<select id="getCount" parameterType="HashMap" resultType="int">
+		SELECT count(*)
+
+		FROM xeus.ELI_KHC_ACC
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND LK_INFO_ID = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND RCV_YMD_HMS = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND SEQ_NO = #{seqNo}::numeric
+			</if>
+
+			<if test="endYn != null and endYn != ''">
+				AND END_YN = #{endYn}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND LOC = #{loc}
+			</if>
+
+			<if test="ymdhm != null and ymdhm != ''">
+				AND YMDHM = #{ymdhm}
+			</if>
+
+			<if test="updn != null and updn != ''">
+				AND UPDN = #{updn}
+			</if>
+
+			<if test="stat != null and stat != ''">
+				AND STAT = #{stat}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="gId != null and gId != ''">
+				AND G_ID = #{gId}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+	</select>
+
+
+	<delete id="del" parameterType="HashMap">
+		DELETE FROM xeus.ELI_KHC_ACC WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+	</delete>
+
+
+	<insert id="add" parameterType="EliKhcAccVo">
+		INSERT xeus.INTO ELI_KHC_ACC(
+			LK_INFO_ID, RCV_YMD_HMS, SEQ_NO, END_YN, LOC, YMDHM, UPDN, STAT, POINT_X, POINT_Y, G_ID
+		) VALUES (
+			#{lkInfoId}, #{rcvYmdHms}, #{seqNo}::numeric, #{endYn}, #{loc}, #{ymdhm}, #{updn}, #{stat}, #{pointX}::numeric, #{pointY}::numeric, #{gId}
+		);
+	</insert>
+
+
+	<update id="edit" parameterType="EliKhcAccVo">
+		UPDATE xeus.ELI_KHC_ACC SET
+
+			LK_INFO_ID = #{lkInfoId}
+			, RCV_YMD_HMS = #{rcvYmdHms}
+			, SEQ_NO = #{seqNo}::numeric
+
+			<if test="endYn != null and endYn != ''">
+				, END_YN = #{endYn}
+			</if>
+
+			<if test="loc != null and loc != ''">
+				, LOC = #{loc}
+			</if>
+
+			<if test="ymdhm != null and ymdhm != ''">
+				, YMDHM = #{ymdhm}
+			</if>
+
+			<if test="updn != null and updn != ''">
+				, UPDN = #{updn}
+			</if>
+
+			<if test="stat != null and stat != ''">
+				, STAT = #{stat}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				, POINT_X = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				, POINT_Y = #{pointY}::numeric
+			</if>
+
+			<if test="gId != null and gId != ''">
+				, G_ID = #{gId}
+			</if>
+
+		WHERE LK_INFO_ID = #{lkInfoId} AND RCV_YMD_HMS = #{rcvYmdHms} AND SEQ_NO = #{seqNo}::numeric
+
+	</update>
+
+</mapper>

@@ -1,0 +1,212 @@
+           package geomex.xeus.ivcp.service;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
+import javax.servlet.ServletException;
+
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+
+import egovframework.rte.fdl.property.EgovPropertyService;
+import geomex.xeus.ivcp.util.IVCPHead;
+import geomex.xeus.smartcity.Utils;
+import geomex.xeus.smartcity.service.EventHistService;
+import geomex.xeus.smartcity.service.EventHistVo;
+import geomex.xeus.smartcity.service.EventService;
+import geomex.xeus.smartcity.service.EventWebSocketService;
+import geomex.xeus.tvius.service.CrmsSysParamService;
+
+@Service("ivcpSendService")
+public class IVCPSendService {
+
+	@Resource(name = "propService")
+	private EgovPropertyService propService;
+
+	@Resource(name = "eventWebSocketService")
+	private EventWebSocketService socket;
+
+	@Resource(name = "ivcpService")
+	private IVCPService ivcpService;
+
+	@Resource(name = "eventService")
+	private EventService event;
+
+	@Resource(name = "eventHistService")
+	private EventHistService eventhist;
+
+	@Resource(name = "crmsSysParamService")
+	private CrmsSysParamService sysParamList;
+
+	/**
+	 * IVCP 발생 이벤트를 처리한다.
+	 *
+	 * @param json
+	 * @throws Exception
+	 */
+	public void eventProcess(JSONObject json, IVCPacket vo) throws Exception {
+		HashMap<String, String> param = new HashMap<String, String>();
+		String start = json.opt("Start").toString().split("_")[0] + json.opt("Start").toString().split("_")[1]
+				+ json.opt("Start").toString().split("_")[2];
+		String end = json.opt("End").toString().split("_")[0] + json.opt("End").toString().split("_")[1]
+				+ json.opt("End").toString().split("_")[2];
+		HashMap<String, String> ivcpMap = new HashMap<String, String>();
+		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
+		// ivcpMap.put("uid", json.get("Name").toString());
+		ivcpMap.put("guid", json.opt("GUID").toString());
+		IVCPVo ivcpVo = ivcpService.getItem(ivcpMap); // 해당 이벤트 guid에 대한 스마트 cctv가 우리 테이블에 없음.
+
+		String key = "P" + json.opt("GUID").toString() + json.opt("EvtID").toString() + json.opt("EvtType").toString();
+		if (ivcpVo == null) {
+			System.out.println(format.format(System.currentTimeMillis())+"  ivcpVO가 null이다.guid ->"+json.opt("GUID").toString()+"  IP->"+vo.getIVCPConnIp());
+		} else {
+			param.put("statEvetTypCd", "SMARTCCTV");
+			param.put("statMsgTypCd", "");
+			param.put("outbPosNm", ivcpVo.getCctvArea() + " 방향 - " + ivcpVo.getCctvCate());
+			param.put("statEvetNm", vo.getEventCode(json.opt("EvtType").toString()));
+			param.put("statEvetCntn", vo.getContent(json.opt("EvtType").toString(), json));
+			param.put("statEvetType", "사회재난");
+			param.put("outbPos", "[{x:" + ivcpVo.getLocLon() + ", y:" + ivcpVo.getLocLon() + "}]");
+			param.put("x", ivcpVo.getLocLon());
+			param.put("y", ivcpVo.getLocLat());
+			param.put("isTest", "N");
+			param.put("uSvcOutbId", "T" + key);
+			param.put("statEvetActnDtm", "");
+			param.put("statEvetSvcTyp", "지능형 CCTV");
+			param.put("etcCntn", "");
+			param.put("tmx", ivcpVo.getLocLat());
+			param.put("tmy", ivcpVo.getLocLon());
+			param.put("targetId", "geomex");
+			param.put("targetGrp", "G00001,G00002,G00000");
+			param.put("etcCntn", "{}");
+
+			param.put("statEvetClrDtm", "");
+			param.put("statEvetOutbDtm", start);
+
+			if (json.opt("EvtStatus").toString().equals("0")) { // 이벤트 시작
+				param.put("statEvetActnDtm", "");
+				param.put("procSt", "10");
+			} else { // 이벤트 종료
+				param.put("statEvetActnDtm", end);
+				param.put("statEvetActnMn", "-");
+				param.put("statEvetActnCntn", "상황 종료");
+				param.put("procSt", "91");
+			}
+
+			String reqJson = Utils.setJson(param); // hashmap->string
+
+			EventHistVo histVo = Utils.parseVo(reqJson); // string->vo
+//		     	System.out.println("histVo = "+histVo);
+//		     	System.out.println("param = "+param);
+//		     	System.out.println("string = "+reqJson);
+//		     	isContain = sysParamList.chkSysParam(histVo.getEvtTypCd(), histVo.getEvtNm());	//해당 이벤트타입이 사용자가 원하는 이벤트 타입인지..
+//		     	isContain = sysParamList.chkSysParam(histVo.getEvtTypCd(), "급작스런 장면변화");	//해당 이벤트타입이 사용자가 원하는 이벤트 타입인지..
+			// 만약 아니면 DB에도 넣지말고 경광등도 울리지 않는다.
+			if (param.get("procSt").equals("10")) {
+//		     	   	System.out.println("start(list) = "+start.substring(4,6)+"_"+start.substring(6,8)+"  "+start.substring(8,10)+":"+start.substring(10,12)+":"+start.substring(12,14));
+//		     	   	System.out.println("key(list)   = "+key);
+//		     	 	System.out.println("\n");
+				event.add(histVo);
+			} else {
+//		     	   	System.out.println("start(hist) = "+start.substring(4,6)+"_"+start.substring(6,8)+"  "+start.substring(8,10)+":"+start.substring(10,12)+":"+start.substring(12,14));
+//			     	System.out.println("end(hist)   = "+end.substring(4,6)+"_"+end.substring(6,8)+"  "+end.substring(8,10)+"_"+end.substring(10,12)+"_"+end.substring(12,14));
+//			     	System.out.println("key(hist)   = "+key);
+//			       	System.out.println("\n");
+				event.del(param);
+				eventhist.add(histVo);
+			}
+			socket.broadcast(Utils.setJson(param));
+		}
+	}
+
+	@PostConstruct
+	public void initIt() throws Exception {
+		// this.port = propService.getInt("socket.evt.port", 10060);
+		try {
+			//mysql 마리아 DB 연결 테스트
+			connectTest();
+
+			String[] ipArr = propService.getStringArray("ivcp.socket.ips");
+			int IVCPReqPort = propService.getInt("ivcp.socket.req.port");
+			int IVCPEventPort = propService.getInt("ivcp.socket.event.port");
+			int IVCPStreamPort = propService.getInt("ivcp.socket.stream.port");
+//			System.out.println("JVM MEMOERY SIZE = "+Runtime.getRuntime().maxMemory());
+			for (int i = 0; i < ipArr.length; i++) {
+
+				IVCPacket vo = new IVCPacket();
+				IVCPSendReqThread reqThread = new IVCPSendReqThread();
+				IVCPSendEventThread eventThread = new IVCPSendEventThread();
+				IVCPSendStreamThread streamThread = new IVCPSendStreamThread();
+				IVCPCheckPortThread checkPortThread = new IVCPCheckPortThread();
+
+				vo.setIVCPConnIp(ipArr[i]);
+				vo.setIVCPConnReqPort(IVCPReqPort);
+				vo.setIVCPConnEventPort(IVCPEventPort);
+				vo.setIVCPConnStreamPort(IVCPStreamPort);
+				vo.setReqConnect(true);
+				vo.setEventConnect(true);
+				vo.setStreamConnect(true);
+				vo.setNAI(IVCPHead.getNAI().toString());
+//
+				reqThread.init(vo);
+				reqThread.start();
+				eventThread.init(vo);
+				eventThread.start();
+				streamThread.init(vo);
+				streamThread.start();
+//
+//	           checkPortThread.init(vo);
+//	           checkPortThread.start();
+			}
+			// startSocketServer();
+		} catch (Exception e) {
+			throw new ServletException(e);
+		}
+	}
+
+
+	public void connectTest() {
+        Connection conn = null;
+        try{
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+            String url = "jdbc:mysql://127.0.0.1:3306/relation";
+
+            // @param  getConnection(url, userName, password);
+            // @return Connection
+            conn = DriverManager.getConnection(url, "root", "geomex3217");
+            System.out.println("Maria DB 연결 성공");
+        }
+        catch(ClassNotFoundException e){
+            System.out.println("드라이버 로딩 실패");
+        }
+        catch(SQLException e){
+            System.out.println("에러: " + e);
+        }
+        finally{
+            try{
+                if( conn != null && !conn.isClosed()){
+                    conn.close();
+                }
+            }
+            catch( SQLException e){
+                e.printStackTrace();
+            }
+        }
+
+	}
+
+	@PreDestroy
+	public void cleanUp() throws Exception {
+		// egovLogger.info("Spring Container is destroy! EventSocketReceiveService clean
+		// up");
+		// serverClose();
+	}
+}

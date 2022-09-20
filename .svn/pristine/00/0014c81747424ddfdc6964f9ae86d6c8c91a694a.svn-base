@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.log.service.IfEvtLogMapper">
+
+
+    <insert id="add" parameterType="IfEvtLogVo">
+        INSERT INTO xeus.if_event_log(
+            msg_typ_cd, snd_sys_cd, rcv_sys_cd, msg_exch_ptrn, body_type, snd_dtm, data_len, rcv_orgn, err_msg
+        ) VALUES (
+            #{msgTypCd}, #{sndSysCd}, #{rcvSysCd}, #{msgExchPtrn}, #{bodyType}, #{sndDtm}, #{dataLen}, #{rcvOrgn}, #{errMsg}
+        );
+    </insert>
+
+
+    <select id="getList" parameterType="HashMap" resultType="IfEvtLogVo">
+        SELECT msg_typ_cd, snd_sys_cd, rcv_sys_cd, msg_exch_ptrn, body_type, snd_dtm, data_len, rcv_orgn, err_msg
+
+        FROM xeus.if_event_log
+
+        <where>
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                AND msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                AND snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                AND rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="msgExchPtrn != null and msgExchPtrn != ''">
+                AND msg_exch_ptrn = #{msgExchPtrn}
+            </if>
+
+            <if test="bodyType != null and bodyType != ''">
+                AND body_type = #{bodyType}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                AND snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                AND data_len = #{dataLen}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                AND rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                AND err_msg = #{errMsg}
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND snd_dtm <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND snd_dtm <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+        </where>
+
+        <trim prefix="ORDER BY">
+            <if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+                ${sortCol} ${sortTyp}
+            </if>
+            <if test="sortCol == null and sortTyp == null">
+                snd_dtm DESC
+            </if>
+        </trim>
+
+        <if test="limit != null and limit != '' and offset != null and offset != ''">
+            LIMIT ${limit} OFFSET ${offset}
+        </if>
+
+    </select>
+
+
+    <select id="getItem" parameterType="HashMap" resultType="IfEvtLogVo">
+        SELECT msg_typ_cd, snd_sys_cd, rcv_sys_cd, msg_exch_ptrn, body_type, snd_dtm, data_len, rcv_orgn, err_msg
+
+        FROM xeus.if_event_log
+
+        <where>
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                AND msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                AND snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                AND rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="msgExchPtrn != null and msgExchPtrn != ''">
+                AND msg_exch_ptrn = #{msgExchPtrn}
+            </if>
+
+            <if test="bodyType != null and bodyType != ''">
+                AND body_type = #{bodyType}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                AND snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                AND data_len = #{dataLen}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                AND rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                AND err_msg = #{errMsg}
+            </if>
+
+        </where>
+    </select>
+
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+        SELECT count(*)
+
+        FROM xeus.if_event_log
+
+        <where>
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                AND msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                AND snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                AND rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="msgExchPtrn != null and msgExchPtrn != ''">
+                AND msg_exch_ptrn = #{msgExchPtrn}
+            </if>
+
+            <if test="bodyType != null and bodyType != ''">
+                AND body_type = #{bodyType}
+            </if>
+
+            <if test="sndDtm != null and sndDtm != ''">
+                AND snd_dtm = #{sndDtm}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                AND data_len = #{dataLen}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                AND rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                AND err_msg = #{errMsg}
+            </if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND snd_dtm <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND snd_dtm <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+        </where>
+    </select>
+
+
+    <delete id="del" parameterType="HashMap">
+        DELETE FROM xeus.if_event_log WHERE snd_dtm = #{sndDtm}
+    </delete>
+
+
+    <update id="edit" parameterType="IfEvtLogVo">
+        UPDATE xeus.if_event_log SET
+            snd_dtm = #{sndDtm}
+
+            <if test="msgTypCd != null and msgTypCd != ''">
+                , msg_typ_cd = #{msgTypCd}
+            </if>
+
+            <if test="sndSysCd != null and sndSysCd != ''">
+                , snd_sys_cd = #{sndSysCd}
+            </if>
+
+            <if test="rcvSysCd != null and rcvSysCd != ''">
+                , rcv_sys_cd = #{rcvSysCd}
+            </if>
+
+            <if test="msgExchPtrn != null and msgExchPtrn != ''">
+                , msg_exch_ptrn = #{msgExchPtrn}
+            </if>
+
+            <if test="bodyType != null and bodyType != ''">
+                , body_type = #{bodyType}
+            </if>
+
+            <if test="dataLen != null and dataLen != ''">
+                , data_len = #{dataLen}
+            </if>
+
+            <if test="rcvOrgn != null and rcvOrgn != ''">
+                , rcv_orgn = #{rcvOrgn}
+            </if>
+
+            <if test="errMsg != null and errMsg != ''">
+                , err_msg = #{errMsg}
+            </if>
+
+        WHERE snd_dtm = #{sndDtm}
+
+    </update>
+
+</mapper>

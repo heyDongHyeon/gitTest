@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="geomex.xeus.eventmonitor.service.EliFoaForestMapMapper">
+    <select id="getList" parameterType="HashMap" resultType="EliFoaForestMapVo">
+		SELECT lk_info_id, rcv_ymd_hms, seq_no, tp_status, point_x, point_y, loc, rcv_ymdhm
+
+		FROM xeus.eli_foa_forest_map
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND lk_info_id = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND rcv_ymd_hms = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="tpStatus != null and tpStatus != ''">
+				AND tp_status = #{tpStatus}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND point_x = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND point_y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND loc = #{loc}
+			</if>
+
+			<if test="rcvYmdhm != null and rcvYmdhm != ''">
+				AND rcv_ymdhm = #{rcvYmdhm}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+
+		<trim prefix="ORDER BY">
+			<if test="sortCol != null and sortCol != '' and sortTyp != null and sortTyp != ''">
+				${sortCol} ${sortTyp}
+			</if>
+			<if test="sortCol == null and sortTyp == null">
+				seq_no DESC
+			</if>
+		</trim>
+
+		<if test="limit != null and limit != '' and offset != null and offset != ''">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+
+	</select>
+
+
+    <select id="getItem" parameterType="HashMap" resultType="EliFoaForestMapVo">
+		SELECT lk_info_id, rcv_ymd_hms, seq_no, tp_status, point_x, point_y, loc, rcv_ymdhm
+
+		FROM xeus.eli_foa_forest_map
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND lk_info_id = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND rcv_ymd_hms = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="tpStatus != null and tpStatus != ''">
+				AND tp_status = #{tpStatus}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND point_x = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND point_y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND loc = #{loc}
+			</if>
+
+			<if test="rcvYmdhm != null and rcvYmdhm != ''">
+				AND rcv_ymdhm = #{rcvYmdhm}
+			</if>
+
+		</where>
+	</select>
+
+
+    <select id="getCount" parameterType="HashMap" resultType="int">
+		SELECT count(*)
+
+		FROM xeus.eli_foa_forest_map
+
+		<where>
+
+			<if test="lkInfoId != null and lkInfoId != ''">
+				AND lk_info_id = #{lkInfoId}
+			</if>
+
+			<if test="rcvYmdHms != null and rcvYmdHms != ''">
+				AND rcv_ymd_hms = #{rcvYmdHms}
+			</if>
+
+			<if test="seqNo != null and seqNo != ''">
+				AND seq_no = #{seqNo}::numeric
+			</if>
+
+			<if test="tpStatus != null and tpStatus != ''">
+				AND tp_status = #{tpStatus}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				AND point_x = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				AND point_y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				AND loc = #{loc}
+			</if>
+
+			<if test="rcvYmdhm != null and rcvYmdhm != ''">
+				AND rcv_ymdhm = #{rcvYmdhm}
+			</if>
+
+            <if test="startDat!= null and startDat != ''">
+                AND rcv_ymd_hms <![CDATA[ >= ]]> #{startDat}
+            </if>
+
+            <if test="endDat != null and endDat != ''">
+                AND rcv_ymd_hms <![CDATA[ <= ]]> #{endDat}
+            </if>
+
+		</where>
+	</select>
+
+
+    <delete id="del" parameterType="HashMap">
+        DELETE FROM xeus.eli_foa_forest_map WHERE lk_info_id = #{lkInfoId} AND rcv_ymd_hms = #{rcvYmdHms} AND seq_no = #{seqNo}::numeric
+    </delete>
+
+    <insert id="add" parameterType="EliFoaForestMapVo">
+		INSERT xeus.INTO eli_foa_forest_map(
+			lk_info_id, rcv_ymd_hms, seq_no, tp_status, point_x, point_y, loc, rcv_ymdhm
+		) VALUES (
+			#{lkInfoId}, #{rcvYmdHms}, #{seqNo}::numeric, #{tpStatus}, #{pointX}::numeric, #{pointY}::numeric, #{loc}, #{rcvYmdhm}
+		);
+	</insert>
+
+
+    <update id="edit" parameterType="EliFoaForestMapVo">
+		UPDATE xeus.eli_foa_forest_map SET
+
+			lk_info_id = #{lkInfoId}
+            , rcv_ymd_hms = #{rcvYmdHms}
+            , seq_no = #{seqNo}::numeric
+
+			<if test="tpStatus != null and tpStatus != ''">
+				, tp_status = #{tpStatus}
+			</if>
+
+			<if test="pointX != null and pointX != ''">
+				, point_x = #{pointX}::numeric
+			</if>
+
+			<if test="pointY != null and pointY != ''">
+				, point_y = #{pointY}::numeric
+			</if>
+
+			<if test="loc != null and loc != ''">
+				, loc = #{loc}
+			</if>
+
+			<if test="rcvYmdhm != null and rcvYmdhm != ''">
+				, rcv_ymdhm = #{rcvYmdhm}
+			</if>
+
+		WHERE lk_info_id = #{lkInfoId} AND rcv_ymd_hms = #{rcvYmdHms} AND seq_no = #{seqNo}::numeric
+
+	</update>
+
+</mapper>

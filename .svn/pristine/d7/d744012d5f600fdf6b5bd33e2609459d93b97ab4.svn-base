@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%c] %m%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="geomex.mapservice." level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>    
+        <Logger name="java.sql" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+         <Logger name="org.geotools" level="ERROR" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.egovframework" level="DEBUG" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <!-- log SQL with timing information, post execution -->
+        <Logger name="jdbc.sqltiming" level="INFO" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework" level="OFF" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        <Logger name="org.springframework.aop.interceptor.CustomizableTraceInterceptor" level="TRACE" additivity="false">
+            <AppenderRef ref="console" />
+        </Logger>
+        
+        <Root level="DEBUG">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>

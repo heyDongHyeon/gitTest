@@ -1,0 +1,120 @@
+.play-mode-control {
+    font-size: 7px !important;
+    padding: 0;
+    position: absolute;
+    top: 6.2px;
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+}
+
+span.ptzBtn {
+	position: absolute;
+	cursor: pointer;
+}
+
+span#ptzTop {
+	top: 0px;
+	left: 135px;
+	width: 50px;
+	height: 30px;
+	border-radius: 15px;
+	/* background: white;
+	background-size: 20px; */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(../../res/img/ptz/top.png);
+}
+span#ptzTop:hover {
+	background-image: url(../../res/img/ptz/top_over.png);
+}
+
+span#ptzBottom {
+	position: absolute;
+	cursor: pointer;
+	bottom: 0px;
+	left: 135px;
+	width: 50px;
+	height: 30px;
+	border-radius: 15px;
+	/* background: white;
+	background-size: 20px; */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(../../res/img/ptz/bottom.png);
+}
+span#ptzBottom:hover {
+	background-image: url(../../res/img/ptz/bottom_over.png);
+}
+
+span#ptzLeft {
+	position: absolute;
+	cursor: pointer;
+	top: 95px;
+	left: 0px;
+	width: 30px;
+	height: 50px;
+	border-radius: 15px;
+	/* background: white;
+	background-size: 20px; */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(../../res/img/ptz/left.png);
+}
+span#ptzLeft:hover {
+	background-image: url(../../res/img/ptz/left_over.png);
+}
+
+span#ptzRight {
+	position: absolute;
+	cursor: pointer;
+	top: 95px;
+	right: 0px;
+	width: 30px;
+	height: 50px;
+	border-radius: 15px;
+	/* background: white;
+	background-size: 20px; */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url(../../res/img/ptz/right.png);
+}
+span#ptzRight:hover {
+	background-image: url(../../res/img/ptz/right_over.png);
+}
+
+span#ptzZoomIn {
+	position: absolute;
+	cursor: pointer;
+    top: 95px;
+    right: 133px;
+    width: 50px;
+    height: 25px;
+    border-radius: 5px;
+	/* background: white;
+	background-size: 20px;
+	background-position: center; */
+	background-repeat: no-repeat;
+	background-image: url(../../res/img/ptz/zoom.png);
+}
+span#ptzZoomIn:hover {
+	background-image: url(../../res/img/ptz/zoom_top_over.png);
+}
+
+span#ptzZoomOut {
+	position: absolute;
+	cursor: pointer;
+    top: 119px;
+    right: 133px;
+    width: 50px;
+    height: 26px;
+    border-radius: 5px;
+	/* background: white;
+	background-size: 20px; */
+	background-position: bottom;
+	background-repeat: no-repeat;
+	background-image: url(../../res/img/ptz/zoom.png);
+}
+span#ptzZoomOut:hover {
+	background-image: url(../../res/img/ptz/zoom_bottom_over.png);
+}

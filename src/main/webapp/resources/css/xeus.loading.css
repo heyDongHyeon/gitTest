@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+#loading {
+	width: 479px;
+	height: 1212px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: rgba(0,0,0,0.15);
+    z-index: 999;
+    opacity: 1.2;
+}
+#loading #loading_pop{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+#loading #loading_pop #loading_box{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 47%;
+    top: 32%;
+    opacity: 1;
+    z-index: 99999;
+    background: rgba(7,7,7,0.0);
+}
+#loading #loading_pop #loading_box #loading_img{
+    display: inline-block;
+    width: 48;
+    height: 48;
+    vertical-align: middle;
+}
+

@@ -1,0 +1,232 @@
+@CHARSET "UTF-8";
+@font-face {
+    font-family: 'AritaDotumMedium';
+    src: url('/xeus/res/css/font/AritaDotumSemiBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	font-family: 'AritaDotumMedium';
+	font-size: 12px;
+}
+
+#waterLevel .roundDiv{
+	background:#53535B;
+	border-radius : 10px;
+	height:30px;
+	margin-right:17px;
+}
+
+#rainLevel .roundDiv{
+	background:#53535B;
+	border-radius : 10px;
+	height:30px;
+	margin-right:17px;
+}
+
+#waterLevel .regionSelect{
+	background:#30303A;
+	color:white;
+	margin-left:50px !important;
+	font-size:17px !important;
+	border-radius:10px ;
+	height:30px;
+}
+
+#rainLevel .regionSelect{
+	background:#30303A;
+	color:white;
+	margin-left:50px !important;
+	font-size:17px !important;
+	border-radius:10px ;
+	height:30px;
+}
+
+#title-bar {
+	position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid #30303A;
+    border-top: 2px solid #30303A;
+    background: #3e3f48;
+}
+
+#title-bar .title{
+	font-size:25px;
+    color: white;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    padding-left :10px;
+}
+
+#address-bar {
+    position: relative;
+    width: 100%;
+    height: 31px;
+    background: #3e3f48;
+    border-bottom: 1px solid #30303A;
+}
+
+#address-bar .title{
+    color: white;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    padding-left :20px;
+    font-size:14px;
+}
+#content{
+	width:100%;
+	height: 100%;
+	background : #21222B;
+}
+
+#content #waterLevelTable{
+    height:400px;
+    margin-left : 28px;
+}
+
+#content #waterLevelTable .mCSB_container{
+	margin-right:1;
+}
+
+
+#content #waterLevelTable th{
+	color:white;
+	font-size:14px;
+	height: 30px;
+    background: #30303A;
+    border-left: 1px #21222B solid;
+    border-bottom: 1px #21222B solid;
+    border-top: 1px #21222B solid;
+}
+
+#content #waterLevelTable .lastThtd{
+	border-right : 1px #21222B solid;
+}
+
+#content #waterLevelTable td{
+	color:white;
+	font-size:12px;
+	background: #53535B;
+    border-left: 1px #21222B solid;
+    border-bottom: 1px #21222B solid;
+	text-align : center;
+	font-family : "Nanum";
+}
+
+#content #rainLevelTable{
+    height:400px;
+    margin-left : 28px;
+}
+
+#content #rainLevelTable .mCSB_container{
+	margin-right:1;
+}
+
+
+#content #rainLevelTable th{
+	color:white;
+	font-size:14px;
+	height: 30px;
+    background: #30303A;
+    border-left: 1px #21222B solid;
+    border-bottom: 1px #21222B solid;
+    border-top: 1px #21222B solid;
+}
+
+#content #rainLevelTable .lastThtd{
+	border-right : 1px #21222B solid;
+}
+
+#content #rainLevelTable td{
+	color:white;
+	font-size:12px;
+	background: #53535B;
+    border-left: 1px #21222B solid;
+    border-bottom: 1px #21222B solid;
+	text-align : center;
+	font-family : "Nanum";
+}
+
+#content .btnImg{
+	float: left;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.vertical-center{
+	position:relative;
+	top:50%;
+	transform:translate(0,-50%);
+}
+
+
+.contentOption #searchDiv{
+	width : 600px;
+	height : 40px;
+	float : left;
+	background:#53535B;
+	margin-left : 20px;
+	margin-top :20px;
+	color:white;
+}
+
+
+.contentOption #searchDiv input{
+	margin-top : 10px;
+	margin-left : 10px;
+	border:none;
+	background: #21222B;
+	height: 22px;
+	text-align: center;
+	color : white;
+}
+
+.contentOption #searchDiv select{
+	margin-top : 10px;
+	height : 22px;
+	background : #21222B;
+	color : white;
+}
+.contentOption #searchBtn{
+	background: #53535B;
+    color: white;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0px;
+    width : 120px;
+    height : 40px;
+    float : left;
+    margin-top : 20px;
+    margin-left : 30px;
+}
+
+.contentOption #excelBtn{
+	background: #53535B;
+    color: white;
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0px;
+    width : 120px;
+    height : 40px;
+    float : left;
+    margin-top : 20px;
+    margin-left : 25px;
+}
