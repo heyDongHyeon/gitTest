@@ -541,7 +541,7 @@ $(document).ready(function() {
 <body>
 	<div id="loadingWrap"></div>
 	<div id="tabs">
-		<button class="tab blueBtn hidden" target="eventView"><span class="title">이벤트모니터링</span><span class="close"></span><img class="tabRight" src="../res/img/tab/tab_over_right.png"></button>
+		<button class="tab blueBtn hidden" target="eventView"><span class="title">이벤트모니터링GIT</span><span class="close"></span><img class="tabRight" src="../res/img/tab/tab_over_right.png"></button>
 		<!-- <button class="tab blueBtn hidden" target="bigdataView"><span class="title">빅데이터 분석</span><span class="close"></span><img class="tabRight" src="../res/img/tab/tab_over_right.png"></button> -->
 		<button class="tab blueBtn hidden" target="ndmsView"><span class="title">NDMS</span><span class="close"></span><img class="tabRight" src="../res/img/tab/tab_over_right.png"></button>
 		<button class="tab blueBtn hidden" target="ndpsView"><span class="title">재난시설물</span><span class="close"></span><img class="tabRight" src="../res/img/tab/tab_over_right.png"></button>
