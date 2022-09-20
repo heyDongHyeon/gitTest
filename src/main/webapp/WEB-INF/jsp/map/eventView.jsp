@@ -96,7 +96,7 @@ S
     <button id="btn-monitor-view" class="menu-button" for="btn-cctv-view">모니터링</button>
     <button id="btn-cctv-sch" class="menu-button" for="btn-cctv-view" icon="menu1">CCTV검색</button>
     <button id="btn-eventwait-list-view" class="menu-button" for="btn-cctv-view">이벤트<br>처리 대기</button>
-    <button id="btn-ptr-view" class="menu-button" for="btn-cctv-view" icon="menu4">순찰감시</button>
+    <button id="btn-ptr-view" class="menu-button" for="btn-cctv-view" icon="menu4">순찰감시GIT</button>
     <button id="btn-event-list-view" class="menu-button" for="btn-cctv-view">이벤트<br>이력 조회</button>
 <!--     <button id="smsBtn" class="blackBtn" style="width: 80px; height: 28px;">SMS</button> -->
 <!--     <button id="btn-select-mng" class="menu-button" for="btn-cctv-view" icon="menu3">선택감시</button>
