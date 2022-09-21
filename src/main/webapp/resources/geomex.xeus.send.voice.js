@@ -6,6 +6,7 @@ var NDPS_OBJ_LIST = {}; //NDPS 데이터 전역 변수 - 목록 표출 및 차�
 
 (function(){
 	debugger
+	debugger
 	var hintTag = '<p class="send_hint_msg">* 지도 화면 왼쪽 검색 화면에서 검색하여 체크박스를 선택해주세요.</p>';
 
 	//전송 폼을 생성한다.
