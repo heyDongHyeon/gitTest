@@ -25,3 +25,6 @@ replay_pid*
 
 # "temporary" build files
 /target
+
+geomex.xeus.send.voice.js
+src/main/webapp/resources/geomex.xeus.send.voice.js
